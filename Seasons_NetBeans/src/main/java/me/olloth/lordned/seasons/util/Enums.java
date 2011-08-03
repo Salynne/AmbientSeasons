@@ -39,14 +39,11 @@ public class Enums
     
         public static String getSeasonString(int season) {
         String string = "";
-        switch(season){
-            case 1: string = "Djilba"; break;
-            case 2: string = "Kamba"; break;
-            case 3: string = "Birak"; break;
-            case 4: string = "Bunuru"; break;
-            case 5: string = "Djeran"; break;
-            case 6: string = "Makuru"; break;
-        };
+        for(int i = 0; i < season; i++) {
+            if(i == (season - 1)) {
+                string = (String) Config.SEASON_STRINGS.get(i);
+            }
+        }
         
         return string;
     }
