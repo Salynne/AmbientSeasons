@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import me.olloth.lordned.seasons.listener.Players;
 import me.olloth.lordned.seasons.util.Config;
-import me.olloth.lordned.seasons.util.Enums.Day;
-import me.olloth.lordned.seasons.util.Enums.Season;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -19,7 +17,7 @@ public class Seasons extends JavaPlugin {
     String logPrefix = "[Seasons] ";
     
     //Scheduled Task Stuff
-    private Dates scheduledTasks = new Dates(this);
+    private Dates dates = new Dates(this);
     
     private PluginDescriptionFile info;
     private PluginManager pm;
@@ -30,6 +28,7 @@ public class Seasons extends JavaPlugin {
     
     public void onDisable()
     {
+        
         System.out.println("[" + info.getName() + "] is now disabled!");
     }
 
@@ -47,12 +46,14 @@ public class Seasons extends JavaPlugin {
         
         pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
         
+        players.playersInit(getServer().getOnlinePlayers());
+        
         System.out.println("[" + info.getName() + "] version " + 
                 info.getVersion() + " is now enabled!");
 
         
         //Setup misc. Scheduled Tasks for this
-        scheduledTasks.SetupScheduledTasks();
+        dates.SetupScheduledTasks();
 
     }
     

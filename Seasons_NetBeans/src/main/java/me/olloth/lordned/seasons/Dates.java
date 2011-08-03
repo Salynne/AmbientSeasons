@@ -4,9 +4,13 @@
  */
 package me.olloth.lordned.seasons;
 
+import java.util.UUID;
 import me.olloth.lordned.seasons.util.Config;
 import me.olloth.lordned.seasons.util.Enums;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.getspout.spoutapi.gui.GenericLabel;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  *
@@ -65,9 +69,8 @@ public class Dates
         YEAR = Times.getYear(FULL_TIME);
         
         if(DAY_OF_WEEK != dayOfWeek) {
+            updateHud();
             // New day code here
-            System.out.println(Enums.getDate());
-            System.out.println(Times.getDays(FULL_TIME));
         }
         
         if(DAY_OF_SEASON != dayOfSeason ) {
@@ -87,6 +90,17 @@ public class Dates
         time = TIME_OF_DAY;
         dayOfWeek = DAY_OF_WEEK;
         dayOfSeason = DAY_OF_SEASON;
+        
+    }
+    
+    public void updateHud() {
+        for(Player player : plugin.getServer().getOnlinePlayers()) {
+            SpoutPlayer sPlayer = (SpoutPlayer) player;
+            UUID labelId = (UUID) plugin.getLabels().get(player.getName());
+            GenericLabel label = (GenericLabel) sPlayer.getMainScreen().getWidget(labelId);
+            label.setText(Enums.getDate());
+            label.setDirty(true);
+        }
     }
     
 }

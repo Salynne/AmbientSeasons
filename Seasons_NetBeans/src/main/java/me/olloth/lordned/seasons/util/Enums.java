@@ -70,8 +70,7 @@ public class Enums
         
         public static String getDate() {
                         
-            String date = "Time: " + Dates.TIME_OF_DAY + " " +
-                    getDayString(Dates.DAY_OF_WEEK) + " the " +
+            String date = getDayString(Dates.DAY_OF_WEEK) + " the " +
                     Dates.DAY_OF_SEASON + getModString(Dates.DAY_OF_SEASON) + 
                     " of " + getSeasonString(Dates.SEASON) + 
                     ", " + Dates.YEAR + "AN";
