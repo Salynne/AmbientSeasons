@@ -10,8 +10,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Seasons extends JavaPlugin {
     //Setup Bukkit's Logger
-    Logger log = Logger.getLogger("Minecraft");
+    static final Logger log = Logger.getLogger("Minecraft");
     String logPrefix = "[Seasons] ";
+    
+    //Scheduled Task Stuff
+    private SeasonsScheduledTasks scheduledTasks = new SeasonsScheduledTasks(this);
     
     private PluginDescriptionFile info;
     private File directory, config;
@@ -37,11 +40,14 @@ public class Seasons extends JavaPlugin {
 
             public void run()
             {
-                log.info(logPrefix + "Current Year: " + getYear());
+                //log.info(logPrefix + "Current Year: " + getYear());
                 log.info(logPrefix + "Current Season: " + getSeason().toString() );
                 log.info(logPrefix + "Current Day: " + getDay().toString() );
             }
         }, 1, 20);
+        
+        //Setup misc. Scheduled Tasks for this
+        scheduledTasks.SetupScheduledTasks();
 
     }
     
