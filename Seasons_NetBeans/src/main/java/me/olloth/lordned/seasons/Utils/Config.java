@@ -6,17 +6,20 @@ import java.io.IOException;
 import org.bukkit.util.config.Configuration;
 
 public class Config {
+    
+        public static Configuration CONFIG;
 	
 	public static String WORLD;
         public static int SEASON_LENGTH;
 	
 	public static void load(Configuration config) {
 		config.load();
+                CONFIG = config;
 		
 		//Let the world be known!
 		//Now committing as LordNed?
 		WORLD = config.getString("world");
-                SEASON_LENGTH = config.getInt("season_length", 5);
+                SEASON_LENGTH = config.getInt("days_per_season", 3);
                 if (SEASON_LENGTH <= 0)
                     SEASON_LENGTH = 1;
 		
@@ -25,7 +28,8 @@ public class Config {
 	public static Configuration newConfig(Configuration config) {
 
 		config.setProperty("world","world");
-		config.setProperty("season_length", 5); //5 Minute Seasons for Now
+                // Default 3 for testing purposes
+		config.setProperty("days_per_season", 3);
 		config.save();
 
 		System.out.println("New Config file made");
