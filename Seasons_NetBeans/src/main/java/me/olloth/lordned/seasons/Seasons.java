@@ -16,6 +16,7 @@ public class Seasons extends JavaPlugin {
     //Setup Bukkit's Logger
 
     public static final Logger log = Logger.getLogger("Minecraft");
+    public static boolean RELOAD;
     String logPrefix = "[Seasons] ";
     //Scheduled Task Stuff
     private Dates dates = new Dates(this);
@@ -36,22 +37,22 @@ public class Seasons extends JavaPlugin {
         pm = getServer().getPluginManager();
         players = new Players(this);
 
+        RELOAD = true;
         labels = new HashMap();
 
         //Load the Config
         Config.configSetup(directory, config);
 
         pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
-        pm.registerEvent(Type.CUSTOM_EVENT, new SpoutCraftListener(this), Priority.Low, this);
+        pm.registerEvent(Type.CUSTOM_EVENT, new SpoutCraftListener(this), Priority.Low, this);    
+
+        //Setup misc. Scheduled Tasks for this
+        dates.SetupScheduledTasks();
 
         players.playersInit(getServer().getOnlinePlayers());
 
         System.out.println("[" + info.getName() + "] version "
                 + info.getVersion() + " is now enabled!");
-
-
-        //Setup misc. Scheduled Tasks for this
-        dates.SetupScheduledTasks();
 
     }
 

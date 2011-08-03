@@ -61,6 +61,11 @@ public class Dates {
         DAY_OF_SEASON = Times.getDayOfSeason(FULL_TIME);
         SEASON = Times.getSeason(FULL_TIME);
         YEAR = Times.getYear(FULL_TIME);
+        
+        if(Seasons.RELOAD) {
+            updateHud();
+            Seasons.RELOAD = false;
+        }
 
         if (DAY_OF_WEEK != dayOfWeek) {
             updateHud();
@@ -70,6 +75,7 @@ public class Dates {
         if (DAY_OF_SEASON != dayOfSeason) {
             updateTextures();
         }
+
 
         if (YEAR > year) {
             // New year code fires here;

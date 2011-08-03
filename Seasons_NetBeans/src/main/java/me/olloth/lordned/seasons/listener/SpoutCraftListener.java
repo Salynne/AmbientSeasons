@@ -28,6 +28,7 @@ public class SpoutCraftListener extends SpoutListener {
             event.getPlayer().sendMessage("This server uses SpoutCraft for the Seasons plugin.");
             event.getPlayer().sendMessage("Install SpoutCraft from http://goo.gl/UbjS1 to see it.");
         }
+        
         event.getPlayer().setTexturePack(Enums.getSeasonUrl());
     }
     
