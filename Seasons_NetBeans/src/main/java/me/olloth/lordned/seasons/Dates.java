@@ -16,85 +16,74 @@ import org.getspout.spoutapi.player.SpoutPlayer;
  *
  * @author Matt
  */
-public class Dates
-{
+public class Dates {
+
     private final Seasons plugin;
     public static int DAY_OF_WEEK,
             DAY_OF_SEASON,
             SEASON,
             YEAR;
-    
     public static long TIME_OF_DAY,
-                        FULL_TIME;
-    
+            FULL_TIME;
     private int dayOfWeek,
             dayOfSeason,
             season,
             year;
-    
     private long time;
-    
-    public Dates(Seasons plugin)
-    {
+
+    public Dates(Seasons plugin) {
         this.plugin = plugin;
     }
-        
-    public void SetupScheduledTasks()
-    {
+
+    public void SetupScheduledTasks() {
         long fullTime = Bukkit.getServer().getWorld(Config.WORLD).getFullTime();
         time = Bukkit.getServer().getWorld(Config.WORLD).getTime();
         dayOfWeek = Times.getDayOfWeek(fullTime);
         dayOfSeason = Times.getDayOfSeason(fullTime);
         season = Times.getSeason(fullTime);
         year = Times.getYear(fullTime);
-        
+
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 
-            public void run()
-            {
+            public void run() {
                 onSecond();
-                
+
             }
         }, 0, 20);
     }
-    
+
     private void onSecond() {
-        
+
         FULL_TIME = Bukkit.getServer().getWorld(Config.WORLD).getFullTime();
         TIME_OF_DAY = Bukkit.getServer().getWorld(Config.WORLD).getTime();
-        
+
         DAY_OF_WEEK = Times.getDayOfWeek(FULL_TIME);
         DAY_OF_SEASON = Times.getDayOfSeason(FULL_TIME);
         SEASON = Times.getSeason(FULL_TIME);
         YEAR = Times.getYear(FULL_TIME);
-        
-        if(DAY_OF_WEEK != dayOfWeek) {
+
+        if (DAY_OF_WEEK != dayOfWeek) {
             updateHud();
             // New day code here
         }
-        
-        if(DAY_OF_SEASON != dayOfSeason ) {
-            // new season code fires here
+
+        if (DAY_OF_SEASON != dayOfSeason) {
+            updateTextures();
         }
-        
-        if(SEASON > season) {
-            // new season code fires as well
-            season = SEASON;
-        }
-        
-        if(YEAR > year) {
+
+        if (YEAR > year) {
             // New year code fires here;
             year = YEAR;
         }
-        
+
         time = TIME_OF_DAY;
         dayOfWeek = DAY_OF_WEEK;
         dayOfSeason = DAY_OF_SEASON;
-        
+
     }
-    
+
     public void updateHud() {
-        for(Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             SpoutPlayer sPlayer = (SpoutPlayer) player;
             UUID labelId = (UUID) plugin.getLabels().get(player.getName());
             GenericLabel label = (GenericLabel) sPlayer.getMainScreen().getWidget(labelId);
@@ -103,4 +92,10 @@ public class Dates
         }
     }
     
+    public void updateTextures() {
+        for(Player player : plugin.getServer().getOnlinePlayers()) {
+            SpoutPlayer sPlayer = (SpoutPlayer) player;
+            sPlayer.setTexturePack(Enums.getSeasonUrl());
+        }
+    }
 }

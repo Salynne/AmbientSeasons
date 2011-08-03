@@ -5,6 +5,7 @@
 package me.olloth.lordned.seasons.listener;
 
 import me.olloth.lordned.seasons.Seasons;
+import me.olloth.lordned.seasons.util.Enums;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.event.spout.SpoutListener;
 
@@ -16,13 +17,18 @@ public class SpoutCraftListener extends SpoutListener {
     
     Seasons plugin;
     
-    SpoutCraftListener(Seasons plugin) {
+    public SpoutCraftListener(Seasons plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-//        event.getPlayer().setTexturePack("Texture pack URL");
+
+        if(!event.getPlayer().isSpoutCraftEnabled()) {
+            event.getPlayer().sendMessage("This server uses SpoutCraft for the Seasons plugin.");
+            event.getPlayer().sendMessage("Install SpoutCraft from http://goo.gl/UbjS1 to see it.");
+        }
+        event.getPlayer().setTexturePack(Enums.getSeasonUrl());
     }
     
     
