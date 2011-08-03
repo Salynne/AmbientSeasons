@@ -1,11 +1,16 @@
 package me.olloth.lordned.seasons;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.logging.Logger;
+import me.olloth.lordned.seasons.listener.Players;
 import me.olloth.lordned.seasons.util.Config;
 import me.olloth.lordned.seasons.util.Enums.Day;
 import me.olloth.lordned.seasons.util.Enums.Season;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Seasons extends JavaPlugin {
@@ -14,8 +19,11 @@ public class Seasons extends JavaPlugin {
     String logPrefix = "[Seasons] ";
     
     private PluginDescriptionFile info;
+    private PluginManager pm;
     private File directory, config;
+    private Players players;
     
+    HashMap labels;
     
     public void onDisable()
     {
@@ -26,22 +34,18 @@ public class Seasons extends JavaPlugin {
     {        
         directory = getDataFolder();
         info = getDescription();
+        pm = getServer().getPluginManager();
+        players = new Players(this);
+        
+        labels = new HashMap();
         
         //Load the Config
         Config.configSetup(directory, config);
         
+        pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
+        
         System.out.println("[" + info.getName() + "] version " + 
                 info.getVersion() + " is now enabled!");
-        
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-
-            public void run()
-            {
-                log.info(logPrefix + "Current Year: " + getYear());
-                log.info(logPrefix + "Current Season: " + getSeason().toString() );
-                log.info(logPrefix + "Current Day: " + getDay().toString() );
-            }
-        }, 1, 20);
 
     }
     
@@ -122,5 +126,9 @@ public class Seasons extends JavaPlugin {
         
         //Return the number of years
         return (int) (numberOfDays / 360) + 1;
+    }
+    
+    public HashMap getLabels() {
+        return labels;
     }
 }
