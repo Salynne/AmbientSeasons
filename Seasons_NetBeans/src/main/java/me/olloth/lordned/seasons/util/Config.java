@@ -11,6 +11,7 @@ public class Config {
 	
 	public static String WORLD;
         public static int SEASON_LENGTH;
+        public static int SEASONS;
 	
 	public static void load(Configuration config) {
 		config.load();
@@ -19,7 +20,8 @@ public class Config {
 		//Let the world be known!
 		//Now committing as LordNed?
 		WORLD = config.getString("world");
-                SEASON_LENGTH = config.getInt("days_per_season", 3);
+                SEASON_LENGTH = config.getInt("season_length", 28);
+                SEASONS = config.getInt("seasons", 6);
                 if (SEASON_LENGTH <= 0)
                     SEASON_LENGTH = 1;
 		
@@ -28,8 +30,8 @@ public class Config {
 	public static Configuration newConfig(Configuration config) {
 
 		config.setProperty("world","world");
-                // Default 3 for testing purposes
-		config.setProperty("days_per_season", 3);
+		config.setProperty("season_length", 28);
+                config.setProperty("seasons", 6);
 		config.save();
 
 		System.out.println("New Config file made");
