@@ -2,9 +2,9 @@ package me.olloth.lordned.seasons;
 
 import java.io.File;
 import java.util.logging.Logger;
-import me.olloth.lordned.seasons.Utils.Config;
-import me.olloth.lordned.seasons.Utils.Enums.Day;
-import me.olloth.lordned.seasons.Utils.Enums.Season;
+import me.olloth.lordned.seasons.util.Config;
+import me.olloth.lordned.seasons.util.Enums.Day;
+import me.olloth.lordned.seasons.util.Enums.Season;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
