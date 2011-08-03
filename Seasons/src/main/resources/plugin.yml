@@ -1,8 +1,0 @@
-author: Olloth & Lord Ned
-database: false
-description: Adds Seasons to Minecraft. Uses SpoutAPI for clientside controls.
-generator: http://dinnerbone.com/minecraft/tools/pluginator/
-main: me.olloth.lordned.seasons.Seasons
-name: Seasons
-startup: postworld
-version: '1.0'
