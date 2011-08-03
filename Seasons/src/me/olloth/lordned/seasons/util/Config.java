@@ -13,6 +13,7 @@ public class Config {
 		config.load();
 		
 		//Let the world be known!
+		//Now committing as LordNed?
 		WORLD = config.getString("world");
 		
 	}
