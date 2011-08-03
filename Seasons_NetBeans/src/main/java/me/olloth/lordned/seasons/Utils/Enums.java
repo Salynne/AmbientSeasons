@@ -15,4 +15,9 @@ public class Enums
         SPRING, SUMMER, FALL, WINTER
     }
     
+    static public enum Day
+    {
+        SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
+    }
+    
 }

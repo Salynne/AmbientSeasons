@@ -3,6 +3,7 @@ package me.olloth.lordned.seasons;
 import java.io.File;
 import java.util.logging.Logger;
 import me.olloth.lordned.seasons.Utils.Config;
+import me.olloth.lordned.seasons.Utils.Enums.Day;
 import me.olloth.lordned.seasons.Utils.Enums.Season;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,16 @@ public class Seasons extends JavaPlugin {
         
         System.out.println("[" + info.getName() + "] version " + 
                 info.getVersion() + " is now enabled!");
+        
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+
+            public void run()
+            {
+                log.info(logPrefix + "Current Year: " + getYear());
+                log.info(logPrefix + "Current Season: " + getSeason().toString() );
+                log.info(logPrefix + "Current Day: " + getDay().toString() );
+            }
+        }, 1, 20);
 
     }
     
@@ -38,11 +49,12 @@ public class Seasons extends JavaPlugin {
     //1 = Spring, 2 = Summer, 3 = Fall, 4 = Winter
     public Season getSeason()
     {
-        //Seasons are read from the config as minutes!
-        long time = getServer().getWorld(Config.WORLD).getFullTime();
+        long fullTime = getServer().getWorld(Config.WORLD).getFullTime();
         
-        long season = (time / 20) / 60; //Current full world time in minutes.
-        switch ((int)((season % (4 * Config.SEASON_LENGTH)) / 4 + 1))
+        //Seasons are read from the config as minutes!
+        long numberOfDays = (fullTime / 24000); //24000 Ticks to a Minecraft-Day
+        int season = (int) (((numberOfDays) / Config.SEASON_LENGTH) % 4) + 1;
+        switch (season)
         {
             case 1:
                 return Season.SPRING;
@@ -56,5 +68,59 @@ public class Seasons extends JavaPlugin {
                 log.severe(logPrefix + "Calculated Invalid Season!");
                 return Season.SPRING;
         }
+    }
+    
+    //getDay() returns 1-7 based off of the time since the map was created.
+    public Day getDay()
+    {
+        long fullTime = getServer().getWorld(Config.WORLD).getFullTime();
+        
+        //Seasons are read from the config as minutes!
+        long numberOfDays = (fullTime / 24000); //24000 Ticks to a Minecraft-Day
+        
+        int day = (int) ((numberOfDays) % 7) + 1;
+        switch(day)
+        {
+            case 1:
+                return Day.SUNDAY;
+            case 2:
+                return Day.MONDAY;
+            case 3:
+                return Day.TUESDAY;
+            case 4:
+                return Day.WEDNESDAY;
+            case 5:
+                return Day.THURSDAY;
+            case 6:
+                return Day.FRIDAY;
+            case 7:
+                return Day.SATURDAY;
+            default:
+                log.severe(logPrefix + "Calculated Invalid Day of the Week!");
+                return Day.SATURDAY;
+        }
+    }
+    
+    //getDayOfSeason, returns 0-???
+    public int getDayOfSeason()
+    {
+       long fullTime = getServer().getWorld(Config.WORLD).getFullTime();
+        
+        //Seasons are read from the config as minutes!
+        long numberOfDays = (fullTime / 24000); //24000 Ticks to a Minecraft-Day
+        
+        return (int) (numberOfDays % Config.SEASON_LENGTH);
+    }
+    
+    //getYear() returns the number of years since the map was created.
+    public int getYear()
+    {
+        long fullTime = getServer().getWorld(Config.WORLD).getFullTime();
+        
+        //Seasons are read from the config as minutes!
+        long numberOfDays = (fullTime / 24000); //24000 Ticks to a Minecraft-Day
+        
+        //Return the number of years
+        return (int) (numberOfDays / 360) + 1;
     }
 }
