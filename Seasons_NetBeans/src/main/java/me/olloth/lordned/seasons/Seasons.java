@@ -2,9 +2,12 @@ package me.olloth.lordned.seasons;
 
 import java.io.File;
 import java.util.logging.Logger;
-import me.olloth.lordned.seasons.Utils.Config;
-import me.olloth.lordned.seasons.Utils.Enums.Season;
+import me.olloth.lordned.seasons.util.Config;
+import me.olloth.lordned.seasons.util.Enums.Season;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Seasons extends JavaPlugin {
@@ -13,6 +16,7 @@ public class Seasons extends JavaPlugin {
     String logPrefix = "[Seasons] ";
     
     private PluginDescriptionFile info;
+    private PluginManager pm;
     private File directory, config;
     
     
@@ -25,9 +29,12 @@ public class Seasons extends JavaPlugin {
     {        
         directory = getDataFolder();
         info = getDescription();
+        pm = getServer().getPluginManager();
         
         //Load the Config
         Config.configSetup(directory, config);
+        
+        pm.registerEvent(Type.PIG_ZAP, null, Priority.Low, this);
         
         System.out.println("[" + info.getName() + "] version " + 
                 info.getVersion() + " is now enabled!");
