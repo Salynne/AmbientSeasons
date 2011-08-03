@@ -15,8 +15,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Seasons extends JavaPlugin {
     //Setup Bukkit's Logger
-    Logger log = Logger.getLogger("Minecraft");
+    static final Logger log = Logger.getLogger("Minecraft");
     String logPrefix = "[Seasons] ";
+    
+    //Scheduled Task Stuff
+    private SeasonsScheduledTasks scheduledTasks = new SeasonsScheduledTasks(this);
     
     private PluginDescriptionFile info;
     private PluginManager pm;
@@ -46,6 +49,10 @@ public class Seasons extends JavaPlugin {
         
         System.out.println("[" + info.getName() + "] version " + 
                 info.getVersion() + " is now enabled!");
+
+        
+        //Setup misc. Scheduled Tasks for this
+        scheduledTasks.SetupScheduledTasks();
 
     }
     
