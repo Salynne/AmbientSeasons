@@ -12,6 +12,8 @@ public class Config {
 	public static void load(Configuration config) {
 		config.load();
 		
+		//Let the world be known!
+		//Now committing as LordNed?
 		WORLD = config.getString("world");
 		
 	}
