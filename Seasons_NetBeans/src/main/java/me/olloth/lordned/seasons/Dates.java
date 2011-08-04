@@ -6,7 +6,8 @@ package me.olloth.lordned.seasons;
 
 import java.util.UUID;
 import me.olloth.lordned.seasons.util.Config;
-import me.olloth.lordned.seasons.util.Enums;
+import me.olloth.lordned.seasons.util.Times;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.gui.GenericLabel;
@@ -25,11 +26,13 @@ public class Dates {
             YEAR;
     public static long TIME_OF_DAY,
             FULL_TIME;
-    private int dayOfWeek,
+    @SuppressWarnings("unused")
+	private int dayOfWeek,
             dayOfSeason,
             season,
             year;
-    private long time;
+    @SuppressWarnings("unused")
+	private long time;
 
     public Dates(Seasons plugin) {
         this.plugin = plugin;
@@ -91,9 +94,9 @@ public class Dates {
     public void updateHud() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             SpoutPlayer sPlayer = (SpoutPlayer) player;
-            UUID labelId = (UUID) plugin.getLabels().get(player.getName());
+            UUID labelId = (UUID) Seasons.labels.get(player.getName());
             GenericLabel label = (GenericLabel) sPlayer.getMainScreen().getWidget(labelId);
-            label.setText(Enums.getDate());
+            label.setText(Times.getDate());
             label.setDirty(true);
         }
     }
@@ -101,7 +104,7 @@ public class Dates {
     public void updateTextures() {
         for(Player player : plugin.getServer().getOnlinePlayers()) {
             SpoutPlayer sPlayer = (SpoutPlayer) player;
-            sPlayer.setTexturePack(Enums.getSeasonUrl());
+            sPlayer.setTexturePack(Times.getSeasonUrl());
         }
     }
 }

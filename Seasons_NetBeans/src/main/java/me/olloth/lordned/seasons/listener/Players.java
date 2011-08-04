@@ -4,9 +4,9 @@
  */
 package me.olloth.lordned.seasons.listener;
 
-import java.util.HashMap;
 import me.olloth.lordned.seasons.Seasons;
-import me.olloth.lordned.seasons.util.Enums;
+import me.olloth.lordned.seasons.util.Times;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -33,12 +33,10 @@ public class Players extends PlayerListener {
     }
 
     public void playerInit(SpoutPlayer sPlayer) {
-        GenericLabel label = new GenericLabel(Enums.getDate());
+        GenericLabel label = new GenericLabel(Times.getDate());
         label.setHexColor(Integer.parseInt("FFFFFF", 16)).setX(10).setY(10);
-        HashMap labels = plugin.getLabels();
-        HashMap toggle = plugin.getToggle();
-        toggle.put(sPlayer.getName(), true);
-        labels.put(sPlayer.getName(), label.getId());
+        Seasons.HUDEnable.put(sPlayer.getName(), true);
+        Seasons.labels.put(sPlayer.getName(), label.getId());
         sPlayer.getMainScreen().attachWidget(label);
     }
 

@@ -5,7 +5,9 @@
 package me.olloth.lordned.seasons.listener;
 
 import me.olloth.lordned.seasons.Seasons;
-import me.olloth.lordned.seasons.util.Enums;
+import me.olloth.lordned.seasons.util.Times;
+
+import org.getspout.spoutapi.event.spout.ServerTickEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.event.spout.SpoutListener;
 
@@ -29,9 +31,12 @@ public class SpoutCraftListener extends SpoutListener {
             event.getPlayer().sendMessage("Install SpoutCraft from http://goo.gl/UbjS1 to see it.");
         }
         
-        event.getPlayer().setTexturePack(Enums.getSeasonUrl());
+        event.getPlayer().setTexturePack(Times.getSeasonUrl());
     }
     
-    
+    @Override
+    public void onServerTick(ServerTickEvent event) {
+
+    }
     
 }

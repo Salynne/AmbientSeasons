@@ -1,27 +1,47 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package me.olloth.lordned.seasons.util;
 
 import me.olloth.lordned.seasons.Dates;
 
 /**
  *
- * @author Matt
+ * @author Olloth
  */
-public class Enums {
+public class Times {
 
-    static public enum Season {
+    public static int getDayOfWeek(long fullTime) {
 
-        SPRING, SUMMER, FALL, WINTER
+        int day = (int) (getDays(fullTime) % Config.WEEKDAY_COUNT) + 1;
+
+        return day;
     }
 
-    static public enum Day {
+    public static int getDayOfSeason(long fullTime) {
 
-        SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
+        int days = (int) (getDays(fullTime) % Config.SEASON_LENGTH) + 1;
+
+        return days;
     }
 
+    public static int getSeason(long fullTime) {
+
+        int season = (int) ((getDays(fullTime) / Config.SEASON_LENGTH)
+                % Config.SEASONS) + 1;
+
+        return season;
+    }
+
+    public static int getYear(long fullTime) {
+
+        int year = (int) (getDays(fullTime) / (Config.SEASON_LENGTH * Config.SEASONS)) + 1;
+
+        return year;
+    }
+
+    public static long getDays(long fullTime) {
+        long days = fullTime / 24000;
+        return days;
+    }
+    
     public static String getDayString(int day) {
         String string = "";
         for (int i = 0; i < day; i++) {

@@ -16,18 +16,18 @@ public class Config {
     public static int SEASON_LENGTH;
     public static int SEASONS;
     public static int WEEKDAY_COUNT;
-    public static List SEASON_STRINGS;
-    public static List SEASON_URLS;
-    public static List WEEKDAYS;
-    public static List DISABLED_WORLDS;
+    public static List<String> SEASON_STRINGS;
+    public static List<String> SEASON_URLS;
+    public static List<String> WEEKDAYS;
+    public static List<String> DISABLED_WORLDS;
 
     public static void load(Configuration config) {
         config.load();
         CONFIG = config;
-        SEASON_STRINGS = new ArrayList();
-        SEASON_URLS = new ArrayList();
-        WEEKDAYS = new ArrayList();
-        DISABLED_WORLDS = new ArrayList();
+        SEASON_STRINGS = new ArrayList<String>();
+        SEASON_URLS = new ArrayList<String>();
+        WEEKDAYS = new ArrayList<String>();
+        DISABLED_WORLDS = new ArrayList<String>();
 
         int seasonsCount = 0;
         int weekdayCount = 0;
@@ -35,22 +35,22 @@ public class Config {
 
 
         for (Object string : config.getList("weekdays")) {
-            WEEKDAYS.add(string);
+            WEEKDAYS.add((String) string);
             weekdayCount++;
         }
 
         for (Object string : config.getList("season_urls")) {
-            SEASON_URLS.add(string);
+            SEASON_URLS.add((String) string);
             urlCount++;
         }
 
         for (Object string : config.getList("seasons")) {
-            SEASON_STRINGS.add(string);
+            SEASON_STRINGS.add((String) string);
             seasonsCount++;
         }
         
         for (Object string : config.getList("disabled_worlds")) {
-            DISABLED_WORLDS.add(string);
+            DISABLED_WORLDS.add((String) string);
         }
 
         if (urlCount != seasonsCount) {
@@ -73,7 +73,7 @@ public class Config {
 
     public static Configuration newConfig(Configuration config) {
 
-        List seasons = new ArrayList();
+        List<String> seasons = new ArrayList<String>();
 
         // Default season config block
         seasons.add("Djilba");
@@ -83,7 +83,7 @@ public class Config {
         seasons.add("Djeran");
         seasons.add("Makuru");
 
-        List seasonUrls = new ArrayList();
+        List<String> seasonUrls = new ArrayList<String>();
         
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
@@ -92,7 +92,7 @@ public class Config {
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip");
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip");
 
-        List weekdays = new ArrayList();
+        List<String> weekdays = new ArrayList<String>();
 
         // Default days of the week config block
         weekdays.add("Sunday");
@@ -103,7 +103,7 @@ public class Config {
         weekdays.add("Friday");
         weekdays.add("Saturday");
         
-        List disabledWorlds = new ArrayList();
+        List<String> disabledWorlds = new ArrayList<String>();
         disabledWorlds.add("disabled_world_name");
 
         config.setProperty("weekdays", weekdays);
