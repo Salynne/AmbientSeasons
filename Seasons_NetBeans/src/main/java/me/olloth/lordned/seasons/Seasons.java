@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Logger;
 import me.olloth.lordned.seasons.listener.Players;
-import me.olloth.lordned.seasons.listener.SpoutCraftListener;
+import me.olloth.lordned.seasons.listener.SListener;
 import me.olloth.lordned.seasons.util.Config;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,17 +16,17 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Seasons extends JavaPlugin {
-	
+
 	// Setup Bukkit's Logger
 	public static final Logger log = Logger.getLogger("Minecraft");
-	
+
 	public static boolean RELOAD;
 	String logPrefix = "[Seasons] ";
-	private Dates dates = new Dates(this);
 	private PluginDescriptionFile info;
 	private PluginManager pm;
 	private File directory, config;
 	private Players players;
+	private SListener sListener;
 	public static HashMap<String, UUID> labels;
 	public static HashMap<String, Boolean> HUDEnable;
 
@@ -40,6 +40,7 @@ public class Seasons extends JavaPlugin {
 		info = getDescription();
 		pm = getServer().getPluginManager();
 		players = new Players(this);
+		sListener = new SListener(this);
 
 		RELOAD = true;
 		labels = new HashMap<String, UUID>();
@@ -49,11 +50,7 @@ public class Seasons extends JavaPlugin {
 		Config.configSetup(directory, config);
 
 		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
-		pm.registerEvent(Type.CUSTOM_EVENT, new SpoutCraftListener(this),
-				Priority.Low, this);
-
-		// Setup misc. Scheduled Tasks for this
-		dates.SetupScheduledTasks();
+		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
 
 		players.playersInit(getServer().getOnlinePlayers());
 
