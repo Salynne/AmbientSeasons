@@ -1,8 +1,0 @@
-authors: [Olloth, LordNed]
-database: false
-depend: [Spout]
-description: Adds Seasons to Minecraft. Uses SpoutAPI for clientside controls.
-main: me.olloth.lordned.seasons.Seasons
-name: Seasons
-startup: postworld
-version: '1.0'

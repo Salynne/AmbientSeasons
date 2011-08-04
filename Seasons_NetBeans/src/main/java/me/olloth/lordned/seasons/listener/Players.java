@@ -29,8 +29,6 @@ public class Players extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         SpoutPlayer sPlayer = (SpoutPlayer) event.getPlayer();
         playerInit(sPlayer);
-        
-
 
     }
 
@@ -38,6 +36,8 @@ public class Players extends PlayerListener {
         GenericLabel label = new GenericLabel(Enums.getDate());
         label.setHexColor(Integer.parseInt("FFFFFF", 16)).setX(10).setY(10);
         HashMap labels = plugin.getLabels();
+        HashMap toggle = plugin.getToggle();
+        toggle.put(sPlayer.getName(), true);
         labels.put(sPlayer.getName(), label.getId());
         sPlayer.getMainScreen().attachWidget(label);
     }

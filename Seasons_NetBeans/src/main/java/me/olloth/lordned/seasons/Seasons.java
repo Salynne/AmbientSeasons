@@ -6,6 +6,9 @@ import java.util.logging.Logger;
 import me.olloth.lordned.seasons.listener.Players;
 import me.olloth.lordned.seasons.listener.SpoutCraftListener;
 import me.olloth.lordned.seasons.util.Config;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -25,6 +28,7 @@ public class Seasons extends JavaPlugin {
     private File directory, config;
     private Players players;
     HashMap labels;
+    HashMap toggle;
 
     public void onDisable() {
 
@@ -39,12 +43,13 @@ public class Seasons extends JavaPlugin {
 
         RELOAD = true;
         labels = new HashMap();
+        toggle = new HashMap();
 
         //Load the Config
         Config.configSetup(directory, config);
 
         pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
-        pm.registerEvent(Type.CUSTOM_EVENT, new SpoutCraftListener(this), Priority.Low, this);    
+        pm.registerEvent(Type.CUSTOM_EVENT, new SpoutCraftListener(this), Priority.Low, this);
 
         //Setup misc. Scheduled Tasks for this
         dates.SetupScheduledTasks();
@@ -56,7 +61,21 @@ public class Seasons extends JavaPlugin {
 
     }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        String commandName = command.getName().toLowerCase();
+        if (commandName.equals("test")) {
+            System.out.println("Test");
+
+        }
+        return false;
+    }
+
     public HashMap getLabels() {
         return labels;
+    }
+
+    public HashMap getToggle() {
+        return toggle;
     }
 }

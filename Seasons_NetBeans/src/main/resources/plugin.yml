@@ -6,3 +6,7 @@ main: me.olloth.lordned.seasons.Seasons
 name: Seasons
 startup: postworld
 version: '1.0'
+commands:
+   test:
+     description: Test
+     usage: /test

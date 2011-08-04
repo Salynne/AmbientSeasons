@@ -36,8 +36,8 @@ public class Dates {
     }
 
     public void SetupScheduledTasks() {
-        long fullTime = Bukkit.getServer().getWorld(Config.WORLD).getFullTime();
-        time = Bukkit.getServer().getWorld(Config.WORLD).getTime();
+        long fullTime = Bukkit.getServer().getWorld(Config.CALENDAR_WORLD).getFullTime();
+        time = Bukkit.getServer().getWorld(Config.CALENDAR_WORLD).getTime();
         dayOfWeek = Times.getDayOfWeek(fullTime);
         dayOfSeason = Times.getDayOfSeason(fullTime);
         season = Times.getSeason(fullTime);
@@ -54,8 +54,8 @@ public class Dates {
 
     private void onSecond() {
 
-        FULL_TIME = Bukkit.getServer().getWorld(Config.WORLD).getFullTime();
-        TIME_OF_DAY = Bukkit.getServer().getWorld(Config.WORLD).getTime();
+        FULL_TIME = Bukkit.getServer().getWorld(Config.CALENDAR_WORLD).getFullTime();
+        TIME_OF_DAY = Bukkit.getServer().getWorld(Config.CALENDAR_WORLD).getTime();
 
         DAY_OF_WEEK = Times.getDayOfWeek(FULL_TIME);
         DAY_OF_SEASON = Times.getDayOfSeason(FULL_TIME);

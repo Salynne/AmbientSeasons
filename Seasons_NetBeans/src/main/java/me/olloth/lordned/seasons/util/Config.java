@@ -12,13 +12,14 @@ import org.bukkit.util.config.Configuration;
 public class Config {
 
     public static Configuration CONFIG;
-    public static String WORLD;
+    public static String CALENDAR_WORLD;
     public static int SEASON_LENGTH;
     public static int SEASONS;
     public static int WEEKDAY_COUNT;
     public static List SEASON_STRINGS;
     public static List SEASON_URLS;
     public static List WEEKDAYS;
+    public static List DISABLED_WORLDS;
 
     public static void load(Configuration config) {
         config.load();
@@ -26,6 +27,7 @@ public class Config {
         SEASON_STRINGS = new ArrayList();
         SEASON_URLS = new ArrayList();
         WEEKDAYS = new ArrayList();
+        DISABLED_WORLDS = new ArrayList();
 
         int seasonsCount = 0;
         int weekdayCount = 0;
@@ -46,6 +48,10 @@ public class Config {
             SEASON_STRINGS.add(string);
             seasonsCount++;
         }
+        
+        for (Object string : config.getList("disabled_worlds")) {
+            DISABLED_WORLDS.add(string);
+        }
 
         if (urlCount != seasonsCount) {
             Seasons.log.log(Level.WARNING, "You don't have the same number "
@@ -57,7 +63,7 @@ public class Config {
 
         SEASON_LENGTH = config.getInt("season_length", 28);
 
-        WORLD = config.getString("world");
+        CALENDAR_WORLD = config.getString("calendar_world");
 
         if (SEASON_LENGTH <= 0) {
             SEASON_LENGTH = 1;
@@ -78,6 +84,7 @@ public class Config {
         seasons.add("Makuru");
 
         List seasonUrls = new ArrayList();
+        
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
         seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip");
@@ -95,12 +102,16 @@ public class Config {
         weekdays.add("Thursday");
         weekdays.add("Friday");
         weekdays.add("Saturday");
+        
+        List disabledWorlds = new ArrayList();
+        disabledWorlds.add("disabled_world_name");
 
         config.setProperty("weekdays", weekdays);
         config.setProperty("season_urls", seasonUrls);
         config.setProperty("seasons", seasons);
         config.setProperty("season_length", 28);
-        config.setProperty("world", "world");
+        config.setProperty("calendar_world", "world");
+        config.setProperty("disabled_worlds",disabledWorlds);
 
         config.save();
 
