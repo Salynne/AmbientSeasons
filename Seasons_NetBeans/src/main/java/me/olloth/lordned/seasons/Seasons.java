@@ -7,13 +7,17 @@ import java.util.logging.Logger;
 import me.olloth.lordned.seasons.listener.Players;
 import me.olloth.lordned.seasons.listener.SListener;
 import me.olloth.lordned.seasons.util.Config;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 public class Seasons extends JavaPlugin {
 
@@ -32,6 +36,7 @@ public class Seasons extends JavaPlugin {
 
 	public void onDisable() {
 
+		Config.saveMap();
 		System.out.println("[" + info.getName() + "] is now disabled!");
 	}
 
@@ -63,8 +68,26 @@ public class Seasons extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		String commandName = command.getName().toLowerCase();
-		if (commandName.equals("test")) {
-			System.out.println("Test");
+		if (commandName.equals("seasonshud")) {
+			Player player = (Player) sender;
+		    if(HUDEnable.containsKey(player.getName())){
+		        if(HUDEnable.get(player.getName())){
+		            HUDEnable.put(player.getName(), false);
+		            UUID labelId = labels.get(player.getName());
+		            SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
+		            sPlayer.getMainScreen().getWidget(labelId).setVisible(false).setDirty(true);
+		            player.sendMessage("Seasons HUD disabled");
+		        } else {
+		            HUDEnable.put(player.getName(), true);
+		            UUID labelId = labels.get(player.getName());
+		            SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
+		            sPlayer.getMainScreen().getWidget(labelId).setVisible(true).setDirty(true);
+		            player.sendMessage("Seasons HUD enabled");
+		        }
+		    } else {
+		        HUDEnable.put(player.getName(), true);
+		        player.sendMessage("Seasons HUD enabled.");
+		    }
 
 		}
 		return false;

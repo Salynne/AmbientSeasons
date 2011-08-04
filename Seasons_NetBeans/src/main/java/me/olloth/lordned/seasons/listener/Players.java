@@ -32,18 +32,28 @@ public class Players extends PlayerListener {
 
 	}
 
-	public void playerInit(SpoutPlayer sPlayer) {
-		GenericLabel label = new GenericLabel(Times.getDate());
-		label.setHexColor(Integer.parseInt("FFFFFF", 16)).setX(10).setY(10);
-		Seasons.HUDEnable.put(sPlayer.getName(), true);
-		Seasons.labels.put(sPlayer.getName(), label.getId());
-		sPlayer.getMainScreen().attachWidget(label);
-	}
-
 	public void playersInit(Player[] players) {
 		for (Player player : players) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
 			playerInit(sPlayer);
 		}
+	}
+	
+	public void playerInit(SpoutPlayer sPlayer) {
+		
+		GenericLabel label = new GenericLabel(Times.getDate());
+		label.setHexColor(Integer.parseInt("FFFFFF", 16)).setX(10).setY(10);
+		Seasons.labels.put(sPlayer.getName(), label.getId());
+		label.setVisible(false);
+		sPlayer.getMainScreen().attachWidget(label);
+		
+		if(!Seasons.HUDEnable.containsKey(sPlayer.getName())) {
+			Seasons.HUDEnable.put(sPlayer.getName(), true);
+		}
+		
+		if(Seasons.HUDEnable.get(sPlayer.getName())) {
+			label.setVisible(true);
+		}
+		
 	}
 }

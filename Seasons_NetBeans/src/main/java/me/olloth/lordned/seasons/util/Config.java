@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import me.olloth.lordned.seasons.Seasons;
 import org.bukkit.util.config.Configuration;
 
 public class Config {
+	
+	private static File hudMap;
 
 	public static Configuration CONFIG;
 	public static String CALENDAR_WORLD;
@@ -125,6 +128,8 @@ public class Config {
 		return config;
 	}
 
+
+	@SuppressWarnings("unchecked")
 	public static void configSetup(File directory, File configFile) {
 		// Make the folder and configuration file if they don't exist.
 		if (!directory.exists()) {
@@ -149,5 +154,19 @@ public class Config {
 			// Load the configuration file
 			load(new Configuration(new File(directory, "config.yml")));
 		}
+		
+		hudMap = new File(directory, "settings.bin");
+		if(!hudMap.exists()) {
+			System.out.println("Making new settings file");
+			saveMap();
+		}
+		else {
+			Seasons.HUDEnable = (HashMap<String, Boolean>) HMapSL.load(hudMap.getPath());
+		}
+	}
+
+	public static void saveMap() {
+		HMapSL.save(Seasons.HUDEnable, hudMap.getPath());
+		
 	}
 }
