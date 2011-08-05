@@ -68,6 +68,7 @@ public class Seasons extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		String commandName = command.getName().toLowerCase();
+		System.out.println(command.getLabel());
 		if (commandName.equals("seasonshud")) {
 			Player player = (Player) sender;
 		    if(HUDEnable.containsKey(player.getName())){
@@ -76,19 +77,13 @@ public class Seasons extends JavaPlugin {
 		            UUID labelId = labels.get(player.getName());
 		            SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 		            sPlayer.getMainScreen().getWidget(labelId).setVisible(false).setDirty(true);
-		            player.sendMessage("Seasons HUD disabled");
 		        } else {
 		            HUDEnable.put(player.getName(), true);
 		            UUID labelId = labels.get(player.getName());
 		            SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 		            sPlayer.getMainScreen().getWidget(labelId).setVisible(true).setDirty(true);
-		            player.sendMessage("Seasons HUD enabled");
 		        }
-		    } else {
-		        HUDEnable.put(player.getName(), true);
-		        player.sendMessage("Seasons HUD enabled.");
 		    }
-
 		}
 		return false;
 	}

@@ -22,7 +22,7 @@ public class Config {
 	public static List<String> SEASON_STRINGS;
 	public static List<String> SEASON_URLS;
 	public static List<String> WEEKDAYS;
-	public static List<String> DISABLED_WORLDS;
+	public static List<String> ENABLED_WORLDS;
 
 	public static void load(Configuration config) {
 		config.load();
@@ -30,7 +30,7 @@ public class Config {
 		SEASON_STRINGS = new ArrayList<String>();
 		SEASON_URLS = new ArrayList<String>();
 		WEEKDAYS = new ArrayList<String>();
-		DISABLED_WORLDS = new ArrayList<String>();
+		ENABLED_WORLDS = new ArrayList<String>();
 
 		int seasonsCount = 0;
 		int weekdayCount = 0;
@@ -51,8 +51,8 @@ public class Config {
 			seasonsCount++;
 		}
 
-		for (Object string : config.getList("disabled_worlds")) {
-			DISABLED_WORLDS.add((String) string);
+		for (Object string : config.getList("enabled_worlds")) {
+			ENABLED_WORLDS.add((String) string);
 		}
 
 		if (urlCount != seasonsCount) {
@@ -87,18 +87,12 @@ public class Config {
 
 		List<String> seasonUrls = new ArrayList<String>();
 
-		seasonUrls
-				.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
-		seasonUrls
-				.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
-		seasonUrls
-				.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip");
-		seasonUrls
-				.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip");
-		seasonUrls
-				.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip");
-		seasonUrls
-				.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip");
+		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
+		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
+		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip");
+		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip");
+		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip");
+		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip");
 
 		List<String> weekdays = new ArrayList<String>();
 
@@ -111,15 +105,15 @@ public class Config {
 		weekdays.add("Friday");
 		weekdays.add("Saturday");
 
-		List<String> disabledWorlds = new ArrayList<String>();
-		disabledWorlds.add("disabled_world_name");
+		List<String> enabledWorlds = new ArrayList<String>();
+		enabledWorlds.add("world");
 
 		config.setProperty("weekdays", weekdays);
 		config.setProperty("season_urls", seasonUrls);
 		config.setProperty("seasons", seasons);
 		config.setProperty("season_length", 28);
 		config.setProperty("calendar_world", "world");
-		config.setProperty("disabled_worlds", disabledWorlds);
+		config.setProperty("enabled_worlds", enabledWorlds);
 
 		config.save();
 
