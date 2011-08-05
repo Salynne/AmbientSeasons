@@ -34,24 +34,20 @@ public class SListener extends SpoutListener {
 
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-
-		if (!event.getPlayer().isSpoutCraftEnabled()) {
-			event.getPlayer().sendMessage(
-					"This server uses SpoutCraft for the Seasons plugin.");
-			event.getPlayer().sendMessage(
-					"Install SpoutCraft from http://goo.gl/UbjS1 to see it.");
+		
+		if(Config.ENABLED_WORLDS.contains(event.getPlayer().getWorld().getName())) {
+			event.getPlayer().setTexturePack(Times.getSeasonUrl());
 		}
-
-		event.getPlayer().setTexturePack(Times.getSeasonUrl());
 	}
 
 	@Override
 	public void onServerTick(ServerTickEvent event) {
-		count++;
 
 		if ((count % 20) == 0) {
 			onSecond();
 		}
+		
+		count++;
 	}
 
 	private void onSecond() {
@@ -104,7 +100,9 @@ public class SListener extends SpoutListener {
 	public void updateTextures() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
-			sPlayer.setTexturePack(Times.getSeasonUrl());
+			if(Config.ENABLED_WORLDS.contains(player.getWorld().getName())) {
+				sPlayer.setTexturePack(Times.getSeasonUrl());
+			}
 		}
 	}
 

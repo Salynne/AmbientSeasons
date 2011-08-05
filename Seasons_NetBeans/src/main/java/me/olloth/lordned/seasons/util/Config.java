@@ -52,7 +52,9 @@ public class Config {
 		}
 
 		for (Object string : config.getList("enabled_worlds")) {
-			ENABLED_WORLDS.add((String) string);
+			if(string instanceof String) {
+				ENABLED_WORLDS.add((String) string);
+			}
 		}
 
 		if (urlCount != seasonsCount) {
