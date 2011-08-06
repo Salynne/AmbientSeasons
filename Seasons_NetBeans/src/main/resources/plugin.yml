@@ -2,11 +2,11 @@ authors: [Olloth, LordNed]
 database: false
 depend: [Spout]
 description: Adds Seasons to Minecraft. Uses SpoutAPI for clientside controls.
-main: me.olloth.lordned.seasons.Seasons
-name: Seasons
+main: me.ambientseasons.AmbientSeasons
+name: AmbientSeasons
 startup: postworld
-version: '1.2'
+version: '1.3'
 commands:
    seasonshud:
-     description: Enables or disables the Seasons HUD
-     usage: /seasonsHUD
+     description: Enables or disables the Ambient Seasons HUD
+     usage: /asHUD

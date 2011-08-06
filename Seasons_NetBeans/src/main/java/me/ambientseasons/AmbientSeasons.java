@@ -103,10 +103,10 @@ public class AmbientSeasons extends JavaPlugin {
 		String commandName = command.getName().toLowerCase();
 		
 		/*
-		 * Checks to see if the command is /seasonshud
+		 * Checks to see if the command is /ashud
 		 * If so, it toggles the players HUD on or off.
 		 */
-		if (commandName.equals("seasonshud")) {
+		if (commandName.equals("ashud")) {
 			Player player = (Player) sender;
 			if (HUDEnable.containsKey(player.getName())) {
 				if (HUDEnable.get(player.getName())) {
