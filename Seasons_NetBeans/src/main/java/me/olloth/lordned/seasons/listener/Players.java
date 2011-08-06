@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package me.olloth.lordned.seasons.listener;
 
 import me.olloth.lordned.seasons.Seasons;
@@ -14,8 +10,8 @@ import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
- * 
  * @author Olloth
+ *
  */
 public class Players extends PlayerListener {
 
@@ -25,6 +21,9 @@ public class Players extends PlayerListener {
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Calls when the player joins the server.
+	 */
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
                 //When a player(s) join, set up the clientside HUD via SPOUT
@@ -33,6 +32,10 @@ public class Players extends PlayerListener {
 
 	}
 
+	/**
+	 * Initializes all the players
+	 * @param players - Array of players to initialize
+	 */
 	public void playersInit(Player[] players) {
 		for (Player player : players) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
@@ -40,6 +43,10 @@ public class Players extends PlayerListener {
 		}
 	}
 	
+	/**
+	 * Initializes a SpoutPlayer
+	 * @param sPlayer - Player to initialize
+	 */
 	public void playerInit(SpoutPlayer sPlayer) {
 		
 		GenericLabel label = new GenericLabel(Times.getDate());

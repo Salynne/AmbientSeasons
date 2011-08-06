@@ -27,11 +27,19 @@ public class SListener extends SpoutListener {
 
 	private int dayOfWeek, season, year;
 
+	
+	/**
+	 * Constructor, sets the ticks counter to 0;
+	 * @param plugin
+	 */
 	public SListener(Seasons plugin) {
 		count = 0;
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Runs when SpoutCraftEnables after a player joins.
+	 */
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
 		
@@ -40,6 +48,9 @@ public class SListener extends SpoutListener {
 		}
 	}
 
+	/**
+	 * Runs every tick, BE CAREFUL HERE.
+	 */
 	@Override
 	public void onServerTick(ServerTickEvent event) {
 
@@ -50,6 +61,9 @@ public class SListener extends SpoutListener {
 		count++;
 	}
 
+	/**
+	 * Runs every second, BE CAREFUL HERE.
+	 */
 	private void onSecond() {
 
 		FULL_TIME = plugin.getServer().getWorld(Config.CALENDAR_WORLD)
@@ -62,30 +76,27 @@ public class SListener extends SpoutListener {
 		SEASON = Times.getSeason(FULL_TIME);
 		YEAR = Times.getYear(FULL_TIME);
 
-		if (Seasons.RELOAD) {
-			updateHud();
-			Seasons.RELOAD = false;
-		}
-
 		if (DAY_OF_WEEK != dayOfWeek) {
 			updateHud();
-			// New day code here
+			dayOfWeek = DAY_OF_WEEK;
 		}
 
 		if (SEASON != season) {
 			updateTextures();
+			updateHud();
+			season = SEASON;
 		}
 
-		if (YEAR > year) {
-			// New year code fires here;
+		if (YEAR != year) {
+			updateHud();
 			year = YEAR;
 		}
 
-		season = SEASON;
-		dayOfWeek = DAY_OF_WEEK;
-
 	}
 
+	/**
+	 * Updates the HUD for every player currently online.
+	 */
 	public void updateHud() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
@@ -97,6 +108,9 @@ public class SListener extends SpoutListener {
 		}
 	}
 
+	/**
+	 * Updates the texture pack for every player currently online.
+	 */
 	public void updateTextures() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;

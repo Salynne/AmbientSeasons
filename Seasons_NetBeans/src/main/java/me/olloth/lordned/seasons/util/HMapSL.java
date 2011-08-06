@@ -7,6 +7,11 @@ import java.io.ObjectOutputStream;
 
 public class HMapSL {
 
+	/**
+	 * Saves an object to a file.
+	 * @param obj - Object to save
+	 * @param path - Path of the object
+	 */
 	public static void save(Object obj, String path) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
@@ -19,6 +24,11 @@ public class HMapSL {
 
 	}
 
+	/**
+	 * Returns an object from a file
+	 * @param path - Path of the object
+	 * @return - Object from the file
+	 */
 	public static Object load(String path) {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));
