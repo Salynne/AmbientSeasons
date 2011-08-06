@@ -4,9 +4,7 @@
  */
 package me.olloth.lordned.seasons.listener;
 
-import java.util.List;
 import me.olloth.lordned.seasons.Seasons;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
@@ -22,7 +20,7 @@ public class Blocks extends BlockListener {
     public Blocks(Seasons plugin)
     {
         this.plugin = plugin;
-        this.plugin.log.info("Block Listener enabled.");
+        Seasons.log.info("Block Listener enabled.");
     }
 
     @Override

@@ -39,10 +39,10 @@ public class Seasons extends JavaPlugin {
 	public static boolean WHEAT_MOD;
 	public List<Location> WheatBlockLocations;
 
-	String logPrefix = "[Seasons] ";
+	public static String PREFIX = "[Seasons] ";
 	private PluginDescriptionFile info;
 	private PluginManager pm;
-	private File directory, config;
+	private File directory;
 	private Players players;
 	private SListener sListener;
 	private Blocks bListener;
@@ -76,7 +76,7 @@ public class Seasons extends JavaPlugin {
 		HUDEnable = new HashMap<String, Boolean>();
 
 		// Load the Config
-		Config.configSetup(directory, config);
+		Config.configSetup(directory);
 
 		// Register events
 		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
