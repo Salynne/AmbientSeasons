@@ -27,6 +27,7 @@ public class Players extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
+                //When a player(s) join, set up the clientside HUD via SPOUT
 		SpoutPlayer sPlayer = (SpoutPlayer) event.getPlayer();
 		playerInit(sPlayer);
 
@@ -56,4 +57,6 @@ public class Players extends PlayerListener {
 		}
 		
 	}
+        
+        
 }

@@ -2,12 +2,15 @@ package me.olloth.lordned.seasons;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
+import me.olloth.lordned.seasons.listener.Blocks;
 import me.olloth.lordned.seasons.listener.Players;
 import me.olloth.lordned.seasons.listener.SListener;
 import me.olloth.lordned.seasons.util.Config;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,12 +28,18 @@ public class Seasons extends JavaPlugin {
 	public static final Logger log = Logger.getLogger("Minecraft");
 
 	public static boolean RELOAD;
+        
+        //Wheat Modifier (Modified growing times based on season)
+        public static boolean WHEAT_MOD;
+        public List<Location> WheatBlockLocations;
+        
 	String logPrefix = "[Seasons] ";
 	private PluginDescriptionFile info;
 	private PluginManager pm;
 	private File directory, config;
 	private Players players;
 	private SListener sListener;
+        private Blocks bListener;
 	public static HashMap<String, UUID> labels;
 	public static HashMap<String, Boolean> HUDEnable;
 
@@ -46,8 +55,10 @@ public class Seasons extends JavaPlugin {
 		pm = getServer().getPluginManager();
 		players = new Players(this);
 		sListener = new SListener(this);
+                bListener = new Blocks(this);
 
 		RELOAD = true;
+                WHEAT_MOD = true; //TEMP (Load from config in future)
 		labels = new HashMap<String, UUID>();
 		HUDEnable = new HashMap<String, Boolean>();
 
@@ -56,6 +67,7 @@ public class Seasons extends JavaPlugin {
 
 		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
+                pm.registerEvent(Type.BLOCK_PLACE, bListener, Priority.Low, this);
 
 		players.playersInit(getServer().getOnlinePlayers());
 
