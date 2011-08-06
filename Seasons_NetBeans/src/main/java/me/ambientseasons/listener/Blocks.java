@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.olloth.lordned.seasons.listener;
+package me.ambientseasons.listener;
 
-import me.olloth.lordned.seasons.Seasons;
+import me.ambientseasons.AmbientSeasons;
+
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
@@ -15,12 +16,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
  * @author Matt
  */
 public class Blocks extends BlockListener {
-    private Seasons plugin;
+    private AmbientSeasons plugin;
     
-    public Blocks(Seasons plugin)
+    public Blocks(AmbientSeasons plugin)
     {
         this.plugin = plugin;
-        Seasons.log.info("Block Listener enabled.");
+        AmbientSeasons.log.info("Block Listener enabled.");
     }
 
     @Override

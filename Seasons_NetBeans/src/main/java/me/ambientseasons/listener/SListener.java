@@ -1,10 +1,10 @@
-package me.olloth.lordned.seasons.listener;
+package me.ambientseasons.listener;
 
 import java.util.UUID;
 
-import me.olloth.lordned.seasons.Seasons;
-import me.olloth.lordned.seasons.util.Config;
-import me.olloth.lordned.seasons.util.Times;
+import me.ambientseasons.AmbientSeasons;
+import me.ambientseasons.util.Config;
+import me.ambientseasons.util.Times;
 
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.event.spout.ServerTickEvent;
@@ -19,7 +19,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
  */
 public class SListener extends SpoutListener {
 
-	private Seasons plugin;
+	private AmbientSeasons plugin;
 	long count;
 
 	public static int DAY_OF_WEEK, DAY_OF_SEASON, SEASON, YEAR;
@@ -32,7 +32,7 @@ public class SListener extends SpoutListener {
 	 * Constructor, sets the ticks counter to 0;
 	 * @param plugin
 	 */
-	public SListener(Seasons plugin) {
+	public SListener(AmbientSeasons plugin) {
 		count = 0;
 		this.plugin = plugin;
 	}
@@ -95,7 +95,7 @@ public class SListener extends SpoutListener {
 	public void updateHud() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
-			UUID labelId = (UUID) Seasons.labels.get(player.getName());
+			UUID labelId = (UUID) AmbientSeasons.labels.get(player.getName());
 			GenericLabel label = (GenericLabel) sPlayer.getMainScreen()
 					.getWidget(labelId);
 			label.setText(Times.getDate());

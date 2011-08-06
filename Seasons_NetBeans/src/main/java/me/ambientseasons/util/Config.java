@@ -1,4 +1,4 @@
-package me.olloth.lordned.seasons.util;
+package me.ambientseasons.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import me.olloth.lordned.seasons.Seasons;
+
+import me.ambientseasons.AmbientSeasons;
+
 import org.bukkit.util.config.Configuration;
 
 public class Config {
@@ -189,7 +191,7 @@ public class Config {
 			saveMap();
 		}
 		else {
-			Seasons.HUDEnable = (HashMap<String, Boolean>) HMapSL.load(hudMap.getPath());
+			AmbientSeasons.HUDEnable = (HashMap<String, Boolean>) HMapSL.load(hudMap.getPath());
 		}
 	}
 
@@ -197,7 +199,7 @@ public class Config {
 	 * Save the hash map HUDEnable
 	 */
 	public static void saveMap() {
-		HMapSL.save(Seasons.HUDEnable, hudMap.getPath());
+		HMapSL.save(AmbientSeasons.HUDEnable, hudMap.getPath());
 		
 	}
 }

@@ -1,7 +1,7 @@
-package me.olloth.lordned.seasons.listener;
+package me.ambientseasons.listener;
 
-import me.olloth.lordned.seasons.Seasons;
-import me.olloth.lordned.seasons.util.Times;
+import me.ambientseasons.AmbientSeasons;
+import me.ambientseasons.util.Times;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -15,9 +15,9 @@ import org.getspout.spoutapi.player.SpoutPlayer;
  */
 public class Players extends PlayerListener {
 
-	Seasons plugin;
+	AmbientSeasons plugin;
 
-	public Players(Seasons plugin) {
+	public Players(AmbientSeasons plugin) {
 		this.plugin = plugin;
 	}
 
@@ -51,15 +51,15 @@ public class Players extends PlayerListener {
 		
 		GenericLabel label = new GenericLabel(Times.getDate());
 		label.setHexColor(Integer.parseInt("FFFFFF", 16)).setX(10).setY(10);
-		Seasons.labels.put(sPlayer.getName(), label.getId());
+		AmbientSeasons.labels.put(sPlayer.getName(), label.getId());
 		label.setVisible(false);
 		sPlayer.getMainScreen().attachWidget(label);
 		
-		if(!Seasons.HUDEnable.containsKey(sPlayer.getName())) {
-			Seasons.HUDEnable.put(sPlayer.getName(), true);
+		if(!AmbientSeasons.HUDEnable.containsKey(sPlayer.getName())) {
+			AmbientSeasons.HUDEnable.put(sPlayer.getName(), true);
 		}
 		
-		if(Seasons.HUDEnable.get(sPlayer.getName())) {
+		if(AmbientSeasons.HUDEnable.get(sPlayer.getName())) {
 			label.setVisible(true);
 		}
 		

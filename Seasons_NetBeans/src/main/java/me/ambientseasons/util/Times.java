@@ -1,6 +1,6 @@
-package me.olloth.lordned.seasons.util;
+package me.ambientseasons.util;
 
-import me.olloth.lordned.seasons.listener.SListener;
+import me.ambientseasons.listener.SListener;
 
 /**
  * 

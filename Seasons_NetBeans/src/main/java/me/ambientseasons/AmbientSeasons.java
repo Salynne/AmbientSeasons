@@ -1,14 +1,15 @@
-package me.olloth.lordned.seasons;
+package me.ambientseasons;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
-import me.olloth.lordned.seasons.listener.Blocks;
-import me.olloth.lordned.seasons.listener.Players;
-import me.olloth.lordned.seasons.listener.SListener;
-import me.olloth.lordned.seasons.util.Config;
+
+import me.ambientseasons.listener.Blocks;
+import me.ambientseasons.listener.Players;
+import me.ambientseasons.listener.SListener;
+import me.ambientseasons.util.Config;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -30,7 +31,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
  * @author Olloth, LordNed
  *
  */
-public class Seasons extends JavaPlugin {
+public class AmbientSeasons extends JavaPlugin {
 
 	// Setup Bukkit's Logger
 	public static final Logger log = Logger.getLogger("Minecraft");
@@ -39,7 +40,7 @@ public class Seasons extends JavaPlugin {
 	public static boolean WHEAT_MOD;
 	public List<Location> WheatBlockLocations;
 
-	public static String PREFIX = "[Seasons] ";
+	public static String PREFIX = "[AmbientSeasons] ";
 	private PluginDescriptionFile info;
 	private PluginManager pm;
 	private File directory;

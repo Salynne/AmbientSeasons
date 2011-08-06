@@ -1,4 +1,4 @@
-package me.olloth.lordned.seasons.util;
+package me.ambientseasons.util;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
