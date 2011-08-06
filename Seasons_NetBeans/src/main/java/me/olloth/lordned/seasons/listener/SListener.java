@@ -25,7 +25,7 @@ public class SListener extends SpoutListener {
 	public static int DAY_OF_WEEK, DAY_OF_SEASON, SEASON, YEAR;
 	public static long TIME_OF_DAY, FULL_TIME;
 
-	private int dayOfWeek, season, year;
+	private int dayOfSeason, season, year;
 
 	
 	/**
@@ -76,20 +76,15 @@ public class SListener extends SpoutListener {
 		SEASON = Times.getSeason(FULL_TIME);
 		YEAR = Times.getYear(FULL_TIME);
 
-		if (DAY_OF_WEEK != dayOfWeek) {
+		if (DAY_OF_SEASON != dayOfSeason || SEASON != season || YEAR != year) {
 			updateHud();
-			dayOfWeek = DAY_OF_WEEK;
+			dayOfSeason = DAY_OF_SEASON;
+			year = YEAR;
 		}
 
 		if (SEASON != season) {
 			updateTextures();
-			updateHud();
 			season = SEASON;
-		}
-
-		if (YEAR != year) {
-			updateHud();
-			year = YEAR;
 		}
 
 	}
