@@ -103,7 +103,7 @@ public class Config {
 
 		// Check if it's empty, if so set default, if not, load it
 		if (config.getString("calc_type") == null) {
-			config.setProperty("calc_type", "time");
+			config.setProperty("calc_type", "world");
 			CALC_TYPE = config.getString("calc_type");
 		} else {
 			CALC_TYPE = config.getString("calc_type");

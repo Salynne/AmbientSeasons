@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
@@ -86,9 +85,8 @@ public class AmbientSeasons extends JavaPlugin {
 		Config.configSetup(directory);
 		
 		if(getServer().getWorld(Config.CALENDAR_WORLD) == null) {
-			log.log(Level.SEVERE,PREFIX + "Please set calendar_world in config.yml to a correct world.");
-			pm.disablePlugin(this);
-			return;
+			Config.CONFIG.setProperty("calc_type", "time");
+			Config.CALC_TYPE = "time";
 		}
 
 		WHEAT_MOD = false; // TEMP (Load from config in future)
