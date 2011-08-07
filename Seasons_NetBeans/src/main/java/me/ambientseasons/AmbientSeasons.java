@@ -1,5 +1,6 @@
 package me.ambientseasons;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import me.ambientseasons.listener.Players;
 import me.ambientseasons.listener.SListener;
 import me.ambientseasons.util.Config;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -122,14 +124,28 @@ public class AmbientSeasons extends JavaPlugin {
 					UUID labelId = labels.get(player.getName());
 					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 					sPlayer.getMainScreen().getWidget(labelId).setVisible(false).setDirty(true);
+                                        sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD disabled.");
+                                        sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to enable it again.");
 				} else {
 					HUDEnable.put(player.getName(), true);
 					UUID labelId = labels.get(player.getName());
 					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 					sPlayer.getMainScreen().getWidget(labelId).setVisible(true).setDirty(true);
+                                        sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD enabled.");
+                                        sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to disable it.");
 				}
 			}
 		}
+                
+                if (commandName.equals("ashelp"))
+                {
+                    Player player = (Player) sender;
+                    sender.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
+                    sender.sendMessage(ChatColor.RED + "Crops not growing?" + ChatColor.WHITE + " Crops prefer moderate biomes,");
+                    sender.sendMessage(ChatColor.WHITE + "and will grow slower in extreme biomes.");
+                    
+                    
+                }
 		return false;
 	}
 }

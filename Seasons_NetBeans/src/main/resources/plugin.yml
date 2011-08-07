@@ -7,6 +7,12 @@ name: AmbientSeasons
 startup: postworld
 version: '1.3'
 commands:
-   seasonshud:
+   ashud:
      description: Enables or disables the Ambient Seasons HUD
-     usage: /asHUD
+     usage: /<command>
+     alias: [ashud, seasonshud]
+   ashelp:
+     description: Display the help file 
+     usage: /<command>
+     alias: [ashelp, seasondhelp]
+       
