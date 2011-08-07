@@ -10,9 +10,9 @@ commands:
    ashud:
      description: Enables or disables the Ambient Seasons HUD
      usage: /<command>
-     alias: [ashud, seasonshud]
+     aliases: [ashud, seasonshud]
    ashelp:
      description: Display the help file 
      usage: /<command>
-     alias: [ashelp, seasondhelp]
+     aliases: [ashelp, seasonshelp]
        
