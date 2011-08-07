@@ -11,13 +11,13 @@ public class Times {
 	/**
 	 * Gets the day of the week
 	 * 
-	 * @param fullTime
+	 * @param time
 	 *            - Full time since the world started in ticks
 	 * @return Day of the week
 	 */
-	public static int getDayOfWeek(long fullTime) {
+	public static int getDayOfWeek(long time) {
 
-		int day = (int) (getDays(fullTime) % Config.WEEKDAY_COUNT) + 1;
+		int day = (int) (getDays(time) % Config.WEEKDAY_COUNT) + 1;
 
 		return day;
 	}
@@ -25,13 +25,13 @@ public class Times {
 	/**
 	 * Gets the date in the season
 	 * 
-	 * @param fullTime
+	 * @param time
 	 *            - Full time since the world started in ticks
 	 * @return Day of the season
 	 */
-	public static int getDayOfSeason(long fullTime) {
+	public static int getDayOfSeason(long time) {
 
-		int days = (int) (getDays(fullTime) % Config.SEASON_LENGTH) + 1;
+		int days = (int) (getDays(time) % Config.SEASON_LENGTH) + 1;
 
 		return days;
 	}
@@ -39,13 +39,13 @@ public class Times {
 	/**
 	 * Gets the season
 	 * 
-	 * @param fullTime
+	 * @param time
 	 *            - Full time since the world started in ticks
 	 * @return Season
 	 */
-	public static int getSeason(long fullTime) {
+	public static int getSeason(long time) {
 
-		int season = (int) ((getDays(fullTime) / Config.SEASON_LENGTH) % Config.SEASONS) + 1;
+		int season = (int) ((getDays(time) / Config.SEASON_LENGTH) % Config.SEASONS) + 1;
 
 		return season;
 	}
@@ -53,13 +53,13 @@ public class Times {
 	/**
 	 * Gets the year
 	 * 
-	 * @param fullTime
+	 * @param time
 	 *            - Full time since the world started in ticks
 	 * @return Year
 	 */
-	public static int getYear(long fullTime) {
+	public static int getYear(long time) {
 
-		int year = (int) (getDays(fullTime) / (Config.SEASON_LENGTH * Config.SEASONS)) + 1;
+		int year = (int) (getDays(time) / (Config.SEASON_LENGTH * Config.SEASONS)) + 1;
 
 		return year;
 	}
@@ -67,12 +67,19 @@ public class Times {
 	/**
 	 * Days that have gone by in total
 	 * 
-	 * @param fullTime
+	 * @param time
 	 *            - Full time since the world started in ticks
 	 * @return Number of days since the world started
 	 */
-	public static long getDays(long fullTime) {
-		long days = fullTime / 24000;
+	public static long getDays(long time) {
+		long days;
+		if(Config.CALC_TYPE.toLowerCase().equals("world")) {
+			days = time / 24000;
+		}
+		else {
+			days = time / Config.SECONDS_IN_DAY;
+		}
+
 		return days;
 	}
 

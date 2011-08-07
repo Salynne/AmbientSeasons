@@ -22,6 +22,10 @@ public class Config {
 	public static int SEASON_LENGTH;
 	public static int SEASONS;
 	public static int WEEKDAY_COUNT;
+	public static int SECONDS;
+	public static int SECONDS_IN_DAY;
+	public static long TIME_CALC;
+	public static String CALC_TYPE;
 	public static List<Object> SEASON_STRINGS;
 	public static List<Object> SEASON_URLS;
 	public static List<Object> WEEKDAYS;
@@ -30,6 +34,7 @@ public class Config {
 	private static List<String> seasonUrls;
 	private static List<String> enabledWorlds;
 	private static List<String> weekdays;
+
 
 	/**
 	 * Load the configuration file
@@ -96,11 +101,46 @@ public class Config {
 			CALENDAR_WORLD = config.getString("calendar_world");
 		}
 
+		// Check if it's empty, if so set default, if not, load it
+		if (config.getString("calc_type") == null) {
+			config.setProperty("calc_type", "time");
+			CALC_TYPE = config.getString("calc_type");
+		} else {
+			CALC_TYPE = config.getString("calc_type");
+		}
+
+		// Check if it's empty, if so set default, if not, load it
+		if (config.getString("seconds") == null) {
+			config.setProperty("seconds", 1);
+			SECONDS = config.getInt("seconds", 1);
+		} else {
+			SECONDS = config.getInt("seconds", 1);
+		}
+		
+		// Check if it's empty, if so set default, if not, load it
+		if (config.getString("seconds_in_day") == null) {
+			config.setProperty("seconds_in_day", 60);
+			SECONDS_IN_DAY = config.getInt("seconds_in_day", 60);
+		} else {
+			SECONDS_IN_DAY = config.getInt("seconds_in_day", 60);
+		}
+
 		SEASONS = config.getList("seasons").size();
 		WEEKDAY_COUNT = config.getList("weekdays").size();
 
 		config.save();
 
+	}
+
+	public static void saveSeconds() {
+		// Check if it's empty, if so set default, if not, load it
+		if (CONFIG.getString("seconds") == null) {
+			CONFIG.setProperty("seconds", 1);
+		} else {
+			CONFIG.setProperty("seconds", SECONDS);
+		}
+
+		CONFIG.save();
 	}
 
 	/**

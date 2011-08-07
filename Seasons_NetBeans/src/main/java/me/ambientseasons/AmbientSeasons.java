@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
@@ -38,6 +39,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 	// Setup Bukkit's Logger
 	public static final Logger log = Logger.getLogger("Minecraft");
+	public static String PREFIX = "[AmbientSeasons] ";
 	public static boolean DEBUG = false;
 
 	// Wheat Modifier (Modified growing times based on season)
@@ -45,7 +47,6 @@ public class AmbientSeasons extends JavaPlugin {
 	public List<Location> WheatBlockLocations;
 	public WheatMod wheatMod;
 
-	public static String PREFIX = "[AmbientSeasons] ";
 	private PluginDescriptionFile info;
 	private PluginManager pm;
 	private File directory;
@@ -61,6 +62,7 @@ public class AmbientSeasons extends JavaPlugin {
 	 */
 	public void onDisable() {
 
+		Config.saveSeconds();
 		Config.saveMap();
 		System.out.println("[" + info.getName() + "] is now disabled!");
 	}
@@ -76,24 +78,36 @@ public class AmbientSeasons extends JavaPlugin {
 		// Initialize listeners
 		players = new Players(this);
 		sListener = new SListener(this);
-		blockPlace = new BlockPlaceListener(this);
-		blockGrow = new BlockGrow(this);
-
-		WHEAT_MOD = true; // TEMP (Load from config in future)
-		WheatBlockLocations = new ArrayList<Location>();
-		wheatMod = new WheatMod(this);
 
 		labels = new HashMap<String, UUID>();
 		HUDEnable = new HashMap<String, Boolean>();
 
 		// Load the Config
 		Config.configSetup(directory);
+		
+		if(getServer().getWorld(Config.CALENDAR_WORLD) == null) {
+			log.log(Level.SEVERE,PREFIX + "Please set calendar_world in config.yml to a correct world.");
+			pm.disablePlugin(this);
+			return;
+		}
+
+		WHEAT_MOD = false; // TEMP (Load from config in future)
+
+		if (WHEAT_MOD) {
+			blockPlace = new BlockPlaceListener(this);
+			blockGrow = new BlockGrow(this);
+
+			WheatBlockLocations = new ArrayList<Location>();
+			wheatMod = new WheatMod(this);
+		}
 
 		// Register events
 		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PLACE, blockPlace, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
+		if (WHEAT_MOD) {
+			pm.registerEvent(Type.BLOCK_PLACE, blockPlace, Priority.Low, this);
+			pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
+		}
 
 		// Update any players who were online (In case of /reload)
 		players.playersInit(getServer().getOnlinePlayers());
@@ -146,8 +160,10 @@ public class AmbientSeasons extends JavaPlugin {
 			sender.sendMessage("");
 			sender.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
 			sender.sendMessage(ChatColor.RED + "/asHUD" + ChatColor.WHITE + " Command toggles your clientside HUD.");
-			sender.sendMessage(ChatColor.RED + "Crops not growing?" + ChatColor.WHITE + " Crops prefer moderate biomes,");
-			sender.sendMessage(ChatColor.WHITE + "and will grow slower in extreme biomes.");
+			// sender.sendMessage(ChatColor.RED + "Crops not growing?" +
+			// ChatColor.WHITE + " Crops prefer moderate biomes,");
+			// sender.sendMessage(ChatColor.WHITE +
+			// "and will grow slower in extreme biomes.");
 
 			return true;
 

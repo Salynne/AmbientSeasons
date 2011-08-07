@@ -21,10 +21,10 @@ public class SListener extends SpoutListener {
 
 	private AmbientSeasons plugin;
 	long count;
-	int wheatCount;
+	long seconds;
 
 	public static int DAY_OF_WEEK, DAY_OF_SEASON, SEASON, YEAR;
-	public static long TIME_OF_DAY, FULL_TIME;
+
 
 	private int dayOfSeason, season, year;
 
@@ -35,7 +35,6 @@ public class SListener extends SpoutListener {
 	 */
 	public SListener(AmbientSeasons plugin) {
 		count = 0;
-		wheatCount = 0;
 		this.plugin = plugin;
 	}
 
@@ -67,14 +66,20 @@ public class SListener extends SpoutListener {
 	 * Runs every second, BE CAREFUL HERE.
 	 */
 	private void onSecond() {
+		
+		Config.SECONDS++;
 
-		FULL_TIME = plugin.getServer().getWorld(Config.CALENDAR_WORLD).getFullTime();
-		TIME_OF_DAY = plugin.getServer().getWorld(Config.CALENDAR_WORLD).getTime();
+		if(Config.CALC_TYPE.toLowerCase().equals("world")) {
+			Config.TIME_CALC = plugin.getServer().getWorld(Config.CALENDAR_WORLD).getFullTime();
+		}
+		else {
+			Config.TIME_CALC = Config.SECONDS;
+		}
 
-		DAY_OF_WEEK = Times.getDayOfWeek(FULL_TIME);
-		DAY_OF_SEASON = Times.getDayOfSeason(FULL_TIME);
-		SEASON = Times.getSeason(FULL_TIME);
-		YEAR = Times.getYear(FULL_TIME);
+		DAY_OF_WEEK = Times.getDayOfWeek(Config.TIME_CALC);
+		DAY_OF_SEASON = Times.getDayOfSeason(Config.TIME_CALC);
+		SEASON = Times.getSeason(Config.TIME_CALC);
+		YEAR = Times.getYear(Config.TIME_CALC);
 
 		if (DAY_OF_SEASON != dayOfSeason || SEASON != season || YEAR != year) {
 			updateHud();
@@ -84,7 +89,11 @@ public class SListener extends SpoutListener {
 
 		if (SEASON != season) {
 			updateTextures();
-			plugin.wheatMod.updateSettings();
+			
+			if (AmbientSeasons.WHEAT_MOD) {
+				plugin.wheatMod.updateSettings();
+			}
+
 			season = SEASON;
 		}
 
