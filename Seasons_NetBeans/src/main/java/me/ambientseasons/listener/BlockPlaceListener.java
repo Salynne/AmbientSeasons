@@ -31,6 +31,7 @@ public class BlockPlaceListener extends BlockListener {
                 //What we do is register a Runnable to grow the crops.
                 //This way we can accurately speed up (or slow down) crop growth
                 //without growing them all at once.
+                plugin.log.info("Biome: " + event.getBlock().getBiome().toString());
                 plugin.wheatMod.CreateWheatGrowthScheduler(event);
             }  
 	}
