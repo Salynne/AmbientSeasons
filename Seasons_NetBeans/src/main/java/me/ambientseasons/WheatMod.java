@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * 
@@ -17,7 +18,7 @@ import org.bukkit.block.Block;
 public class WheatMod {
 	private AmbientSeasons plugin;
 
-	// -1 = slow, 0 = normal, 1 = fast
+        
 	public int WheatGrowthSpeed;
 
 	public WheatMod(AmbientSeasons plugin) {
@@ -27,45 +28,29 @@ public class WheatMod {
 
 		// TODO:
 		// Calculate the first growth time
-		WheatGrowthSpeed = 10;
+		WheatGrowthSpeed = 5;
 
 		// TODO:
 		// Hook weather change, if it starts raining grow faster.
 	}
+        
+        public void CreateWheatGrowthScheduler(BlockPlaceEvent event)
+        {
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new WheatGrow(event, plugin), WheatGrowthSpeed * 20);
+        }
+        
+        // TODO:
+        // Calculate the time for the next growth.
+        // Modify by WheatGrowthSpeed
+        // Take block's biome into account
+        // ("Wheat grows best in a dry, mild climate. Too hot or too cold ruin the crop.")
 
-	public void growWheat() {
-		List<Location> removedLocations = new ArrayList<Location>();
-		for (Location location : plugin.WheatBlockLocations) {
-			AmbientSeasons.log.info(AmbientSeasons.PREFIX + "Wheat Mod is growing");
-			Block block = plugin.getServer().getWorld("world").getBlockAt(location);
-
-			byte dataValue = block.getData();
-
-			if (dataValue == 0x7) {
-				removedLocations.add(location);
-				continue;
-			} else {
-				dataValue++;
-				block.setData(dataValue);
-			}
-		}
-		
-		plugin.WheatBlockLocations.removeAll(removedLocations);
-
-		// TODO:
-		// Calculate the time for the next growth.
-		// Modify by WheatGrowthSpeed
-		// Take block's biome into account
-		// ("Wheat grows best in a dry, mild climate. Too hot or too cold ruin the crop.")
-
-		// TODO: Create a temporary list in here, and randomly
-		// pick wheat
-		// to add to it (and remove from original list). Then
-		// schedule
-		// second delayed runnable that grows those a bit later,
-		// so it's not total global growth all at once.
-
-	}
+        // TODO: Create a temporary list in here, and randomly
+        // pick wheat
+        // to add to it (and remove from original list). Then
+        // schedule
+        // second delayed runnable that grows those a bit later,
+        // so it's not total global growth all at once.
 
 	public void updateSettings() {
 		// Read the season off of the config

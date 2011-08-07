@@ -87,13 +87,6 @@ public class SListener extends SpoutListener {
 			plugin.wheatMod.updateSettings();
 			season = SEASON;
 		}
-		
-		if(AmbientSeasons.WHEAT_MOD) {
-			if(wheatCount % plugin.wheatMod.WheatGrowthSpeed == 0) {
-				plugin.wheatMod.growWheat();
-			}
-			wheatCount ++;
-		}
 
 	}
 

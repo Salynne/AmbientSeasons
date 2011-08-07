@@ -24,18 +24,22 @@ public class BlockPlaceListener extends BlockListener {
 	}
 
 	@Override
-	public void onBlockPlace(BlockPlaceEvent event) {
-		if (event.getBlock().getType() == Material.CROPS) {
-			// Track the location of all wheat blocks
-			plugin.WheatBlockLocations.add(event.getBlock().getLocation());
-		}
+	public void onBlockPlace(BlockPlaceEvent event)
+        {
+            if (event.getBlock().getType() == Material.CROPS)
+            {
+                //What we do is register a Runnable to grow the crops.
+                //This way we can accurately speed up (or slow down) crop growth
+                //without growing them all at once.
+                plugin.wheatMod.CreateWheatGrowthScheduler(event);
+            }  
 	}
-
+            
 	@Override
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (event.getBlock().getType() == Material.CROPS) {
 			// Remove it from the list if it's on there.
-			plugin.WheatBlockLocations.remove(event.getBlock().getLocation());
+			//plugin.WheatBlockLocations.remove(event.getBlock().getLocation());
 		}
 	}
 

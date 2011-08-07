@@ -23,13 +23,17 @@ public class BlockGrow extends BlockListener {
 	@Override
 	// Prevent Crops from growing. We will manually grow them on our own later.
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (event.getBlock().getType() == Material.CROPS) {
-			event.setCancelled(true);
+            
+            if (!plugin.WHEAT_MOD)
+                return;
+            
+            if (event.getBlock().getType() == Material.CROPS) {
+                    event.setCancelled(true);
 
-			// If the list doesn't already have this block, go ahead and add it.
-			if (!plugin.WheatBlockLocations.contains(event.getBlock().getLocation())) {
-				plugin.WheatBlockLocations.add(event.getBlock().getLocation());
-			}
-		}
+                    // If the list doesn't already have this block, go ahead and add it.
+                    if (!plugin.WheatBlockLocations.contains(event.getBlock().getLocation())) {
+                            plugin.WheatBlockLocations.add(event.getBlock().getLocation());
+                    }
+            }
 	}
 }
