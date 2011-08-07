@@ -28,7 +28,7 @@ public class BlockGrow extends BlockListener{
         {           
             event.setCancelled(true);
                  
-            //If the list doesn't already have this block, goa head and add it.
+            //If the list doesn't already have this block, go ahead and add it.
             if (!plugin.WheatBlockLocations.contains(event.getBlock().getLocation()))
             {
                 plugin.WheatBlockLocations.add(event.getBlock().getLocation());

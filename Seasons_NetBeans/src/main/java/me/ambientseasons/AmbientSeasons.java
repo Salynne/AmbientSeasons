@@ -71,7 +71,7 @@ public class AmbientSeasons extends JavaPlugin {
 		info = getDescription();
 		pm = getServer().getPluginManager();
 		
-		// Initialize listeners
+		// Initialize listeners 
 		players = new Players(this);
 		sListener = new SListener(this);
 		blockPlace = new BlockPlaceListener(this);

@@ -60,6 +60,7 @@ public class WheatMod
                 //TODO:
                 //Calculate the time for the next growth. 
                 //Modify by WheatGrowthSpeed
+                //Take block's biome into account ("Wheat grows best in a dry, mild climate. Too hot or too cold ruin the crop.")
                 nextGrowthTime = 10;
                 
                 //TODO: Create a temporary list in here, and randomly pick wheat
