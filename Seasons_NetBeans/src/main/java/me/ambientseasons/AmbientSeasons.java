@@ -1,6 +1,5 @@
 package me.ambientseasons;
 
-import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +38,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 	// Setup Bukkit's Logger
 	public static final Logger log = Logger.getLogger("Minecraft");
-        public static boolean DEBUG = false;
+	public static boolean DEBUG = false;
 
 	// Wheat Modifier (Modified growing times based on season)
 	public static boolean WHEAT_MOD;
@@ -112,12 +111,11 @@ public class AmbientSeasons extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		String commandName = command.getName().toLowerCase();
 
-                //Only Players
-                if (!(sender instanceof Player))
-                {
-                    sender.sendMessage(PREFIX + "/" + commandName + " can only be run from in game.");
-                    return true;
-                }
+		// Only Players
+		if (!(sender instanceof Player)) {
+			sender.sendMessage(PREFIX + "/" + commandName + " can only be run from in game.");
+			return true;
+		}
 		/*
 		 * Checks to see if the command is /ashud If so, it toggles the players
 		 * HUD on or off.
@@ -130,33 +128,30 @@ public class AmbientSeasons extends JavaPlugin {
 					UUID labelId = labels.get(player.getName());
 					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 					sPlayer.getMainScreen().getWidget(labelId).setVisible(false).setDirty(true);
-                                        sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD disabled.");
-                                        sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to enable it again.");
+					sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD disabled.");
+					sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to enable it again.");
 				} else {
 					HUDEnable.put(player.getName(), true);
 					UUID labelId = labels.get(player.getName());
 					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 					sPlayer.getMainScreen().getWidget(labelId).setVisible(true).setDirty(true);
-                                        sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD enabled.");
-                                        sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to disable it.");
+					sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD enabled.");
+					sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to disable it.");
 				}
 			}
-                        return true;
+			return true;
 		}
-                
-                if (commandName.equals("ashelp"))
-                {
-                    Player player = (Player) sender;
-                    sender.sendMessage("");
-                    sender.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
-                    sender.sendMessage(ChatColor.RED + "/asHUD" + ChatColor.WHITE + " Command toggles your clientside HUD.");
-                    sender.sendMessage(ChatColor.RED + "Crops not growing?" + ChatColor.WHITE + " Crops prefer moderate biomes,");
-                    sender.sendMessage(ChatColor.WHITE + "and will grow slower in extreme biomes.");
-                    
-                    return true;
-                    
-                    
-                }
+
+		if (commandName.equals("ashelp")) {
+			sender.sendMessage("");
+			sender.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
+			sender.sendMessage(ChatColor.RED + "/asHUD" + ChatColor.WHITE + " Command toggles your clientside HUD.");
+			sender.sendMessage(ChatColor.RED + "Crops not growing?" + ChatColor.WHITE + " Crops prefer moderate biomes,");
+			sender.sendMessage(ChatColor.WHITE + "and will grow slower in extreme biomes.");
+
+			return true;
+
+		}
 		return false;
 	}
 }

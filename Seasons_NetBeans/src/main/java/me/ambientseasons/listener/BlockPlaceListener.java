@@ -20,30 +20,28 @@ public class BlockPlaceListener extends BlockListener {
 
 	public BlockPlaceListener(AmbientSeasons plugin) {
 		this.plugin = plugin;
-                if (plugin.DEBUG)
-                    AmbientSeasons.log.info("Block Listener enabled.");
+		if (AmbientSeasons.DEBUG)
+			AmbientSeasons.log.info("Block Listener enabled.");
 	}
 
 	@Override
-	public void onBlockPlace(BlockPlaceEvent event)
-        {
-            if (event.getBlock().getType() == Material.CROPS)
-            {
-                //What we do is register a Runnable to grow the crops.
-                //This way we can accurately speed up (or slow down) crop growth
-                //without growing them all at once.
-                if (plugin.DEBUG)
-                    plugin.log.info("Biome: " + event.getBlock().getBiome().toString());
-                
-                plugin.wheatMod.CreateWheatGrowthScheduler(event);
-            }  
+	public void onBlockPlace(BlockPlaceEvent event) {
+		if (event.getBlock().getType() == Material.CROPS) {
+			// What we do is register a Runnable to grow the crops.
+			// This way we can accurately speed up (or slow down) crop growth
+			// without growing them all at once.
+			if (AmbientSeasons.DEBUG)
+				AmbientSeasons.log.info("Biome: " + event.getBlock().getBiome().toString());
+
+			plugin.wheatMod.CreateWheatGrowthScheduler(event);
+		}
 	}
-            
+
 	@Override
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (event.getBlock().getType() == Material.CROPS) {
 			// Remove it from the list if it's on there.
-			//plugin.WheatBlockLocations.remove(event.getBlock().getLocation());
+			// plugin.WheatBlockLocations.remove(event.getBlock().getLocation());
 		}
 	}
 
