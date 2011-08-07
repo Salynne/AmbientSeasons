@@ -21,6 +21,7 @@ public class SListener extends SpoutListener {
 
 	private AmbientSeasons plugin;
 	long count;
+	int wheatCount;
 
 	public static int DAY_OF_WEEK, DAY_OF_SEASON, SEASON, YEAR;
 	public static long TIME_OF_DAY, FULL_TIME;
@@ -34,6 +35,7 @@ public class SListener extends SpoutListener {
 	 */
 	public SListener(AmbientSeasons plugin) {
 		count = 0;
+		wheatCount = 0;
 		this.plugin = plugin;
 	}
 
@@ -82,8 +84,15 @@ public class SListener extends SpoutListener {
 
 		if (SEASON != season) {
 			updateTextures();
-			plugin.wheatMod.UpdateSettings();
+			plugin.wheatMod.updateSettings();
 			season = SEASON;
+		}
+		
+		if(AmbientSeasons.WHEAT_MOD) {
+			if(wheatCount % plugin.wheatMod.WheatGrowthSpeed == 0) {
+				plugin.wheatMod.growWheat();
+			}
+			wheatCount ++;
 		}
 
 	}

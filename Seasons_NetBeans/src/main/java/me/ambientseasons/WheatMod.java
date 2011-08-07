@@ -4,6 +4,9 @@
  */
 package me.ambientseasons;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -16,7 +19,6 @@ public class WheatMod {
 
 	// -1 = slow, 0 = normal, 1 = fast
 	public int WheatGrowthSpeed;
-	private int nextGrowthTime;
 
 	public WheatMod(AmbientSeasons plugin) {
 		this.plugin = plugin;
@@ -25,54 +27,47 @@ public class WheatMod {
 
 		// TODO:
 		// Calculate the first growth time
-		nextGrowthTime = 25;
-		GrowWheat();
+		WheatGrowthSpeed = 10;
 
 		// TODO:
 		// Hook weather change, if it starts raining grow faster.
 	}
 
-	public void GrowWheat() {
-		// Set up a runnable to start growing
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+	public void growWheat() {
+		List<Location> removedLocations = new ArrayList<Location>();
+		for (Location location : plugin.WheatBlockLocations) {
+			AmbientSeasons.log.info(AmbientSeasons.PREFIX + "Wheat Mod is growing");
+			Block block = plugin.getServer().getWorld("world").getBlockAt(location);
 
-			public void run() {
-				for (int i = 0; i < plugin.WheatBlockLocations.size(); i++) {
-					Location location = plugin.WheatBlockLocations.get(i);
-					AmbientSeasons.log.info("[SEASONS] Wheat Mod is growing: " + location.toString());
-					Block block = plugin.getServer().getWorld("world").getBlockAt(location);
+			byte dataValue = block.getData();
 
-					byte dataValue = block.getData();
-
-					if (dataValue == 0x7)
-						continue;
-					else {
-						dataValue++;
-						block.setData(dataValue);
-					}
-				}
-
-				// TODO:
-				// Calculate the time for the next growth.
-				// Modify by WheatGrowthSpeed
-				// Take block's biome into account
-				// ("Wheat grows best in a dry, mild climate. Too hot or too cold ruin the crop.")
-				nextGrowthTime = 10;
-
-				// TODO: Create a temporary list in here, and randomly
-				// pick wheat
-				// to add to it (and remove from original list). Then
-				// schedule
-				// second delayed runnable that grows those a bit later,
-				// so it's not total global growth all at once.
-
-				// Schedule the next growth
-				GrowWheat();
+			if (dataValue == 0x7) {
+				removedLocations.add(location);
+				continue;
+			} else {
+				dataValue++;
+				block.setData(dataValue);
 			}
-		}, nextGrowthTime * 20);
+		}
+		
+		plugin.WheatBlockLocations.removeAll(removedLocations);
+
+		// TODO:
+		// Calculate the time for the next growth.
+		// Modify by WheatGrowthSpeed
+		// Take block's biome into account
+		// ("Wheat grows best in a dry, mild climate. Too hot or too cold ruin the crop.")
+
+		// TODO: Create a temporary list in here, and randomly
+		// pick wheat
+		// to add to it (and remove from original list). Then
+		// schedule
+		// second delayed runnable that grows those a bit later,
+		// so it's not total global growth all at once.
+
 	}
 
-	public void UpdateSettings() {
+	public void updateSettings() {
 		// Read the season off of the config
 		AmbientSeasons.log.info("WheatMod is updating settings for the new season.");
 	}

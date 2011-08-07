@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
 <jardesc>
-    <jar path="AmbientSeasons/Seasons_NetBeans/target/AmbientSeasons.jar"/>
-    <options buildIfNeeded="true" compress="true" descriptionLocation="/AmbientSeasons/buildjar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <jar path="C:/Users/Olloth/Minecraft/server/plugins/AmbientSeasons.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/AmbientSeasons/buildjar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
     <manifest generateManifest="false" manifestLocation="/AmbientSeasons/MANIFEST" manifestVersion="1.0" reuseManifest="true" saveManifest="true" usesManifest="true">
