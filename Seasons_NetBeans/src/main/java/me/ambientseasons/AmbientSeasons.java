@@ -39,7 +39,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 	// Setup Bukkit's Logger
 	public static final Logger log = Logger.getLogger("Minecraft");
-        public static boolean DEBUG = true;
+        public static boolean DEBUG = false;
 
 	// Wheat Modifier (Modified growing times based on season)
 	public static boolean WHEAT_MOD;
