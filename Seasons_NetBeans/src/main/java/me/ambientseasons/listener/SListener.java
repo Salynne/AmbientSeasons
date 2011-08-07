@@ -84,6 +84,7 @@ public class SListener extends SpoutListener {
 
 		if (SEASON != season) {
 			updateTextures();
+                        plugin.wheatMod.UpdateSettings();
 			season = SEASON;
 		}
 

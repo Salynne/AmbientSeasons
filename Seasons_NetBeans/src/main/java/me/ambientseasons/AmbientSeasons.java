@@ -1,12 +1,14 @@
 package me.ambientseasons;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import me.ambientseasons.listener.Blocks;
+import me.ambientseasons.listener.BlockGrow;
+import me.ambientseasons.listener.BlockPlaceListener;
 import me.ambientseasons.listener.Players;
 import me.ambientseasons.listener.SListener;
 import me.ambientseasons.util.Config;
@@ -39,6 +41,7 @@ public class AmbientSeasons extends JavaPlugin {
 	// Wheat Modifier (Modified growing times based on season)
 	public static boolean WHEAT_MOD;
 	public List<Location> WheatBlockLocations;
+        public WheatMod wheatMod;
 
 	public static String PREFIX = "[AmbientSeasons] ";
 	private PluginDescriptionFile info;
@@ -46,7 +49,8 @@ public class AmbientSeasons extends JavaPlugin {
 	private File directory;
 	private Players players;
 	private SListener sListener;
-	private Blocks bListener;
+	private BlockPlaceListener blockPlace;
+        private BlockGrow blockGrow;
 	public static HashMap<String, UUID> labels;
 	public static HashMap<String, Boolean> HUDEnable;
 
@@ -70,9 +74,13 @@ public class AmbientSeasons extends JavaPlugin {
 		// Initialize listeners
 		players = new Players(this);
 		sListener = new SListener(this);
-		bListener = new Blocks(this);
+		blockPlace = new BlockPlaceListener(this);
+                blockGrow = new BlockGrow(this);
 
 		WHEAT_MOD = true; // TEMP (Load from config in future)
+                WheatBlockLocations = new ArrayList<Location>();
+                wheatMod = new WheatMod(this);
+                
 		labels = new HashMap<String, UUID>();
 		HUDEnable = new HashMap<String, Boolean>();
 
@@ -82,7 +90,8 @@ public class AmbientSeasons extends JavaPlugin {
 		// Register events
 		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
-		pm.registerEvent(Type.BLOCK_PLACE, bListener, Priority.Low, this);
+		pm.registerEvent(Type.BLOCK_PLACE, blockPlace, Priority.Low, this);
+                pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
 
 		// Update any players who were online (In case of /reload)
 		players.playersInit(getServer().getOnlinePlayers());
