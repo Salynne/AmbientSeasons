@@ -31,7 +31,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
  * Let's the server have a custom calendar and rotating seasons based on it.
  * 
  * @author Olloth, LordNed
- *
+ * 
  */
 public class AmbientSeasons extends JavaPlugin {
 
@@ -41,7 +41,7 @@ public class AmbientSeasons extends JavaPlugin {
 	// Wheat Modifier (Modified growing times based on season)
 	public static boolean WHEAT_MOD;
 	public List<Location> WheatBlockLocations;
-        public WheatMod wheatMod;
+	public WheatMod wheatMod;
 
 	public static String PREFIX = "[AmbientSeasons] ";
 	private PluginDescriptionFile info;
@@ -50,7 +50,7 @@ public class AmbientSeasons extends JavaPlugin {
 	private Players players;
 	private SListener sListener;
 	private BlockPlaceListener blockPlace;
-        private BlockGrow blockGrow;
+	private BlockGrow blockGrow;
 	public static HashMap<String, UUID> labels;
 	public static HashMap<String, Boolean> HUDEnable;
 
@@ -58,7 +58,7 @@ public class AmbientSeasons extends JavaPlugin {
 	 * Calls when the plugin disables.
 	 */
 	public void onDisable() {
-	
+
 		Config.saveMap();
 		System.out.println("[" + info.getName() + "] is now disabled!");
 	}
@@ -70,17 +70,17 @@ public class AmbientSeasons extends JavaPlugin {
 		directory = getDataFolder();
 		info = getDescription();
 		pm = getServer().getPluginManager();
-		
-		// Initialize listeners 
+
+		// Initialize listeners
 		players = new Players(this);
 		sListener = new SListener(this);
 		blockPlace = new BlockPlaceListener(this);
-                blockGrow = new BlockGrow(this);
+		blockGrow = new BlockGrow(this);
 
 		WHEAT_MOD = true; // TEMP (Load from config in future)
-                WheatBlockLocations = new ArrayList<Location>();
-                wheatMod = new WheatMod(this);
-                
+		WheatBlockLocations = new ArrayList<Location>();
+		wheatMod = new WheatMod(this);
+
 		labels = new HashMap<String, UUID>();
 		HUDEnable = new HashMap<String, Boolean>();
 
@@ -91,15 +91,14 @@ public class AmbientSeasons extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
 		pm.registerEvent(Type.BLOCK_PLACE, blockPlace, Priority.Low, this);
-                pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
+		pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
 
 		// Update any players who were online (In case of /reload)
 		players.playersInit(getServer().getOnlinePlayers());
 		sListener.updateHud();
 
 		// Send an enable message
-		System.out.println("[" + info.getName() + "] version "
-				+ info.getVersion() + " is now enabled!");
+		System.out.println("[" + info.getName() + "] version " + info.getVersion() + " is now enabled!");
 
 	}
 
@@ -107,13 +106,12 @@ public class AmbientSeasons extends JavaPlugin {
 	 * Calls when a player uses a command.
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		String commandName = command.getName().toLowerCase();
-		
+
 		/*
-		 * Checks to see if the command is /ashud
-		 * If so, it toggles the players HUD on or off.
+		 * Checks to see if the command is /ashud If so, it toggles the players
+		 * HUD on or off.
 		 */
 		if (commandName.equals("ashud")) {
 			Player player = (Player) sender;
@@ -122,14 +120,12 @@ public class AmbientSeasons extends JavaPlugin {
 					HUDEnable.put(player.getName(), false);
 					UUID labelId = labels.get(player.getName());
 					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-					sPlayer.getMainScreen().getWidget(labelId)
-							.setVisible(false).setDirty(true);
+					sPlayer.getMainScreen().getWidget(labelId).setVisible(false).setDirty(true);
 				} else {
 					HUDEnable.put(player.getName(), true);
 					UUID labelId = labels.get(player.getName());
 					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-					sPlayer.getMainScreen().getWidget(labelId).setVisible(true)
-							.setDirty(true);
+					sPlayer.getMainScreen().getWidget(labelId).setVisible(true).setDirty(true);
 				}
 			}
 		}

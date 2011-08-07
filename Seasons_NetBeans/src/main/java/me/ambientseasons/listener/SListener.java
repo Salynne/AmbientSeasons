@@ -27,9 +27,9 @@ public class SListener extends SpoutListener {
 
 	private int dayOfSeason, season, year;
 
-	
 	/**
 	 * Constructor, sets the ticks counter to 0;
+	 * 
 	 * @param plugin
 	 */
 	public SListener(AmbientSeasons plugin) {
@@ -42,8 +42,8 @@ public class SListener extends SpoutListener {
 	 */
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-		
-		if(Config.ENABLED_WORLDS.contains(event.getPlayer().getWorld().getName())) {
+
+		if (Config.ENABLED_WORLDS.contains(event.getPlayer().getWorld().getName())) {
 			event.getPlayer().setTexturePack(Times.getSeasonUrl());
 		}
 	}
@@ -57,7 +57,7 @@ public class SListener extends SpoutListener {
 		if ((count % 20) == 0) {
 			onSecond();
 		}
-		
+
 		count++;
 	}
 
@@ -66,10 +66,8 @@ public class SListener extends SpoutListener {
 	 */
 	private void onSecond() {
 
-		FULL_TIME = plugin.getServer().getWorld(Config.CALENDAR_WORLD)
-				.getFullTime();
-		TIME_OF_DAY = plugin.getServer().getWorld(Config.CALENDAR_WORLD)
-				.getTime();
+		FULL_TIME = plugin.getServer().getWorld(Config.CALENDAR_WORLD).getFullTime();
+		TIME_OF_DAY = plugin.getServer().getWorld(Config.CALENDAR_WORLD).getTime();
 
 		DAY_OF_WEEK = Times.getDayOfWeek(FULL_TIME);
 		DAY_OF_SEASON = Times.getDayOfSeason(FULL_TIME);
@@ -84,7 +82,7 @@ public class SListener extends SpoutListener {
 
 		if (SEASON != season) {
 			updateTextures();
-                        plugin.wheatMod.UpdateSettings();
+			plugin.wheatMod.UpdateSettings();
 			season = SEASON;
 		}
 
@@ -97,8 +95,7 @@ public class SListener extends SpoutListener {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
 			UUID labelId = (UUID) AmbientSeasons.labels.get(player.getName());
-			GenericLabel label = (GenericLabel) sPlayer.getMainScreen()
-					.getWidget(labelId);
+			GenericLabel label = (GenericLabel) sPlayer.getMainScreen().getWidget(labelId);
 			label.setText(Times.getDate());
 			label.setDirty(true);
 		}
@@ -110,7 +107,7 @@ public class SListener extends SpoutListener {
 	public void updateTextures() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
 			SpoutPlayer sPlayer = (SpoutPlayer) player;
-			if(Config.ENABLED_WORLDS.contains(player.getWorld().getName())) {
+			if (Config.ENABLED_WORLDS.contains(player.getWorld().getName())) {
 				sPlayer.setTexturePack(Times.getSeasonUrl());
 			}
 		}
