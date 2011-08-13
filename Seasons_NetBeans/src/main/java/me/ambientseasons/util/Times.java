@@ -176,7 +176,12 @@ public class Times {
 	 */
 	public static String getDate() {
 
-		String date = getDayString(SListener.DAY_OF_WEEK) + " the " + SListener.DAY_OF_SEASON + getModString(SListener.DAY_OF_SEASON) + " of " + getSeasonString(SListener.SEASON) + ", " + SListener.YEAR + "AN";
+		String date = Config.getDateMessage();
+		date = date.replace("{WEEKDAY}", getDayString(SListener.DAY_OF_WEEK));
+		date = date.replace("{DATE}", Integer.toString(SListener.DAY_OF_SEASON));
+		date = date.replace("{MOD}", getModString(SListener.DAY_OF_SEASON));
+		date = date.replace("{SEASON}", getSeasonString(SListener.SEASON));
+		date = date.replace("{YEAR}", Integer.toString(SListener.YEAR));
 		return date;
 	}
 }

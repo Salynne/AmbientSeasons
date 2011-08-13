@@ -57,6 +57,7 @@ public class Config {
 		getSeconds();
 		getSecondsInDay();
 		getCalcType();
+		getDateMessage();
 		getHUDPosition();
 
 		config.save();
@@ -144,6 +145,10 @@ public class Config {
 
 	public static String getCalcType() {
 		return config.getString("calc_type", "world");
+	}
+	
+	public static String getDateMessage() {
+		return config.getString("date_message","{WEEKDAY} the {DATE}{MOD} of {SEASON} {YEAR}AN");
 	}
 
 	public static Configuration getConfig() {
