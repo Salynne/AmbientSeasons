@@ -42,9 +42,16 @@ public class SListener extends SpoutListener {
 	 */
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-		HUDLabel label = new HUDLabel();
-		label.setX(10).setY(Config.getHUDPosition());
+
 		SpoutPlayer sPlayer = event.getPlayer();
+		
+		if(!AmbientSeasons.HUDEnable.containsKey(sPlayer.getName())) {
+			AmbientSeasons.HUDEnable.put(sPlayer.getName(),true);
+		}
+		
+		HUDLabel label = new HUDLabel(sPlayer);
+		label.setX(10).setY(Config.getHUDPosition());
+		
 		sPlayer.getMainScreen().attachWidget(label);
 		
 	}

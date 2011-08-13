@@ -3,7 +3,6 @@ package me.ambientseasons;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
@@ -21,8 +20,6 @@ import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * Seasons Plugin for Bukkit and Spout
@@ -49,7 +46,6 @@ public class AmbientSeasons extends JavaPlugin {
 	private SListener sListener;
 	private BlockPlaceListener blockPlace;
 	private BlockGrow blockGrow;
-	public static HashMap<String, UUID> labels;
 	public static HashMap<String, Boolean> HUDEnable;
 
 	/**
@@ -69,7 +65,6 @@ public class AmbientSeasons extends JavaPlugin {
 		info = getDescription();
 		pm = getServer().getPluginManager();
 
-		labels = new HashMap<String, UUID>();
 		HUDEnable = new HashMap<String, Boolean>();
 
 		// Load the Config
@@ -121,16 +116,10 @@ public class AmbientSeasons extends JavaPlugin {
 			if (HUDEnable.containsKey(player.getName())) {
 				if (HUDEnable.get(player.getName())) {
 					HUDEnable.put(player.getName(), false);
-					UUID labelId = labels.get(player.getName());
-					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-					sPlayer.getMainScreen().getWidget(labelId).setVisible(false).setDirty(true);
 					sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD disabled.");
 					sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to enable it again.");
 				} else {
 					HUDEnable.put(player.getName(), true);
-					UUID labelId = labels.get(player.getName());
-					SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-					sPlayer.getMainScreen().getWidget(labelId).setVisible(true).setDirty(true);
 					sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD enabled.");
 					sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to disable it.");
 				}
