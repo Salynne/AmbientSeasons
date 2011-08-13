@@ -54,6 +54,9 @@ public class SListener extends SpoutListener {
 		
 		sPlayer.getMainScreen().attachWidget(label);
 		
+		if (Config.isWorldEnabled(sPlayer.getWorld())) {
+			sPlayer.setTexturePack(Times.getSeasonUrl());
+		}
 	}
 
 
