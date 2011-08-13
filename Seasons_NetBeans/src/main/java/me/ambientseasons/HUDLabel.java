@@ -7,11 +7,12 @@ import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 public class HUDLabel extends GenericLabel {
-	Integer count = 0;
+	int count;
 	SpoutPlayer sPlayer;
 
 	public HUDLabel(SpoutPlayer sPlayer) {
 		super();
+		count = 0;
 		this.sPlayer = sPlayer;
 	}
 	
