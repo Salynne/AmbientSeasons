@@ -1,8 +1,7 @@
 package me.ambientseasons.listener;
 
-import java.util.UUID;
-
 import me.ambientseasons.AmbientSeasons;
+import me.ambientseasons.HUDLabel;
 import me.ambientseasons.util.Config;
 import me.ambientseasons.util.Times;
 
@@ -11,7 +10,6 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.event.spout.ServerTickEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.event.spout.SpoutListener;
-import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
@@ -40,15 +38,17 @@ public class SListener extends SpoutListener {
 	}
 
 	/**
-	 * Runs when SpoutCraftEnables after a player joins.
+	 * Runs when SpoutCraft enables after a player joins.
 	 */
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-
-		if (Config.isWorldEnabled(event.getPlayer().getWorld())) {
-			event.getPlayer().setTexturePack(Times.getSeasonUrl());
-		}
+		HUDLabel label = new HUDLabel();
+		label.setX(10).setY(Config.getHUDPosition());
+		SpoutPlayer sPlayer = event.getPlayer();
+		sPlayer.getMainScreen().attachWidget(label);
+		
 	}
+
 
 	/**
 	 * Runs every tick, BE CAREFUL HERE.
@@ -69,10 +69,9 @@ public class SListener extends SpoutListener {
 	private void onSecond() {
 		seconds++;
 
-		if(Config.getCalcType().toLowerCase().equals("world")) {
+		if (Config.getCalcType().toLowerCase().equals("world")) {
 			Config.setTimeCalc(plugin.getServer().getWorld(Config.getCalendarWorld()).getFullTime());
-		}
-		else {
+		} else {
 			Config.setTimeCalc(seconds);
 		}
 
@@ -82,7 +81,6 @@ public class SListener extends SpoutListener {
 		YEAR = Times.getYear(Config.getTimeCalc());
 
 		if (DAY_OF_SEASON != dayOfSeason || SEASON != season || YEAR != year) {
-			updateHud();
 			dayOfSeason = DAY_OF_SEASON;
 			year = YEAR;
 		}
@@ -98,34 +96,34 @@ public class SListener extends SpoutListener {
 		}
 
 	}
-
-	/**
-	 * Updates the HUD for every player currently online.
-	 */
-	public void updateHud() {
-		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-			UUID labelId = (UUID) AmbientSeasons.labels.get(player.getName());
-			GenericLabel label = (GenericLabel) sPlayer.getMainScreen().getWidget(labelId);
-			label.setText(Times.getDate());
-			label.setDirty(true);
-		}
-	}
-
+	
 	/**
 	 * Updates the texture pack for every player currently online.
 	 */
 	public void updateTextures() {
-
-		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-			
-			if (Config.isWorldEnabled(player.getWorld())) {
-				sPlayer.setTexturePack(Times.getSeasonUrl());
-			}
+		for(Player player : plugin.getServer().getOnlinePlayers()) {
+			setTexture(SpoutManager.getPlayer(player));
 		}
 	}
-	
+
+
+	/**
+	 * Updates the texture pack of a specific player.
+	 * @param sPlayer SpoutPlayer to update the texture pack for.
+	 */
+	public void setTexture(SpoutPlayer sPlayer) {
+
+		if (Config.isWorldEnabled(sPlayer.getWorld())) {
+			sPlayer.setTexturePack(Times.getSeasonUrl());
+		}
+
+	}
+
+	/**
+	 * Gets the seconds that have gone by since the plugin started.
+	 * 
+	 * @return seconds that have gone by since the plugin started
+	 */
 	public int getSeconds() {
 		return seconds;
 	}

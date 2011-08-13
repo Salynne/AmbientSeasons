@@ -48,6 +48,7 @@ public class Config {
 		config.setProperty("season_urls",getSeasonURLs());
 		config.setProperty("weekdays",getWeekdays());
 		config.setProperty("enabled_worlds",getEnabledWorlds());
+		getHUDPosition();
 		getTimeCalc();
 		getSeasonLength();
 		getSeconds();
@@ -128,6 +129,10 @@ public class Config {
 
 	public static int getSecondsInDay() {
 		return config.getInt("seconds_in_day", 60);
+	}
+	
+	public static int getHUDPosition() {
+		return config.getInt("HUD_y_value", 10);
 	}
 
 	public static String getCalendarWorld() {

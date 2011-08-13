@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
 import me.ambientseasons.listener.BlockPlaceListener;
-import me.ambientseasons.listener.Players;
 import me.ambientseasons.listener.SListener;
 import me.ambientseasons.util.Config;
 
@@ -47,7 +46,6 @@ public class AmbientSeasons extends JavaPlugin {
 
 	private PluginDescriptionFile info;
 	private PluginManager pm;
-	private Players players;
 	private SListener sListener;
 	private BlockPlaceListener blockPlace;
 	private BlockGrow blockGrow;
@@ -78,7 +76,6 @@ public class AmbientSeasons extends JavaPlugin {
 		Config.init(this);
 
 		// Initialize listeners
-		players = new Players(this);
 		sListener = new SListener(this);
 
 		WHEAT_MOD = false; // TEMP (Load from config in future)
@@ -92,16 +89,11 @@ public class AmbientSeasons extends JavaPlugin {
 		}
 
 		// Register events
-		pm.registerEvent(Type.PLAYER_JOIN, players, Priority.Low, this);
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
 		if (WHEAT_MOD) {
 			pm.registerEvent(Type.BLOCK_PLACE, blockPlace, Priority.Low, this);
 			pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
 		}
-
-		// Update any players who were online (In case of /reload)
-		players.playersInit(getServer().getOnlinePlayers());
-		sListener.updateHud();
 
 		// Send an enable message
 		System.out.println("[" + info.getName() + "] version " + info.getVersion() + " is now enabled!");
@@ -150,10 +142,6 @@ public class AmbientSeasons extends JavaPlugin {
 			sender.sendMessage("");
 			sender.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
 			sender.sendMessage(ChatColor.RED + "/asHUD" + ChatColor.WHITE + " Command toggles your clientside HUD.");
-			// sender.sendMessage(ChatColor.RED + "Crops not growing?" +
-			// ChatColor.WHITE + " Crops prefer moderate biomes,");
-			// sender.sendMessage(ChatColor.WHITE +
-			// "and will grow slower in extreme biomes.");
 
 			return true;
 
