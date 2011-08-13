@@ -7,6 +7,7 @@ import me.ambientseasons.util.Config;
 import me.ambientseasons.util.Times;
 
 import org.bukkit.entity.Player;
+import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.event.spout.ServerTickEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.event.spout.SpoutListener;
@@ -21,10 +22,9 @@ public class SListener extends SpoutListener {
 
 	private AmbientSeasons plugin;
 	long count;
-	long seconds;
+	int seconds;
 
 	public static int DAY_OF_WEEK, DAY_OF_SEASON, SEASON, YEAR;
-
 
 	private int dayOfSeason, season, year;
 
@@ -34,6 +34,7 @@ public class SListener extends SpoutListener {
 	 * @param plugin
 	 */
 	public SListener(AmbientSeasons plugin) {
+		seconds = Config.getSeconds();
 		count = 0;
 		this.plugin = plugin;
 	}
@@ -44,7 +45,7 @@ public class SListener extends SpoutListener {
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
 
-		if (Config.ENABLED_WORLDS.contains(event.getPlayer().getWorld().getName())) {
+		if (Config.isWorldEnabled(event.getPlayer().getWorld())) {
 			event.getPlayer().setTexturePack(Times.getSeasonUrl());
 		}
 	}
@@ -66,20 +67,19 @@ public class SListener extends SpoutListener {
 	 * Runs every second, BE CAREFUL HERE.
 	 */
 	private void onSecond() {
-		
-		Config.SECONDS++;
+		seconds++;
 
-		if(Config.CALC_TYPE.toLowerCase().equals("world")) {
-			Config.TIME_CALC = plugin.getServer().getWorld(Config.CALENDAR_WORLD).getFullTime();
+		if(Config.getCalcType().toLowerCase().equals("world")) {
+			Config.setTimeCalc(plugin.getServer().getWorld(Config.getCalendarWorld()).getFullTime());
 		}
 		else {
-			Config.TIME_CALC = Config.SECONDS;
+			Config.setTimeCalc(seconds);
 		}
 
-		DAY_OF_WEEK = Times.getDayOfWeek(Config.TIME_CALC);
-		DAY_OF_SEASON = Times.getDayOfSeason(Config.TIME_CALC);
-		SEASON = Times.getSeason(Config.TIME_CALC);
-		YEAR = Times.getYear(Config.TIME_CALC);
+		DAY_OF_WEEK = Times.getDayOfWeek(Config.getTimeCalc());
+		DAY_OF_SEASON = Times.getDayOfSeason(Config.getTimeCalc());
+		SEASON = Times.getSeason(Config.getTimeCalc());
+		YEAR = Times.getYear(Config.getTimeCalc());
 
 		if (DAY_OF_SEASON != dayOfSeason || SEASON != season || YEAR != year) {
 			updateHud();
@@ -89,7 +89,7 @@ public class SListener extends SpoutListener {
 
 		if (SEASON != season) {
 			updateTextures();
-			
+
 			if (AmbientSeasons.WHEAT_MOD) {
 				plugin.wheatMod.updateSettings();
 			}
@@ -104,7 +104,7 @@ public class SListener extends SpoutListener {
 	 */
 	public void updateHud() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			SpoutPlayer sPlayer = (SpoutPlayer) player;
+			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 			UUID labelId = (UUID) AmbientSeasons.labels.get(player.getName());
 			GenericLabel label = (GenericLabel) sPlayer.getMainScreen().getWidget(labelId);
 			label.setText(Times.getDate());
@@ -116,12 +116,18 @@ public class SListener extends SpoutListener {
 	 * Updates the texture pack for every player currently online.
 	 */
 	public void updateTextures() {
+
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			SpoutPlayer sPlayer = (SpoutPlayer) player;
-			if (Config.ENABLED_WORLDS.contains(player.getWorld().getName())) {
+			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
+			
+			if (Config.isWorldEnabled(player.getWorld())) {
 				sPlayer.setTexturePack(Times.getSeasonUrl());
 			}
 		}
+	}
+	
+	public int getSeconds() {
+		return seconds;
 	}
 
 }

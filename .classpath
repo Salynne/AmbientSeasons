@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="Seasons_NetBeans/src/main/java"/>
 	<classpathentry kind="src" path="Seasons_NetBeans/src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="Seasons_NetBeans/libs/Bukkit.jar"/>
-	<classpathentry kind="lib" path="Seasons_NetBeans/libs/SpoutAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Olloth/Minecraft/lib/Bukkit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Olloth/Minecraft/lib/SpoutAPI.jar"/>
 	<classpathentry kind="output" path="Seasons_NetBeans/target/classes"/>
 </classpath>

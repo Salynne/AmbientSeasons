@@ -17,7 +17,7 @@ public class Times {
 	 */
 	public static int getDayOfWeek(long time) {
 
-		int day = (int) (getDays(time) % Config.WEEKDAY_COUNT) + 1;
+		int day = (int) (getDays(time) % Config.getNumberOfWeekdays()) + 1;
 
 		return day;
 	}
@@ -31,7 +31,7 @@ public class Times {
 	 */
 	public static int getDayOfSeason(long time) {
 
-		int days = (int) (getDays(time) % Config.SEASON_LENGTH) + 1;
+		int days = (int) (getDays(time) % Config.getSeasonLength()) + 1;
 
 		return days;
 	}
@@ -45,7 +45,7 @@ public class Times {
 	 */
 	public static int getSeason(long time) {
 
-		int season = (int) ((getDays(time) / Config.SEASON_LENGTH) % Config.SEASONS) + 1;
+		int season = (int) ((getDays(time) / Config.getSeasonLength()) % Config.getNumberOfSeasons()) + 1;
 
 		return season;
 	}
@@ -59,7 +59,7 @@ public class Times {
 	 */
 	public static int getYear(long time) {
 
-		int year = (int) (getDays(time) / (Config.SEASON_LENGTH * Config.SEASONS)) + 1;
+		int year = (int) (getDays(time) / (Config.getSeasonLength() * Config.getNumberOfSeasons())) + 1;
 
 		return year;
 	}
@@ -73,11 +73,12 @@ public class Times {
 	 */
 	public static long getDays(long time) {
 		long days;
-		if(Config.CALC_TYPE.toLowerCase().equals("world")) {
+		
+		if(Config.getCalcType().toLowerCase().equals("world")) {
 			days = time / 24000;
 		}
 		else {
-			days = time / Config.SECONDS_IN_DAY;
+			days = time / Config.getSecondsInDay();
 		}
 
 		return days;
@@ -94,7 +95,7 @@ public class Times {
 		String string = "";
 		for (int i = 0; i < day; i++) {
 			if (i == (day - 1)) {
-				string = (String) Config.WEEKDAYS.get(i);
+				string = (String) Config.getWeekdays().get(i);
 			}
 		}
 
@@ -112,7 +113,7 @@ public class Times {
 		String string = "";
 		for (int i = 0; i < season; i++) {
 			if (i == (season - 1)) {
-				string = (String) Config.SEASON_STRINGS.get(i);
+				string = (String) Config.getSeasons().get(i);
 			}
 		}
 
@@ -129,7 +130,7 @@ public class Times {
 		String string = "";
 		for (int i = 0; i < season; i++) {
 			if (i == (season - 1)) {
-				string = (String) Config.SEASON_URLS.get(i);
+				string = (String) Config.getSeasonURLs().get(i);
 			}
 		}
 

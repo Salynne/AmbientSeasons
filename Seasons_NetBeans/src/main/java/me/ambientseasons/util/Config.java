@@ -1,14 +1,14 @@
 package me.ambientseasons.util;
 
 import java.io.File;
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import me.ambientseasons.AmbientSeasons;
 
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
 public class Config {
@@ -16,166 +16,72 @@ public class Config {
 	// Hashmap file location
 	private static File hudMap;
 
-	// Static fields loaded from the configuration file
-	public static Configuration CONFIG;
-	public static String CALENDAR_WORLD;
-	public static int SEASON_LENGTH;
-	public static int SEASONS;
-	public static int WEEKDAY_COUNT;
-	public static int SECONDS;
-	public static int SECONDS_IN_DAY;
-	public static long TIME_CALC;
-	public static String CALC_TYPE;
-	public static List<Object> SEASON_STRINGS;
-	public static List<Object> SEASON_URLS;
-	public static List<Object> WEEKDAYS;
-	public static List<Object> ENABLED_WORLDS;
-	private static List<String> seasonStrings;
-	private static List<String> seasonUrls;
-	private static List<String> enabledWorlds;
-	private static List<String> weekdays;
+	private static Plugin plugin;
+	private static File directory;
+	private static File configFile;
+	private static Configuration config;
+	private static long timeCalc;
 
+	public static void init(Plugin plgn) {
+		plugin = plgn;
+		directory = plugin.getDataFolder();
+		configFile = new File(directory, "config.yml");
+		if (!directory.exists())
+			directory.mkdir();
+		if (!configFile.exists()) {
+			try {
+				configFile.createNewFile();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
-	/**
-	 * Load the configuration file
-	 * 
-	 * @param config
-	 *            - Configuration to load
-	 */
-	public static void load(Configuration config) {
+		load();
+
+		loadMap();
+	}
+
+	public static void load() {
+		config = new Configuration(configFile);
 		config.load();
-		setDefaults();
-
-		// Initialize the static fields
-		CONFIG = config;
-		SEASON_STRINGS = new ArrayList<Object>();
-		SEASON_URLS = new ArrayList<Object>();
-		WEEKDAYS = new ArrayList<Object>();
-		ENABLED_WORLDS = new ArrayList<Object>();
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getList("seasons") == null) {
-			config.setProperty("seasons", seasonStrings);
-			SEASON_STRINGS = config.getList("seasons");
-		} else {
-			SEASON_STRINGS = config.getList("seasons");
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getList("season_urls") == null) {
-			config.setProperty("season_urls", seasonUrls);
-			SEASON_URLS = config.getList("season_urls");
-		} else {
-			SEASON_URLS = config.getList("season_urls");
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getList("weekdays") == null) {
-			config.setProperty("weekdays", weekdays);
-			WEEKDAYS = config.getList("weekdays");
-		} else {
-			WEEKDAYS = config.getList("weekdays");
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getList("enabled_worlds") == null) {
-			config.setProperty("enabled_worlds", enabledWorlds);
-			ENABLED_WORLDS = config.getList("enabled_worlds");
-		} else {
-			ENABLED_WORLDS = config.getList("enabled_worlds");
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getString("season_length") == null) {
-			config.setProperty("season_length", 28);
-			SEASON_LENGTH = config.getInt("season_length", 28);
-		} else {
-			SEASON_LENGTH = config.getInt("season_length", 28);
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getString("calendar_world") == null) {
-			config.setProperty("calendar_world", "world");
-			CALENDAR_WORLD = config.getString("calendar_world");
-		} else {
-			CALENDAR_WORLD = config.getString("calendar_world");
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getString("calc_type") == null) {
-			config.setProperty("calc_type", "world");
-			CALC_TYPE = config.getString("calc_type");
-		} else {
-			CALC_TYPE = config.getString("calc_type");
-		}
-
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getString("seconds") == null) {
-			config.setProperty("seconds", 1);
-			SECONDS = config.getInt("seconds", 1);
-		} else {
-			SECONDS = config.getInt("seconds", 1);
-		}
-		
-		// Check if it's empty, if so set default, if not, load it
-		if (config.getString("seconds_in_day") == null) {
-			config.setProperty("seconds_in_day", 60);
-			SECONDS_IN_DAY = config.getInt("seconds_in_day", 60);
-		} else {
-			SECONDS_IN_DAY = config.getInt("seconds_in_day", 60);
-		}
-
-		SEASONS = config.getList("seasons").size();
-		WEEKDAY_COUNT = config.getList("weekdays").size();
+		config.setProperty("seasons", getSeasons());
+		config.setProperty("season_urls",getSeasonURLs());
+		config.setProperty("weekdays",getWeekdays());
+		config.setProperty("enabled_worlds",getEnabledWorlds());
+		getTimeCalc();
+		getSeasonLength();
+		getSeconds();
+		getSecondsInDay();
+		getCalendarWorld();
+		getCalcType();
 
 		config.save();
-
 	}
 
-	public static void saveSeconds() {
-		// Check if it's empty, if so set default, if not, load it
-		if (CONFIG.getString("seconds") == null) {
-			CONFIG.setProperty("seconds", 1);
-		} else {
-			CONFIG.setProperty("seconds", SECONDS);
-		}
-
-		CONFIG.save();
+	public static List<String> getSeasons() {
+		ArrayList<String> seasons = new ArrayList<String>();
+		seasons.add("Djilba");
+		seasons.add("Kamba");
+		seasons.add("Birak");
+		seasons.add("Bunuru");
+		seasons.add("Djeran");
+		seasons.add("Makuru");
+		return config.getStringList("seasons", seasons);
 	}
 
-	/**
-	 * Set default values for the configuration file
-	 */
-	public static void setDefaults() {
-		// Create new list of strings for seasons
-		seasonStrings = new ArrayList<String>();
+	public static List<String> getSeasonURLs() {
+		ArrayList<String> seasonURLs = new ArrayList<String>();
+		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
+		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
+		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip");
+		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip");
+		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip");
+		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip");
+		return config.getStringList("season_urls", seasonURLs);
+	}
 
-		// Create new list of strings for season urls
-		seasonUrls = new ArrayList<String>();
-
-		// Create new list of strings for the weekdays
-		weekdays = new ArrayList<String>();
-
-		// Create new list of strings for the enabled worlds
-		enabledWorlds = new ArrayList<String>();
-
-		// Add default values to the list of seasons
-		seasonStrings.add("Djilba");
-		seasonStrings.add("Kamba");
-		seasonStrings.add("Birak");
-		seasonStrings.add("Bunuru");
-		seasonStrings.add("Djeran");
-		seasonStrings.add("Makuru");
-
-		// Add default values to the list of urls
-		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
-		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
-		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip");
-		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip");
-		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip");
-		seasonUrls.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip");
-
-		// Add default values to the weekday list
+	public static List<String> getWeekdays() {
+		ArrayList<String> weekdays = new ArrayList<String>();
 		weekdays.add("Sunday");
 		weekdays.add("Monday");
 		weekdays.add("Tuesday");
@@ -183,44 +89,67 @@ public class Config {
 		weekdays.add("Thursday");
 		weekdays.add("Friday");
 		weekdays.add("Saturday");
-
-		// Add default values to the enabled worlds list
-		enabledWorlds.add("world");
+		return config.getStringList("weekdays", weekdays);
 	}
 
-	/**
-	 * Setup and load the configuration file and hashmap
-	 * 
-	 * @param directory
-	 * @param configFile
-	 */
+	private static List<String> getEnabledWorlds() {
+		ArrayList<String> enabledWorlds = new ArrayList<String>();
+		enabledWorlds.add("world");
+		return config.getStringList("enabled_worlds", enabledWorlds);
+	}
+
+	public static Boolean isWorldEnabled(World world) {
+		return getEnabledWorlds().contains(world.getName());
+	}
+
+	public static long getTimeCalc() {
+		return timeCalc;
+	}
+
+	public static void setTimeCalc(long calc) {
+		timeCalc = calc;
+	}
+
+	public static int getNumberOfSeasons() {
+		return getSeasons().size();
+	}
+
+	public static int getNumberOfWeekdays() {
+		return getWeekdays().size();
+	}
+
+	public static int getSeasonLength() {
+		return config.getInt("season_length", 28);
+	}
+
+	public static int getSeconds() {
+		return config.getInt("seconds", 1);
+	}
+
+	public static int getSecondsInDay() {
+		return config.getInt("seconds_in_day", 60);
+	}
+
+	public static String getCalendarWorld() {
+		return config.getString("calendar_world", plugin.getServer().getWorlds().get(0).getName());
+	}
+
+	public static String getCalcType() {
+		return config.getString("calc_type", "world");
+	}
+
+	public static Configuration getConfig() {
+		return config;
+	}
+	
+	public static void updateSeconds(int seconds) {
+		config.load();
+		config.setProperty("seconds", seconds);
+		config.save();
+	}
+
 	@SuppressWarnings("unchecked")
-	public static void configSetup(File directory) {
-		File configFile;
-		// Make the folder and configuration file if they don't exist.
-		if (!directory.exists()) {
-			directory.mkdirs();
-		}
-
-		configFile = new File(directory, "config.yml");
-		if (!configFile.exists()) {
-			try {
-				configFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			// Make the new configuration file
-			Configuration config = new Configuration(new File(directory, "config.yml"));
-			config.save();
-
-			// Load the configuration file
-			load(config);
-		} else {
-			// Load the configuration file
-			load(new Configuration(new File(directory, "config.yml")));
-		}
-
+	public static void loadMap() {
 		hudMap = new File(directory, "settings.bin");
 		if (!hudMap.exists()) {
 			System.out.println("Making new settings file");
@@ -237,4 +166,5 @@ public class Config {
 		HMapSL.save(AmbientSeasons.HUDEnable, hudMap.getPath());
 
 	}
+
 }

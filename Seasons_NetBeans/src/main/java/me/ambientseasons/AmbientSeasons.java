@@ -1,6 +1,5 @@
 package me.ambientseasons;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +47,6 @@ public class AmbientSeasons extends JavaPlugin {
 
 	private PluginDescriptionFile info;
 	private PluginManager pm;
-	private File directory;
 	private Players players;
 	private SListener sListener;
 	private BlockPlaceListener blockPlace;
@@ -61,7 +59,7 @@ public class AmbientSeasons extends JavaPlugin {
 	 */
 	public void onDisable() {
 
-		Config.saveSeconds();
+		Config.updateSeconds(sListener.getSeconds());
 		Config.saveMap();
 		System.out.println("[" + info.getName() + "] is now disabled!");
 	}
@@ -70,24 +68,18 @@ public class AmbientSeasons extends JavaPlugin {
 	 * Calls on activation of the plugin.
 	 */
 	public void onEnable() {
-		directory = getDataFolder();
 		info = getDescription();
 		pm = getServer().getPluginManager();
-
-		// Initialize listeners
-		players = new Players(this);
-		sListener = new SListener(this);
 
 		labels = new HashMap<String, UUID>();
 		HUDEnable = new HashMap<String, Boolean>();
 
 		// Load the Config
-		Config.configSetup(directory);
-		
-		if(getServer().getWorld(Config.CALENDAR_WORLD) == null) {
-			Config.CONFIG.setProperty("calc_type", "time");
-			Config.CALC_TYPE = "time";
-		}
+		Config.init(this);
+
+		// Initialize listeners
+		players = new Players(this);
+		sListener = new SListener(this);
 
 		WHEAT_MOD = false; // TEMP (Load from config in future)
 
