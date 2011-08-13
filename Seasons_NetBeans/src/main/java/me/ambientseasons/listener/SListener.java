@@ -109,21 +109,11 @@ public class SListener extends SpoutListener {
 	 */
 	public void updateTextures() {
 		for(Player player : plugin.getServer().getOnlinePlayers()) {
-			setTexture(SpoutManager.getPlayer(player));
+			if (Config.isWorldEnabled(player.getWorld())) {
+				SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
+				sPlayer.setTexturePack(Times.getSeasonUrl());
+			}
 		}
-	}
-
-
-	/**
-	 * Updates the texture pack of a specific player.
-	 * @param sPlayer SpoutPlayer to update the texture pack for.
-	 */
-	public void setTexture(SpoutPlayer sPlayer) {
-
-		if (Config.isWorldEnabled(sPlayer.getWorld())) {
-			sPlayer.setTexturePack(Times.getSeasonUrl());
-		}
-
 	}
 
 	/**

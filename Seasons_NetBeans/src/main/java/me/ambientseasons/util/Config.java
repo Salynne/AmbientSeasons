@@ -47,14 +47,17 @@ public class Config {
 		config.setProperty("seasons", getSeasons());
 		config.setProperty("season_urls",getSeasonURLs());
 		config.setProperty("weekdays",getWeekdays());
+		config.save();
+		config.load();
 		config.setProperty("enabled_worlds",getEnabledWorlds());
-		getHUDPosition();
-		getTimeCalc();
+		config.save();
+		config.load();
+		getCalendarWorld();
 		getSeasonLength();
 		getSeconds();
 		getSecondsInDay();
-		getCalendarWorld();
 		getCalcType();
+		getHUDPosition();
 
 		config.save();
 	}
@@ -132,7 +135,7 @@ public class Config {
 	}
 	
 	public static int getHUDPosition() {
-		return config.getInt("HUD_y_value", 10);
+		return config.getInt("HUD_Y", 10);
 	}
 
 	public static String getCalendarWorld() {
