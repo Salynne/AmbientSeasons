@@ -54,7 +54,7 @@ public class SListener extends SpoutListener {
 		
 		sPlayer.getMainScreen().attachWidget(label);
 		
-		if (Config.isWorldEnabled(sPlayer.getWorld())) {
+		if (Config.isWorldEnabled(sPlayer.getWorld()) && !sPlayer.hasPermission("ambientseasons.exempt")) {
 			sPlayer.setTexturePack(Times.getSeasonUrl());
 		}
 	}
@@ -112,7 +112,7 @@ public class SListener extends SpoutListener {
 	 */
 	public void updateTextures() {
 		for(Player player : plugin.getServer().getOnlinePlayers()) {
-			if (Config.isWorldEnabled(player.getWorld())) {
+			if (Config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
 				SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 				sPlayer.setTexturePack(Times.getSeasonUrl());
 			}
