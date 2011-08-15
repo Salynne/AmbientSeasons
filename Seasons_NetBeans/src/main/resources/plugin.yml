@@ -5,7 +5,7 @@ description: Adds Seasons to Minecraft. Uses SpoutAPI for clientside controls.
 main: me.ambientseasons.AmbientSeasons
 name: AmbientSeasons
 startup: postworld
-version: '1.4.2'
+version: '1.4.3'
 commands:
    ashud:
      description: Enables or disables the Ambient Seasons HUD
