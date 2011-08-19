@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
 import me.ambientseasons.listener.BlockPlaceListener;
+import me.ambientseasons.listener.Calendar;
 import me.ambientseasons.listener.SListener;
 import me.ambientseasons.util.Config;
 
@@ -44,6 +45,7 @@ public class AmbientSeasons extends JavaPlugin {
 	private PluginDescriptionFile info;
 	private PluginManager pm;
 	private SListener sListener;
+	private Calendar calendar;
 	private BlockPlaceListener blockPlace;
 	private BlockGrow blockGrow;
 	public static HashMap<String, Boolean> HUDEnable;
@@ -53,7 +55,7 @@ public class AmbientSeasons extends JavaPlugin {
 	 */
 	public void onDisable() {
 
-		Config.updateSeconds(sListener.getSeconds());
+		Config.updateSeconds(calendar.getSeconds());
 		Config.saveMap();
 		System.out.println("[" + info.getName() + "] is now disabled!");
 	}
@@ -70,9 +72,6 @@ public class AmbientSeasons extends JavaPlugin {
 		// Load the Config
 		Config.init(this);
 
-		// Initialize listeners
-		sListener = new SListener(this);
-
 		WHEAT_MOD = false; // TEMP (Load from config in future)
 
 		if (WHEAT_MOD) {
@@ -82,6 +81,10 @@ public class AmbientSeasons extends JavaPlugin {
 			WheatBlockLocations = new ArrayList<Location>();
 			wheatMod = new WheatMod(this);
 		}
+		
+		// Initialize listeners
+		calendar = new Calendar(this);
+		sListener = new SListener(this,calendar);
 
 		// Register events
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);

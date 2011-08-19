@@ -1,6 +1,6 @@
 package me.ambientseasons.util;
 
-import me.ambientseasons.listener.SListener;
+import me.ambientseasons.listener.Calendar;
 
 /**
  * 
@@ -126,7 +126,7 @@ public class Times {
 	 * @return URL for the texture pack
 	 */
 	public static String getSeasonUrl() {
-		int season = SListener.SEASON;
+		int season = Calendar.SEASON;
 		String string = "";
 		for (int i = 0; i < season; i++) {
 			if (i == (season - 1)) {
@@ -177,11 +177,11 @@ public class Times {
 	public static String getDate() {
 
 		String date = Config.getDateMessage();
-		date = date.replace("{WEEKDAY}", getDayString(SListener.DAY_OF_WEEK));
-		date = date.replace("{DATE}", Integer.toString(SListener.DAY_OF_SEASON));
-		date = date.replace("{MOD}", getModString(SListener.DAY_OF_SEASON));
-		date = date.replace("{SEASON}", getSeasonString(SListener.SEASON));
-		date = date.replace("{YEAR}", Integer.toString(SListener.YEAR));
+		date = date.replace("{WEEKDAY}", getDayString(Calendar.DAY_OF_WEEK));
+		date = date.replace("{DATE}", Integer.toString(Calendar.DAY_OF_SEASON));
+		date = date.replace("{MOD}", getModString(Calendar.DAY_OF_SEASON));
+		date = date.replace("{SEASON}", getSeasonString(Calendar.SEASON));
+		date = date.replace("{YEAR}", Integer.toString(Calendar.YEAR));
 		return date;
 	}
 }
