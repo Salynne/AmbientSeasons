@@ -1,3 +1,20 @@
+/*
+ * This file is part of AmbientSeasons (https://github.com/Olloth/AmbientSeasons).
+ * 
+ * AmbientSeasons is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package me.ambientseasons.util;
 
 import java.io.File;
@@ -12,6 +29,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
 public class Config {
+	private final static String QUANDARY = "http://www.retributiongames.com/quandary/files/Quandary_4.1_";
 
 	// Hashmap file location
 	private static File hudMap;
@@ -44,45 +62,64 @@ public class Config {
 	public static void load() {
 		config = new Configuration(configFile);
 		config.load();
-		config.setProperty("seasons", getSeasons());
-		config.setProperty("season_urls",getSeasonURLs());
-		config.setProperty("weekdays",getWeekdays());
+
+		getSeasons();
 		config.save();
 		config.load();
-		config.setProperty("enabled_worlds",getEnabledWorlds());
+		config.setProperty("weekdays", getWeekdays());
+		config.save();
+		config.load();
+		config.setProperty("enabled_worlds", getEnabledWorlds());
 		config.save();
 		config.load();
 		getCalendarWorld();
+		config.save();
+		config.load();
 		getSeasonLength();
+		config.save();
+		config.load();
 		getSeconds();
+		config.save();
+		config.load();
 		getSecondsInDay();
+		config.save();
+		config.load();
 		getCalcType();
+		config.save();
+		config.load();
 		getDateMessage();
+		config.save();
+		config.load();
 		getHUDPosition();
 
 		config.save();
 	}
 
 	public static List<String> getSeasons() {
-		ArrayList<String> seasons = new ArrayList<String>();
+		List<String> seasons = new ArrayList<String>();
 		seasons.add("Djilba");
 		seasons.add("Kamba");
 		seasons.add("Birak");
 		seasons.add("Bunuru");
 		seasons.add("Djeran");
 		seasons.add("Makuru");
-		return config.getStringList("seasons", seasons);
+		if (config.getKeys("seasons") == null) {
+			for (String season : seasons) {
+				config.setProperty("seasons." + season + ".URL", QUANDARY + season + ".zip");
+				config.setProperty("seasons." + season + ".season_type", "Spring");
+				config.save();
+				config.load();
+			}
+		}
+
+		return config.getKeys("seasons");
 	}
 
-	public static List<String> getSeasonURLs() {
-		ArrayList<String> seasonURLs = new ArrayList<String>();
-		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
-		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip");
-		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip");
-		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip");
-		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip");
-		seasonURLs.add("http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip");
-		return config.getStringList("season_urls", seasonURLs);
+	public static String getSeasonURL(String season) {
+		String string = config.getString("seasons." + season + ".URL", QUANDARY + "Djilba.zip");
+		System.out.println(string);
+
+		return string;
 	}
 
 	public static List<String> getWeekdays() {
@@ -134,7 +171,7 @@ public class Config {
 	public static int getSecondsInDay() {
 		return config.getInt("seconds_in_day", 60);
 	}
-	
+
 	public static int getHUDPosition() {
 		return config.getInt("HUD_Y", 10);
 	}
@@ -146,15 +183,15 @@ public class Config {
 	public static String getCalcType() {
 		return config.getString("calc_type", "world");
 	}
-	
+
 	public static String getDateMessage() {
-		return config.getString("date_message","{WEEKDAY} the {DATE}{MOD} of {SEASON} {YEAR}AN");
+		return config.getString("date_message", "{WEEKDAY} the {DATE}{MOD} of {SEASON} {YEAR}AN");
 	}
 
 	public static Configuration getConfig() {
 		return config;
 	}
-	
+
 	public static void updateSeconds(int seconds) {
 		config.load();
 		config.setProperty("seconds", seconds);

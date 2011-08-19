@@ -1,3 +1,20 @@
+/*
+ * This file is part of AmbientSeasons (https://github.com/Olloth/AmbientSeasons).
+ * 
+ * AmbientSeasons is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package me.ambientseasons;
 
 import java.util.ArrayList;
@@ -7,7 +24,6 @@ import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
 import me.ambientseasons.listener.BlockPlaceListener;
-import me.ambientseasons.listener.Calendar;
 import me.ambientseasons.listener.SListener;
 import me.ambientseasons.util.Config;
 
@@ -81,10 +97,10 @@ public class AmbientSeasons extends JavaPlugin {
 			WheatBlockLocations = new ArrayList<Location>();
 			wheatMod = new WheatMod(this);
 		}
-		
+
 		// Initialize listeners
 		calendar = new Calendar(this);
-		sListener = new SListener(this,calendar);
+		sListener = new SListener(this, calendar);
 
 		// Register events
 		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
