@@ -78,9 +78,6 @@ public class Config {
 		getSeasonLength();
 		config.save();
 		config.load();
-		getSeconds();
-		config.save();
-		config.load();
 		getSecondsInDay();
 		config.save();
 		config.load();
@@ -91,6 +88,9 @@ public class Config {
 		config.save();
 		config.load();
 		getHUDPosition();
+		config.save();
+		config.load();
+		getSeconds();
 
 		config.save();
 	}
@@ -106,7 +106,22 @@ public class Config {
 		if (config.getKeys("seasons") == null) {
 			for (String season : seasons) {
 				config.setProperty("seasons." + season + ".URL", QUANDARY + season + ".zip");
-				config.setProperty("seasons." + season + ".season_type", "Spring");
+
+				if (season.equals("Djilba"))
+					config.setProperty("seasons." + season + ".season_type", "Spring");
+				else if (season.equals("Kamba"))
+					config.setProperty("seasons." + season + ".season_type", "Spring");
+				else if (season.equals("Birak"))
+					config.setProperty("seasons." + season + ".season_type", "Summer");
+				else if (season.equals("Bunuru"))
+					config.setProperty("seasons." + season + ".season_type", "Summer");
+				else if (season.equals("Djeran"))
+					config.setProperty("seasons." + season + ".season_type", "Fall");
+				else if (season.equals("Makuru"))
+					config.setProperty("seasons." + season + ".season_type", "Winter");
+				else
+					config.setProperty("seasons." + season + ".season_type", "Spring");
+
 				config.save();
 				config.load();
 			}
@@ -117,7 +132,12 @@ public class Config {
 
 	public static String getSeasonURL(String season) {
 		String string = config.getString("seasons." + season + ".URL", QUANDARY + "Djilba.zip");
-		System.out.println(string);
+
+		return string;
+	}
+
+	public static String getSeasonType(String season) {
+		String string = config.getString("seasons." + season + ".season_type", "Spring");
 
 		return string;
 	}

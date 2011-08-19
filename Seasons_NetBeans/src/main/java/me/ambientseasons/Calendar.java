@@ -17,8 +17,11 @@
 
 package me.ambientseasons;
 
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.block.SpoutWeather;
+import org.getspout.spoutapi.player.BiomeManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import me.ambientseasons.util.Config;
@@ -63,6 +66,7 @@ public class Calendar {
 
 		if (SEASON != season) {
 			updateTextures();
+			updateWeather(SEASON);
 
 			if (AmbientSeasons.WHEAT_MOD) {
 				plugin.wheatMod.updateSettings();
@@ -83,6 +87,38 @@ public class Calendar {
 				sPlayer.setTexturePack(Times.getSeasonUrl());
 			}
 		}
+	}
+
+	/**
+	 * Updates the weather type depending on the season
+	 * 
+	 * @param season to check the type of
+	 */
+	public void updateWeather(int season) {
+		String seasonType = Config.getSeasonType(Times.getSeasonString(season)).toLowerCase();
+		BiomeManager bm = SpoutManager.getBiomeManager();
+		bm.setGlobalWeather(SpoutWeather.RESET);
+
+		if (seasonType.equals("spring")) {
+			bm.setGlobalBiomeWeather(Biome.DESERT, SpoutWeather.RAIN);
+			bm.setGlobalBiomeWeather(Biome.TAIGA, SpoutWeather.NONE);
+		}
+		else if (seasonType.equals("summer")) {
+			bm.setGlobalBiomeWeather(Biome.TAIGA, SpoutWeather.RAIN);
+			bm.setGlobalBiomeWeather(Biome.PLAINS, SpoutWeather.NONE);
+		}
+		else if (seasonType.equals("fall")) {
+			bm.setGlobalBiomeWeather(Biome.SEASONAL_FOREST, SpoutWeather.SNOW);
+		}
+		else if (seasonType.equals("winter")) {
+			bm.setGlobalBiomeWeather(Biome.SEASONAL_FOREST, SpoutWeather.SNOW);
+			bm.setGlobalBiomeWeather(Biome.FOREST, SpoutWeather.SNOW);
+			bm.setGlobalBiomeWeather(Biome.ICE_DESERT, SpoutWeather.SNOW);
+			bm.setGlobalBiomeWeather(Biome.PLAINS, SpoutWeather.SNOW);
+			bm.setGlobalBiomeWeather(Biome.SHRUBLAND, SpoutWeather.SNOW);
+			bm.setGlobalBiomeWeather(Biome.SWAMPLAND, SpoutWeather.SNOW);	
+		}
+
 	}
 
 	/**
