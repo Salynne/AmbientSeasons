@@ -3,7 +3,7 @@
     <groupId>me.olloth.lordned.seasons</groupId>
     <artifactId>AmbientSeasons</artifactId>
     <version>1.4.3</version>
-    <name>Seasons</name>
+    <name>AmbientSeasons</name>
     <repositories>
         <repository>
             <id>bukkit-repo</id>
