@@ -1,7 +1,8 @@
+author: Olloth
 authors: [Olloth, LordNed]
 database: false
 depend: [Spout]
-description: Adds Seasons to Minecraft. Uses SpoutAPI for clientside controls.
+description: Adds Ambient Seasons to Minecraft using Spout.
 main: me.ambientseasons.AmbientSeasons
 name: AmbientSeasons
 startup: postworld
