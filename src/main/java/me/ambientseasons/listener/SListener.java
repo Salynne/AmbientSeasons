@@ -63,7 +63,6 @@ public class SListener extends SpoutListener {
 		}
 
 		HUDLabel label = new HUDLabel(sPlayer);
-		label.setX(10).setY(Config.getHUDPosition());
 
 		sPlayer.getMainScreen().attachWidget(plugin, label);
 

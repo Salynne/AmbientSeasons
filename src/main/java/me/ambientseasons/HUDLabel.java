@@ -17,6 +17,7 @@
 
 package me.ambientseasons;
 
+import me.ambientseasons.util.Config;
 import me.ambientseasons.util.Times;
 
 import org.bukkit.ChatColor;
@@ -31,6 +32,8 @@ public class HUDLabel extends GenericLabel {
 		super();
 		count = 0;
 		this.sPlayer = sPlayer;
+		this.setX(10).setY(Config.getHUDPosition());
+		this.setMinHeight(Config.getFontSize()).setMaxHeight(Config.getFontSize());
 	}
 
 	@Override

@@ -65,31 +65,22 @@ public class Config {
 
 		getSeasons();
 		config.save();
-		config.load();
 		config.setProperty("weekdays", getWeekdays());
 		config.save();
-		config.load();
 		config.setProperty("enabled_worlds", getEnabledWorlds());
 		config.save();
-		config.load();
 		getCalendarWorld();
 		config.save();
-		config.load();
 		getSeasonLength();
 		config.save();
-		config.load();
 		getSecondsInDay();
 		config.save();
-		config.load();
 		getCalcType();
 		config.save();
-		config.load();
 		getDateMessage();
 		config.save();
-		config.load();
 		getHUDPosition();
 		config.save();
-		config.load();
 		getSeconds();
 
 		config.save();
@@ -206,6 +197,10 @@ public class Config {
 
 	public static String getDateMessage() {
 		return config.getString("date_message", "{WEEKDAY} the {DATE}{MOD} of {SEASON} {YEAR}AN");
+	}
+	
+	public static int getFontSize() {
+		return config.getInt("font_size", 10);
 	}
 
 	public static Configuration getConfig() {
