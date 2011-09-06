@@ -77,6 +77,8 @@ public class Config {
 		getHUDPosition();
 		config.save();
 		config.load();
+		
+		System.out.println(config.getString("worlds." + "world" + ".months." + "May" + ".days"));
 	}
 
 	public List<String> getWorlds() {
@@ -171,8 +173,11 @@ public class Config {
 	}
 
 	public int getMonthLength(String month, World world) {
-		System.out.println(config.getString("worlds." + world.getName() + ".months." + month + ".days"));
-		return config.getInt("worlds." + world.getName() + ".months." + month + ".days", 30);
+		try{
+			return Integer.parseInt(config.getString("worlds." + world.getName() + ".months." + month + ".days"));
+		} catch(Exception e) {
+			return 30;
+		}
 	}
 
 	public String getSeasonURL(String season) {

@@ -49,11 +49,11 @@ public class Times {
 		int days = getDays() % getDaysInYear() + 1;
 		
 		for (String string : config.getMonths(world)) {
-			if(days > config.getMonthLength(string, world)) {
-				days -= config.getMonthLength(string, world);
+			int length = config.getMonthLength(string, world);
+			if(days > length) {
+				days -= length;
 			}
 		}
-
 		return days;
 	}
 
@@ -63,8 +63,9 @@ public class Times {
 		int days = getDays() % getDaysInYear() + 1;
 		
 		for (String string : config.getMonths(world)) {
-			if(days > config.getMonthLength(string, world)) {
-				days -= config.getMonthLength(string, world);
+			int length = config.getMonthLength(string, world);
+			if(days > length) {
+				days -= length;
 				month++;
 			}
 		}
@@ -80,11 +81,11 @@ public class Times {
 	}
 	
 	public int getDaysInYear() {
+
 		int days = 0;
 		for (String month : config.getMonths(world)) {
 			days += config.getMonthLength(month,world);
 		}
-		System.out.println("Days in year: " + days);
 		return days;
 	}
 
