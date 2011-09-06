@@ -20,6 +20,7 @@ package me.ambientseasons;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
@@ -62,17 +63,17 @@ public class AmbientSeasons extends JavaPlugin {
 	private PluginManager pm;
 	private SListener sListener;
 	private Calendar calendar;
+	private Config config;
 	private BlockPlaceListener blockPlace;
 	private BlockGrow blockGrow;
-	public static HashMap<String, Boolean> HUDEnable;
+	private HashMap<String, Boolean> HUDEnable;
 
 	/**
 	 * Calls when the plugin disables.
 	 */
 	public void onDisable() {
 
-		Config.updateSeconds(calendar.getSeconds());
-		Config.saveMap();
+		config.saveMap();
 		System.out.println("[" + info.getName() + "] is now disabled!");
 	}
 
@@ -85,8 +86,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 		HUDEnable = new HashMap<String, Boolean>();
 
-		// Load the Config
-		Config.init(this);
+		config = new Config(this);
 
 		WHEAT_MOD = false; // TEMP (Load from config in future)
 
@@ -155,5 +155,21 @@ public class AmbientSeasons extends JavaPlugin {
 
 		}
 		return false;
+	}
+	
+	public Config getConfig() {
+		return config;
+	}
+	
+	public Calendar getCalendar() {
+		return calendar;
+	}
+	
+	public Map<String, Boolean> getHUDEnable() {
+		return HUDEnable;
+	}
+	
+	public void setHUDEnable(HashMap<String, Boolean> HUDEnable) {
+		this.HUDEnable = HUDEnable;
 	}
 }

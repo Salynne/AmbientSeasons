@@ -17,11 +17,11 @@
 
 package me.ambientseasons;
 
-import org.bukkit.block.Biome;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.block.SpoutWeather;
-import org.getspout.spoutapi.player.BiomeManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import me.ambientseasons.util.Config;
@@ -30,49 +30,48 @@ import me.ambientseasons.util.Times;
 public class Calendar {
 
 	private AmbientSeasons plugin;
+	private Config config;
+	private Map<String, Times> calendars;
 	long count;
-	int seconds;
 
-	public static int DAY_OF_WEEK, DAY_OF_SEASON, SEASON, YEAR;
+	public int DAY_OF_WEEK, DAY_OF_MONTH, MONTH, YEAR;
 
-	private int dayOfSeason, season, year;
+	private int dayOfMonth, month, year;
 
 	public Calendar(AmbientSeasons plugin) {
 		this.plugin = plugin;
-		seconds = Config.getSeconds();
+		config = plugin.getConfig();
+		calendars = new HashMap<String, Times>();
+		for (String world : config.getWorlds()) {
+			calendars.put(world, new Times(plugin, plugin.getServer().getWorld(world)));
+		}
 	}
 
 	/**
 	 * Runs every second, BE CAREFUL HERE.
 	 */
 	public void onSecond() {
-		seconds++;
+		
+		for(Times time : calendars.values()) {
+			DAY_OF_WEEK = time.getDayOfWeek();
+			DAY_OF_MONTH = time.getDayOfMonth();
+			MONTH = time.getMonth();
+			YEAR = time.getYear();
 
-		if (Config.getCalcType().toLowerCase().equals("world")) {
-			Config.setTimeCalc(plugin.getServer().getWorld(Config.getCalendarWorld()).getFullTime());
-		} else {
-			Config.setTimeCalc(seconds);
-		}
-
-		DAY_OF_WEEK = Times.getDayOfWeek(Config.getTimeCalc());
-		DAY_OF_SEASON = Times.getDayOfSeason(Config.getTimeCalc());
-		SEASON = Times.getSeason(Config.getTimeCalc());
-		YEAR = Times.getYear(Config.getTimeCalc());
-
-		if (DAY_OF_SEASON != dayOfSeason || SEASON != season || YEAR != year) {
-			dayOfSeason = DAY_OF_SEASON;
-			year = YEAR;
-		}
-
-		if (SEASON != season) {
-			updateTextures();
-			updateWeather(SEASON);
-
-			if (AmbientSeasons.WHEAT_MOD) {
-				plugin.wheatMod.updateSettings();
+			if (DAY_OF_MONTH != dayOfMonth || MONTH != month || YEAR != year) {
+				dayOfMonth = DAY_OF_MONTH;
+				year = YEAR;
 			}
 
-			season = SEASON;
+			if (MONTH != month) {
+				updateTextures();
+
+				if (AmbientSeasons.WHEAT_MOD) {
+					plugin.wheatMod.updateSettings();
+				}
+
+				month = MONTH;
+			}
 		}
 
 	}
@@ -82,51 +81,19 @@ public class Calendar {
 	 */
 	public void updateTextures() {
 		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			if (Config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
-				SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-				sPlayer.setTexturePack(Times.getSeasonUrl());
-			}
+			updateTexture(player);
 		}
 	}
-
-	/**
-	 * Updates the weather type depending on the season
-	 * 
-	 * @param season to check the type of
-	 */
-	public void updateWeather(int season) {
-		String seasonType = Config.getSeasonType(Times.getSeasonString(season)).toLowerCase();
-		BiomeManager bm = SpoutManager.getBiomeManager();
-		bm.setGlobalWeather(SpoutWeather.RESET);
-
-		if (seasonType.equals("spring")) {
-			bm.setGlobalBiomeWeather(Biome.DESERT, SpoutWeather.RAIN);
-			bm.setGlobalBiomeWeather(Biome.TAIGA, SpoutWeather.NONE);
+	
+	public void updateTexture(Player player) {
+		if (config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
+			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
+			sPlayer.setTexturePack(calendars.get(player.getWorld().getName()).getSeasonUrl());
 		}
-		else if (seasonType.equals("summer")) {
-			bm.setGlobalBiomeWeather(Biome.TAIGA, SpoutWeather.RAIN);
-			bm.setGlobalBiomeWeather(Biome.PLAINS, SpoutWeather.NONE);
-		}
-		else if (seasonType.equals("fall")) {
-			bm.setGlobalBiomeWeather(Biome.SEASONAL_FOREST, SpoutWeather.SNOW);
-		}
-		else if (seasonType.equals("winter")) {
-			bm.setGlobalBiomeWeather(Biome.SEASONAL_FOREST, SpoutWeather.SNOW);
-			bm.setGlobalBiomeWeather(Biome.FOREST, SpoutWeather.SNOW);
-			bm.setGlobalBiomeWeather(Biome.ICE_DESERT, SpoutWeather.SNOW);
-			bm.setGlobalBiomeWeather(Biome.PLAINS, SpoutWeather.SNOW);
-			bm.setGlobalBiomeWeather(Biome.SHRUBLAND, SpoutWeather.SNOW);
-			bm.setGlobalBiomeWeather(Biome.SWAMPLAND, SpoutWeather.SNOW);	
-		}
-
+	}
+	
+	public Times getTimes(Player player) {
+		return calendars.get(player.getWorld().getName());
 	}
 
-	/**
-	 * Gets the seconds that have gone by since the plugin started.
-	 * 
-	 * @return seconds that have gone by since the plugin started
-	 */
-	public int getSeconds() {
-		return seconds;
-	}
 }

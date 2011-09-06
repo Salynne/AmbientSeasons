@@ -20,8 +20,6 @@ package me.ambientseasons.listener;
 import me.ambientseasons.AmbientSeasons;
 import me.ambientseasons.Calendar;
 import me.ambientseasons.HUDLabel;
-import me.ambientseasons.util.Config;
-import me.ambientseasons.util.Times;
 
 import org.getspout.spoutapi.event.spout.ServerTickEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
@@ -56,18 +54,18 @@ public class SListener extends SpoutListener {
 	@Override
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
 
-		SpoutPlayer sPlayer = event.getPlayer();
+		SpoutPlayer player = event.getPlayer();
 
-		if (!AmbientSeasons.HUDEnable.containsKey(sPlayer.getName())) {
-			AmbientSeasons.HUDEnable.put(sPlayer.getName(), true);
+		if (!plugin.getHUDEnable().containsKey(player.getName())) {
+			plugin.getHUDEnable().put(player.getName(), true);
 		}
 
-		HUDLabel label = new HUDLabel(sPlayer);
+		HUDLabel label = new HUDLabel(player, plugin);
 
-		sPlayer.getMainScreen().attachWidget(plugin, label);
+		player.getMainScreen().attachWidget(plugin, label);
 
-		if (Config.isWorldEnabled(sPlayer.getWorld()) && !sPlayer.hasPermission("ambientseasons.exempt")) {
-			sPlayer.setTexturePack(Times.getSeasonUrl());
+		if (plugin.getConfig().isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
+			calendar.updateTexture(player);
 		}
 	}
 

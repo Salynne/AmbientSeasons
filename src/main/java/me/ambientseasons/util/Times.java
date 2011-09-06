@@ -17,7 +17,9 @@
 
 package me.ambientseasons.util;
 
-import me.ambientseasons.Calendar;
+import org.bukkit.World;
+
+import me.ambientseasons.AmbientSeasons;
 
 /**
  * 
@@ -25,142 +27,105 @@ import me.ambientseasons.Calendar;
  */
 public class Times {
 
-	/**
-	 * Gets the day of the week
-	 * 
-	 * @param time
-	 *            - Full time since the world started in ticks
-	 * @return Day of the week
-	 */
-	public static int getDayOfWeek(long time) {
+	AmbientSeasons plugin;
+	Config config;
+	World world;
 
-		int day = (int) (getDays(time) % Config.getNumberOfWeekdays()) + 1;
+	public Times(AmbientSeasons plugin, World world) {
+		this.plugin = plugin;
+		this.config = plugin.getConfig();
+		this.world = world;
+	}
+
+	public int getDayOfWeek() {
+
+		int day = getDays() % config.getNumberOfWeekdays(world) + 1;
 
 		return day;
 	}
 
-	/**
-	 * Gets the date in the season
-	 * 
-	 * @param time
-	 *            - Full time since the world started in ticks
-	 * @return Day of the season
-	 */
-	public static int getDayOfSeason(long time) {
+	public int getDayOfMonth() {
 
-		int days = (int) (getDays(time) % Config.getSeasonLength()) + 1;
+		int days = getDays() % getDaysInYear() + 1;
+		
+		for (String string : config.getMonths(world)) {
+			if(days > config.getMonthLength(string, world)) {
+				days -= config.getMonthLength(string, world);
+			}
+		}
 
 		return days;
 	}
 
-	/**
-	 * Gets the season
-	 * 
-	 * @param time
-	 *            - Full time since the world started in ticks
-	 * @return Season
-	 */
-	public static int getSeason(long time) {
+	public int getMonth() {
 
-		int season = (int) ((getDays(time) / Config.getSeasonLength()) % Config.getNumberOfSeasons()) + 1;
+		int month = 1;
+		int days = getDays() % getDaysInYear() + 1;
+		
+		for (String string : config.getMonths(world)) {
+			if(days > config.getMonthLength(string, world)) {
+				days -= config.getMonthLength(string, world);
+				month++;
+			}
+		}
 
-		return season;
+		return month;
 	}
 
-	/**
-	 * Gets the year
-	 * 
-	 * @param time
-	 *            - Full time since the world started in ticks
-	 * @return Year
-	 */
-	public static int getYear(long time) {
+	public int getYear() {
 
-		int year = (int) (getDays(time) / (Config.getSeasonLength() * Config.getNumberOfSeasons())) + 1;
+		int year = getDays() / getDaysInYear() + 1;
 
 		return year;
 	}
-
-	/**
-	 * Days that have gone by in total
-	 * 
-	 * @param time
-	 *            - Full time since the world started in ticks
-	 * @return Number of days since the world started
-	 */
-	public static long getDays(long time) {
-		long days;
-
-		if (Config.getCalcType().toLowerCase().equals("world")) {
-			days = time / 24000;
-		} else {
-			days = time / Config.getSecondsInDay();
+	
+	public int getDaysInYear() {
+		int days = 0;
+		for (String month : config.getMonths(world)) {
+			days += config.getMonthLength(month,world);
 		}
-
+		System.out.println("Days in year: " + days);
 		return days;
 	}
 
-	/**
-	 * Gets the String for the day of the week based on the Config file
-	 * 
-	 * @param day
-	 *            - Day of the week number
-	 * @return Name of the day of the week
-	 */
-	public static String getDayString(int day) {
+	public int getDays() {
+		long time = world.getFullTime();
+
+		return (int) (time / 24000) + 1;
+	}
+
+	public String getDayString() {
+		int day = getDayOfWeek();
 		String string = "";
 		for (int i = 0; i < day; i++) {
 			if (i == (day - 1)) {
-				string = (String) Config.getWeekdays().get(i);
+				string = (String) config.getWeekdays(world).get(i);
 			}
 		}
 
 		return string;
 	}
 
-	/**
-	 * Gets the String for the name of the season based on the Config fil
-	 * 
-	 * @param season
-	 *            - Season number
-	 * @return Name of the season
-	 */
-	public static String getSeasonString(int season) {
+	public String getMonthString() {
+		int month = getMonth();
 		String string = "";
-		for (int i = 0; i < season; i++) {
-			if (i == (season - 1)) {
-				string = (String) Config.getSeasons().get(i);
+		for (int i = 0; i < month; i++) {
+			if (i == (month - 1)) {
+				string = (String) config.getMonths(world).get(i);
 			}
 		}
 
 		return string;
 	}
 
-	/**
-	 * Gets the URL for the specified season number
-	 * 
-	 * @return URL for the texture pack
-	 */
-	public static String getSeasonUrl() {
-		int season = Calendar.SEASON;
+	public String getSeasonUrl() {
 		String string = "";
-		for (int i = 0; i < season; i++) {
-			if (i == (season - 1)) {
-				string = Config.getSeasonURL(getSeasonString(Calendar.SEASON));
-			}
-		}
+		string = config.getSeasonURL(config.getSeason(getMonthString(), world));
 
 		return string;
 	}
 
-	/**
-	 * Gets the modifier to add to the date, ie 1st, 2nd, 3rd, 4th
-	 * 
-	 * @param day
-	 *            - Day of the season
-	 * @return Modifier
-	 */
-	public static String getModString(int day) {
+	public String getModString(int day) {
 		String string = "";
 		if ((day == 11) || (day == 12) || (day == 13)) {
 			string = "th";
@@ -185,19 +150,14 @@ public class Times {
 		return string;
 	}
 
-	/**
-	 * Gets the full date as a string
-	 * 
-	 * @return Full date
-	 */
-	public static String getDate() {
+	public String getDate() {
 
-		String date = Config.getDateMessage();
-		date = date.replace("{WEEKDAY}", getDayString(Calendar.DAY_OF_WEEK));
-		date = date.replace("{DATE}", Integer.toString(Calendar.DAY_OF_SEASON));
-		date = date.replace("{MOD}", getModString(Calendar.DAY_OF_SEASON));
-		date = date.replace("{SEASON}", getSeasonString(Calendar.SEASON));
-		date = date.replace("{YEAR}", Integer.toString(Calendar.YEAR));
+		String date = config.getDateMessage();
+		date = date.replace("{WEEKDAY}", getDayString());
+		date = date.replace("{DATE}", Integer.toString(getDayOfMonth()));
+		date = date.replace("{MOD}", getModString(getDayOfMonth()));
+		date = date.replace("{MONTH}", getMonthString());
+		date = date.replace("{YEAR}", Integer.toString(getYear()));
 		return date;
 	}
 }

@@ -25,23 +25,22 @@ import java.util.List;
 import me.ambientseasons.AmbientSeasons;
 
 import org.bukkit.World;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
 public class Config {
-	private final static String QUANDARY = "http://www.retributiongames.com/quandary/files/Quandary_4.1_";
+	private final String QUANDARY = "http://www.retributiongames.com/quandary/files/Quandary_4.1_";
 
 	// Hashmap file location
-	private static File hudMap;
+	private File hudMap;
 
-	private static Plugin plugin;
-	private static File directory;
-	private static File configFile;
-	private static Configuration config;
-	private static long timeCalc;
-
-	public static void init(Plugin plgn) {
-		plugin = plgn;
+	private AmbientSeasons plugin;
+	private File directory;
+	private File configFile;
+	private Configuration config;
+	
+	public Config (AmbientSeasons plugin) {
+		this.plugin = plugin;
+		
 		directory = plugin.getDataFolder();
 		configFile = new File(directory, "config.yml");
 		if (!directory.exists())
@@ -59,34 +58,72 @@ public class Config {
 		loadMap();
 	}
 
-	public static void load() {
+	public void load() {
 		config = new Configuration(configFile);
+		config.load();
+
+		getWorlds();
+		config.save();
 		config.load();
 
 		getSeasons();
 		config.save();
-		config.setProperty("weekdays", getWeekdays());
-		config.save();
-		config.setProperty("enabled_worlds", getEnabledWorlds());
-		config.save();
-		getCalendarWorld();
-		config.save();
-		getSeasonLength();
-		config.save();
-		getSecondsInDay();
-		config.save();
-		getCalcType();
-		config.save();
+		config.load();
+
 		getDateMessage();
 		config.save();
+		config.load();
+
 		getHUDPosition();
 		config.save();
-		getSeconds();
-
-		config.save();
+		config.load();
 	}
 
-	public static List<String> getSeasons() {
+	public List<String> getWorlds() {
+
+		if (config.getKeys("worlds") == null) {
+			List<String> months = new ArrayList<String>();
+			months.add("January");
+			months.add("February");
+			months.add("March");
+			months.add("April");
+			months.add("May");
+			months.add("June");
+			months.add("July");
+			months.add("August");
+			months.add("September");
+			months.add("October");
+			months.add("November");
+			months.add("December");
+
+			ArrayList<String> weekdays = new ArrayList<String>();
+			weekdays.add("Sunday");
+			weekdays.add("Monday");
+			weekdays.add("Tuesday");
+			weekdays.add("Wednesday");
+			weekdays.add("Thursday");
+			weekdays.add("Friday");
+			weekdays.add("Saturday");
+
+			String mainWorld = plugin.getServer().getWorlds().get(0).getName();
+
+			for (String month : months) {
+				config.setProperty("worlds." + mainWorld + ".months." + month + ".season", "Djilba");
+				config.setProperty("worlds." + mainWorld + ".months." + month + ".days", "30");
+				config.save();
+				config.load();
+			}
+
+			config.setProperty("worlds." + mainWorld + ".weekdays", weekdays);
+			config.save();
+			config.load();
+
+		}
+
+		return config.getKeys("worlds");
+	}
+
+	public List<String> getSeasons() {
 		List<String> seasons = new ArrayList<String>();
 		seasons.add("Djilba");
 		seasons.add("Kamba");
@@ -121,114 +158,73 @@ public class Config {
 		return config.getKeys("seasons");
 	}
 
-	public static String getSeasonURL(String season) {
+	public List<String> getMonths(World world) {
+		return config.getKeys("worlds." + world.getName() + ".months");
+	}
+
+	public List<String> getWeekdays(World world) {
+		return config.getStringList("worlds." + world.getName() + ".weekdays", null);
+	}
+
+	public String getSeason(String month, World world) {
+		return config.getString("worlds." + world.getName() + ".months." + month + ".season");
+	}
+
+	public int getMonthLength(String month, World world) {
+		System.out.println(config.getString("worlds." + world.getName() + ".months." + month + ".days"));
+		return config.getInt("worlds." + world.getName() + ".months." + month + ".days", 30);
+	}
+
+	public String getSeasonURL(String season) {
 		String string = config.getString("seasons." + season + ".URL", QUANDARY + "Djilba.zip");
 
 		return string;
 	}
 
-	public static String getSeasonType(String season) {
-		String string = config.getString("seasons." + season + ".season_type", "Spring");
-
-		return string;
+	public Boolean isWorldEnabled(World world) {
+		return getWorlds().contains(world.getName());
 	}
 
-	public static List<String> getWeekdays() {
-		ArrayList<String> weekdays = new ArrayList<String>();
-		weekdays.add("Sunday");
-		weekdays.add("Monday");
-		weekdays.add("Tuesday");
-		weekdays.add("Wednesday");
-		weekdays.add("Thursday");
-		weekdays.add("Friday");
-		weekdays.add("Saturday");
-		return config.getStringList("weekdays", weekdays);
+	public int getNumberOfMonths(World world) {
+		return getMonths(world).size();
 	}
 
-	private static List<String> getEnabledWorlds() {
-		ArrayList<String> enabledWorlds = new ArrayList<String>();
-		enabledWorlds.add("world");
-		return config.getStringList("enabled_worlds", enabledWorlds);
+	public int getNumberOfWeekdays(World world) {
+		return getWeekdays(world).size();
 	}
 
-	public static Boolean isWorldEnabled(World world) {
-		return getEnabledWorlds().contains(world.getName());
-	}
-
-	public static long getTimeCalc() {
-		return timeCalc;
-	}
-
-	public static void setTimeCalc(long calc) {
-		timeCalc = calc;
-	}
-
-	public static int getNumberOfSeasons() {
-		return getSeasons().size();
-	}
-
-	public static int getNumberOfWeekdays() {
-		return getWeekdays().size();
-	}
-
-	public static int getSeasonLength() {
-		return config.getInt("season_length", 28);
-	}
-
-	public static int getSeconds() {
-		return config.getInt("seconds", 1);
-	}
-
-	public static int getSecondsInDay() {
-		return config.getInt("seconds_in_day", 60);
-	}
-
-	public static int getHUDPosition() {
+	public int getHUDPosition() {
 		return config.getInt("HUD_Y", 10);
 	}
 
-	public static String getCalendarWorld() {
-		return config.getString("calendar_world", plugin.getServer().getWorlds().get(0).getName());
+	public String getDateMessage() {
+		return config.getString("date_message", "{WEEKDAY} the {DATE}{MOD} of {MONTH} {YEAR}AN");
 	}
 
-	public static String getCalcType() {
-		return config.getString("calc_type", "world");
-	}
-
-	public static String getDateMessage() {
-		return config.getString("date_message", "{WEEKDAY} the {DATE}{MOD} of {SEASON} {YEAR}AN");
-	}
-	
-	public static int getFontSize() {
+	public int getFontSize() {
 		return config.getInt("font_size", 10);
 	}
 
-	public static Configuration getConfig() {
+	public Configuration getConfig() {
 		return config;
 	}
 
-	public static void updateSeconds(int seconds) {
-		config.load();
-		config.setProperty("seconds", seconds);
-		config.save();
-	}
-
 	@SuppressWarnings("unchecked")
-	public static void loadMap() {
+	public void loadMap() {
 		hudMap = new File(directory, "settings.bin");
 		if (!hudMap.exists()) {
 			System.out.println("Making new settings file");
 			saveMap();
 		} else {
-			AmbientSeasons.HUDEnable = (HashMap<String, Boolean>) HMapSL.load(hudMap.getPath());
+			plugin.setHUDEnable((HashMap<String, Boolean>) HMapSL.load(hudMap.getPath()));
 		}
 	}
 
 	/**
 	 * Save the hash map HUDEnable
 	 */
-	public static void saveMap() {
-		HMapSL.save(AmbientSeasons.HUDEnable, hudMap.getPath());
+	public void saveMap() {
+		HMapSL.save(plugin.getHUDEnable(), hudMap.getPath());
 
 	}
 

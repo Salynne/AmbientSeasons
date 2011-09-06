@@ -17,9 +17,6 @@
 
 package me.ambientseasons;
 
-import me.ambientseasons.util.Config;
-import me.ambientseasons.util.Times;
-
 import org.bukkit.ChatColor;
 import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.player.SpoutPlayer;
@@ -27,21 +24,23 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 public class HUDLabel extends GenericLabel {
 	int count;
 	SpoutPlayer sPlayer;
+	AmbientSeasons plugin;
 
-	public HUDLabel(SpoutPlayer sPlayer) {
+	public HUDLabel(SpoutPlayer sPlayer, AmbientSeasons plugin) {
 		super();
 		count = 0;
 		this.sPlayer = sPlayer;
-		this.setX(10).setY(Config.getHUDPosition());
-		this.setMinHeight(Config.getFontSize()).setMaxHeight(Config.getFontSize());
+		this.plugin = plugin;
+		this.setX(10).setY(plugin.getConfig().getHUDPosition());
+		this.setMinHeight(plugin.getConfig().getFontSize()).setMaxHeight(plugin.getConfig().getFontSize());
 	}
 
 	@Override
 	public boolean isDirty() {
 		count++;
 		if (count % 10 == 0) {
-			this.setVisible(AmbientSeasons.HUDEnable.get(sPlayer.getName()));
-			this.setText(ChatColor.WHITE + Times.getDate());
+			this.setVisible(plugin.getHUDEnable().get(sPlayer.getName()));
+			this.setText(ChatColor.WHITE + plugin.getCalendar().getTimes(sPlayer).getDate());
 		}
 		return true;
 	}
