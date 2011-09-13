@@ -31,18 +31,18 @@ public class HUDLabel extends GenericLabel {
 		count = 0;
 		this.sPlayer = sPlayer;
 		this.plugin = plugin;
-		this.setX(10).setY(plugin.getConfig().getHUDPosition());
+		this.setX(plugin.getConfig().getHUDX()).setY(plugin.getConfig().getHUDY());
 		this.setMinHeight(plugin.getConfig().getFontSize()).setMaxHeight(plugin.getConfig().getFontSize());
 	}
-
+	
 	@Override
-	public boolean isDirty() {
+	public void onTick() {
 		count++;
 		if (count % 10 == 0) {
 			this.setVisible(plugin.getHUDEnable().get(sPlayer.getName()));
 			this.setText(ChatColor.WHITE + plugin.getCalendar().getTimes(sPlayer).getDate());
+			this.setDirty(true);
 		}
-		return true;
 	}
 
 }

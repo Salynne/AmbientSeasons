@@ -20,8 +20,10 @@ package me.ambientseasons;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.BiomeManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import me.ambientseasons.util.Config;
@@ -32,17 +34,13 @@ public class Calendar {
 	private AmbientSeasons plugin;
 	private Config config;
 	private Map<String, Times> calendars;
-	long count;
-
-	@SuppressWarnings("unused")
-	private int dayOfWeek, dayOfMonth, month, year, season;
-	@SuppressWarnings("unused")
-	private int oldDayOfWeek, oldDayOfMonth, oldMonth, oldYear, oldSeason;
+	private BiomeManager bm;
 
 	public Calendar(AmbientSeasons plugin) {
 		this.plugin = plugin;
 		config = plugin.getConfig();
 		calendars = new HashMap<String, Times>();
+		bm = SpoutManager.getBiomeManager();
 		for (String world : config.getWorlds()) {
 			calendars.put(world, new Times(plugin, plugin.getServer().getWorld(world)));
 		}
@@ -54,25 +52,23 @@ public class Calendar {
 	public void onSecond() {
 
 		for (Times time : calendars.values()) {
-			dayOfWeek = time.getDayOfWeek();
-			dayOfMonth = time.getDayOfMonth();
-			month = time.getMonth();
-			year = time.getYear();
 
-			if (dayOfMonth != oldDayOfMonth || month != oldMonth || year != oldYear) {
-				dayOfMonth = oldDayOfMonth;
-				year = oldYear;
-			}
-
-			if (month != oldMonth) {
-				updateTextures();
-
-				if (AmbientSeasons.WHEAT_MOD) {
-					plugin.wheatMod.updateSettings();
+			if (time.newDay()) {
+				if (time.newMonth()) {
+					updateTextures();
 				}
-
-				month = oldMonth;
+				time.newDayOfMonth();
+				time.newDayOfWeek();
+				time.newYear();
+				
+				for(Biome biome : Biome.values()) {
+					System.out.println(time.getSeasonString());
+					System.out.println(biome.toString());
+					System.out.println(config.getSeasonBiomeWeather(time.getSeasonString(), biome.toString()));
+					bm.setGlobalBiomeWeather(biome, config.getSeasonBiomeWeather(time.getSeasonString(), biome.toString()));
+				}
 			}
+
 		}
 
 	}
@@ -89,7 +85,7 @@ public class Calendar {
 	public void updateTexture(Player player) {
 		if (config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
 			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-			sPlayer.setTexturePack(calendars.get(player.getWorld().getName()).getSeasonUrl());
+			sPlayer.setTexturePack(getTimes(sPlayer).getSeasonUrl());
 		}
 	}
 

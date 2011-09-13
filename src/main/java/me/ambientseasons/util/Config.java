@@ -27,6 +27,7 @@ import me.ambientseasons.AmbientSeasons;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.World;
 import org.bukkit.util.config.Configuration;
+import org.getspout.spoutapi.block.SpoutWeather;
 
 public class Config {
 	private final String QUANDARY = "http://www.retributiongames.com/quandary/files/Quandary_4.1_";
@@ -46,7 +47,7 @@ public class Config {
 		
 		try {
 			URL jarConfigURL = plugin.getClass().getResource("/config.yml");
-			File jarConfigFile = new File (jarConfigURL.getPath());
+			File jarConfigFile = new File(jarConfigURL.getFile());
 			Configuration jarConfig = new Configuration(jarConfigFile);
 			jarConfig.load();
 			
@@ -75,6 +76,13 @@ public class Config {
 
 	public List<String> getSeasons() {
 		return config.getKeys("seasons");
+	}
+	
+	public SpoutWeather getSeasonBiomeWeather(String season, String biome) {
+		SpoutWeather weather = SpoutWeather.RESET;
+		String weatherString = config.getString("seasons." + season + ".Biome_Weather." + biome, "RESET");
+		weather = SpoutWeather.valueOf(weatherString);
+		return weather;
 	}
 
 	public List<String> getMonths(World world) {
@@ -109,8 +117,12 @@ public class Config {
 		return getWeekdays(world).size();
 	}
 
-	public int getHUDPosition() {
+	public int getHUDY() {
 		return config.getInt("HUD_Y", 10);
+	}
+	
+	public int getHUDX() {
+		return config.getInt("HUD_X", 0);
 	}
 
 	public String getDateMessage() {
@@ -121,9 +133,6 @@ public class Config {
 		return config.getInt("font_size", 10);
 	}
 
-	public Configuration getConfig() {
-		return config;
-	}
 
 	@SuppressWarnings("unchecked")
 	public void loadMap() {

@@ -3,7 +3,7 @@ worlds:
         months:
             January:
                 days: 31
-                season: Djilba
+                season: Makuru
             February:
                 days: 28
                 season: Djilba
@@ -12,31 +12,31 @@ worlds:
                 season: Djilba
             April:
                 days: 30
-                season: Djilba
+                season: Kamba
             May:
                 days: 31
-                season: Djilba
+                season: Kamba
             June:
                 days: 30
-                season: Djilba
+                season: Birak
             July:
                 days: 31
-                season: Djilba
+                season: Birak
             August:
                 days: 31
-                season: Djilba
+                season: Bunuru
             September:
                 days: 30
-                season: Djilba
+                season: Bunuru
             October:
                 days: 31
-                season: Djilba
+                season: Djeran
             November:
                 days: 30
-                season: Djilba
+                season: Djeran
             December:
                 days: 31
-                season: Djilba
+                season: Makuru
         weekdays:
         - Sunday
         - Monday
@@ -47,22 +47,89 @@ worlds:
         - Saturday
 seasons:
     Djilba:
-        season_type: Spring
         URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip
+        Biome_Weather:
+            DESERT: NONE
+            FOREST: RAIN
+            ICE_DESERT: SNOW
+            PLAINS: NONE
+            RAINFOREST: RAIN
+            SAVANNA: NONE
+            SEASONAL_FOREST: NONE
+            SHRUBLAND: RAIN
+            SWAMPLAND: NONE
+            TAIGA: SNOW
+            TUNDRA: SNOW
     Kamba:
-        season_type: Spring
         URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip
+        Biome_Weather:
+            DESERT: RAIN
+            FOREST: RAIN
+            ICE_DESERT: RAIN
+            PLAINS: RAIN
+            RAINFOREST: RAIN
+            SAVANNA: RAIN
+            SEASONAL_FOREST: RAIN
+            SHRUBLAND: NONE
+            SWAMPLAND: RAIN
+            TAIGA: SNOW
+            TUNDRA: SNOW
     Birak:
-        season_type: Summer
         URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip
+        Biome_Weather:
+            DESERT: NONE
+            FOREST: RAIN
+            ICE_DESERT: NONE
+            PLAINS: RAIN
+            RAINFOREST: RAIN
+            SAVANNA: RAIN
+            SEASONAL_FOREST: RAIN
+            SHRUBLAND: NONE
+            SWAMPLAND: NONE
+            TAIGA: SNOW
+            TUNDRA: SNOW
     Bunuru:
-        season_type: Summer
         URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip
+        Biome_Weather:
+            DESERT: NONE
+            FOREST: RAIN
+            ICE_DESERT: SNOW
+            PLAINS: NONE
+            RAINFOREST: RAIN
+            SAVANNA: RAIN
+            SEASONAL_FOREST: RAIN
+            SHRUBLAND: NONE
+            SWAMPLAND: RAIN
+            TAIGA: SNOW
+            TUNDRA: SNOW
     Djeran:
-        season_type: Fall
         URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip
+        Biome_Weather:
+            DESERT: NONE
+            FOREST: RAIN
+            ICE_DESERT: SNOW
+            PLAINS: NONE
+            RAINFOREST: RAIN
+            SAVANNA: RAIN
+            SEASONAL_FOREST: RAIN
+            SHRUBLAND: RAIN
+            SWAMPLAND: RAIN
+            TAIGA: SNOW
+            TUNDRA: SNOW
     Makuru:
-        season_type: Winter
         URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip
+        Biome_Weather:
+            DESERT: NONE
+            FOREST: SNOW
+            ICE_DESERT: SNOW
+            PLAINS: NONE
+            RAINFOREST: NONE
+            SAVANNA: NONE
+            SEASONAL_FOREST: NONE
+            SHRUBLAND: RAIN
+            SWAMPLAND: NONE
+            TAIGA: SNOW
+            TUNDRA: SNOW
 date_message: '{WEEKDAY} the {DATE}{MOD} of {MONTH} {YEAR}AN'
+HUD_X: 0
 HUD_Y: 10

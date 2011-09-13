@@ -30,44 +30,61 @@ public class Times {
 	AmbientSeasons plugin;
 	Config config;
 	World world;
+	int daysInYear, monthsInYear;
+
+	private int days, dayOfWeek, dayOfMonth, month, year;
+	private int oldDays, oldDayOfWeek, oldDayOfMonth, oldMonth, oldYear;
 
 	public Times(AmbientSeasons plugin, World world) {
 		this.plugin = plugin;
 		this.config = plugin.getConfig();
 		this.world = world;
+		daysInYear = getDaysInYear();
+		monthsInYear = config.getMonths(world).size();
+
+		days = oldDays = getTotalDays();
+		dayOfWeek = oldDayOfWeek = getDayOfWeek();
+		dayOfMonth = oldDayOfMonth = getDayOfMonth();
+		month = oldMonth = getMonth();
+		year = oldYear = getYear();
 	}
 
 	public int getDayOfWeek() {
 
-		int day = getDays() % config.getNumberOfWeekdays(world) + 1;
+		int day = oldDays % config.getNumberOfWeekdays(world) + 1;
 
 		return day;
 	}
 
 	public int getDayOfMonth() {
 
-		int days = getDays() % getDaysInYear() + 1;
-		
+		int days = oldDays % daysInYear - 1;
+
 		for (String string : config.getMonths(world)) {
 			int length = config.getMonthLength(string, world);
 			System.out.println("Days: " + days + " Length: " + length);
-			if(days > length) {
+			if (days >= length) {
 				days -= length;
+			} else {
+				break;
 			}
 		}
-		return days;
+		return days + 1;
 	}
 
 	public int getMonth() {
 
 		int month = 1;
-		int days = getDays() % getDaysInYear() + 1;
-		
+		int days = oldDays % daysInYear - 1;
+
 		for (String string : config.getMonths(world)) {
 			int length = config.getMonthLength(string, world);
-			if(days > length) {
+			if (days >= length) {
+				System.out.println("Days: " + days + " Length: " + length + " Month: " + month);
 				days -= length;
 				month++;
+			} else {
+				break;
 			}
 		}
 
@@ -76,31 +93,36 @@ public class Times {
 
 	public int getYear() {
 
-		int year = getDays() / getDaysInYear() + 1;
+		int year = oldDays / daysInYear + 1;
 
 		return year;
 	}
-	
+
 	public int getDaysInYear() {
 
 		int days = 0;
 		for (String month : config.getMonths(world)) {
-			days += config.getMonthLength(month,world);
+			days += config.getMonthLength(month, world);
 		}
 		return days;
 	}
 
-	public int getDays() {
+	public int getTotalDays() {
 		long time = world.getFullTime();
 
 		return (int) (time / 24000) + 1;
 	}
 
+	public int getTotalMonths() {
+		int totalMonths = oldYear * monthsInYear + oldMonth;
+
+		return totalMonths;
+	}
+
 	public String getDayString() {
-		int day = getDayOfWeek();
 		String string = "";
-		for (int i = 0; i < day; i++) {
-			if (i == (day - 1)) {
+		for (int i = 0; i < dayOfWeek; i++) {
+			if (i == (dayOfWeek - 1)) {
 				string = (String) config.getWeekdays(world).get(i);
 			}
 		}
@@ -109,7 +131,6 @@ public class Times {
 	}
 
 	public String getMonthString() {
-		int month = getMonth();
 		String string = "";
 		for (int i = 0; i < month; i++) {
 			if (i == (month - 1)) {
@@ -122,9 +143,13 @@ public class Times {
 
 	public String getSeasonUrl() {
 		String string = "";
-		string = config.getSeasonURL(config.getSeason(getMonthString(), world));
+		string = config.getSeasonURL(getSeasonString());
 
 		return string;
+	}
+	
+	public String getSeasonString() {
+		return config.getSeason(getMonthString(), world);
 	}
 
 	public String getModString(int day) {
@@ -156,10 +181,76 @@ public class Times {
 
 		String date = config.getDateMessage();
 		date = date.replace("{WEEKDAY}", getDayString());
-		date = date.replace("{DATE}", Integer.toString(getDayOfMonth()));
-		date = date.replace("{MOD}", getModString(getDayOfMonth()));
+		date = date.replace("{DATE}", Integer.toString(dayOfMonth));
+		date = date.replace("{MOD}", getModString(dayOfMonth));
 		date = date.replace("{MONTH}", getMonthString());
-		date = date.replace("{YEAR}", Integer.toString(getYear()));
+		date = date.replace("{YEAR}", Integer.toString(year));
 		return date;
 	}
+
+	public boolean newDay() {
+		boolean newDay;
+		days = getTotalDays();
+		if (days != oldDays) {
+			newDay = true;
+			oldDays = days;
+		} else {
+			newDay = false;
+		}
+
+		return newDay;
+	}
+
+	public boolean newDayOfWeek() {
+		boolean newDayOfWeek;
+		dayOfWeek = getDayOfWeek();
+		if (dayOfWeek != oldDayOfWeek) {
+			newDayOfWeek = true;
+			oldDayOfWeek = dayOfWeek;
+		} else {
+			newDayOfWeek = false;
+		}
+
+		return newDayOfWeek;
+	}
+	
+	public boolean newDayOfMonth() {
+		boolean newDayOfMonth;
+		dayOfMonth = getDayOfMonth();
+		if (dayOfMonth != oldDayOfMonth) {
+			newDayOfMonth = true;
+			oldDayOfMonth = dayOfMonth;
+		} else {
+			newDayOfMonth = false;
+		}
+
+		return newDayOfMonth;
+	}
+	
+	public boolean newMonth() {
+		boolean newMonth;
+		month = getMonth();
+		if (month != oldMonth) {
+			newMonth = true;
+			oldMonth = month;
+		} else {
+			newMonth = false;
+		}
+		
+		return newMonth;
+	}
+	
+	public boolean newYear() {
+		boolean newYear;
+		year = getYear();
+		if (year != oldYear) {
+			newYear = true;
+			oldYear = year;
+		} else {
+			newYear = false;
+		}
+		
+		return newYear;
+	}
+
 }

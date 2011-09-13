@@ -17,11 +17,10 @@
 
 package me.ambientseasons;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
@@ -57,7 +56,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 	// Wheat Modifier (Modified growing times based on season)
 	public static boolean WHEAT_MOD;
-	public List<Location> WheatBlockLocations;
+	public Set<Location> WheatBlockLocations;
 	public WheatMod wheatMod;
 
 	private PluginDescriptionFile info;
@@ -95,7 +94,7 @@ public class AmbientSeasons extends JavaPlugin {
 			blockPlace = new BlockPlaceListener(this);
 			blockGrow = new BlockGrow(this);
 
-			WheatBlockLocations = new ArrayList<Location>();
+			WheatBlockLocations = new HashSet<Location>();
 			wheatMod = new WheatMod(this);
 		}
 
@@ -173,8 +172,5 @@ public class AmbientSeasons extends JavaPlugin {
 	public void setHUDEnable(HashMap<String, Boolean> HUDEnable) {
 		this.HUDEnable = HUDEnable;
 	}
-	
-	public File getJar(){
-		return this.getFile();
-	}
+
 }
