@@ -20,9 +20,11 @@ package me.ambientseasons;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.block.SpoutWeather;
 import org.getspout.spoutapi.player.BiomeManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
@@ -54,17 +56,24 @@ public class Calendar {
 		for (Times time : calendars.values()) {
 
 			if (time.newDay()) {
-				if (time.newMonth()) {
+
+				if (time.newSeason()) {
 					updateTextures();
+
+					for (Biome biome : Biome.values()) {
+						SpoutWeather weather = config.getSeasonBiomeWeather(time.getSeasonString(), biome.toString());
+						bm.setGlobalBiomeWeather(biome, weather);
+
+					}
 				}
+
+				time.newMonth();
 				time.newDayOfMonth();
 				time.newDayOfWeek();
 				time.newYear();
-				
-				for(Biome biome : Biome.values()) {
-					bm.setGlobalBiomeWeather(biome, config.getSeasonBiomeWeather(time.getSeasonString(), biome.toString()));
-					
-				}
+
+				sendNotifications();
+
 			}
 
 		}
@@ -84,6 +93,15 @@ public class Calendar {
 		if (config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
 			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 			sPlayer.setTexturePack(getTimes(sPlayer).getSeasonUrl());
+		}
+	}
+
+	public void sendNotifications() {
+		for (SpoutPlayer player : SpoutManager.getPlayerManager().getOnlinePlayers()) {
+			if (!player.hasPermission("ambientseasons.dontnotify")) {
+				String date = getTimes(player).getShortDate();
+				player.sendNotification("A new day!", date, Material.WATCH);
+			}
 		}
 	}
 

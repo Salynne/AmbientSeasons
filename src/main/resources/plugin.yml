@@ -16,4 +16,14 @@ commands:
      description: Display the help file 
      usage: /<command>
      aliases: [ashelp, seasonshelp]
-       
+   asdate:
+     description: Display the date 
+     usage: /<command>
+     aliases: [date, calendar]
+permissions:
+    ambientseasons.exempt:
+        description: Makes you exempt from the forced texture packs
+        default: false
+    ambientseasons.dontnotify:
+        description: Makes it so that you don't get notifications on new days.
+        default: false

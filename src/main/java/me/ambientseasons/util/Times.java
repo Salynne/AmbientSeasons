@@ -31,6 +31,8 @@ public class Times {
 	Config config;
 	World world;
 	int daysInYear, monthsInYear;
+	
+	private String season, oldSeason;
 
 	private int days, dayOfWeek, dayOfMonth, month, year;
 	private int oldDays, oldDayOfWeek, oldDayOfMonth, oldMonth, oldYear;
@@ -47,6 +49,7 @@ public class Times {
 		dayOfMonth = oldDayOfMonth = getDayOfMonth();
 		month = oldMonth = getMonth();
 		year = oldYear = getYear();
+		season = oldSeason = config.getSeason(getMonthString(), world);
 	}
 
 	public int getDayOfWeek() {
@@ -185,6 +188,14 @@ public class Times {
 		date = date.replace("{YEAR}", Integer.toString(year));
 		return date;
 	}
+	
+	public String getShortDate() {
+		String date = config.getShortDateMessage();
+		date = date.replace("{DATE}", Integer.toString(dayOfMonth));
+		date = date.replace("{MONTH}", Integer.toString(month));
+		date = date.replace("{YEAR}", Integer.toString(year));
+		return date;
+	}
 
 	public boolean newDay() {
 		boolean newDay;
@@ -251,6 +262,18 @@ public class Times {
 		return newYear;
 	}
 	
+	public boolean newSeason() {
+		boolean newSeason;
+		season = getSeasonString();
+		if (!season.equals(oldSeason)) {
+			newSeason = true;
+			oldSeason = season;
+		} else {
+			newSeason = false;
+		}
+		
+		return newSeason;
+	}
 	public World getWorld() {
 		return world;
 	}

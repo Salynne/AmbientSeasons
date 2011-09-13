@@ -30,9 +30,7 @@ import org.bukkit.util.config.Configuration;
 import org.getspout.spoutapi.block.SpoutWeather;
 
 public class Config {
-	private final String QUANDARY = "http://www.retributiongames.com/quandary/files/Quandary_4.1_";
 
-	// Hashmap file location
 	private File hudMap;
 	private AmbientSeasons plugin;
 	private File directory;
@@ -44,28 +42,50 @@ public class Config {
 
 		directory = plugin.getDataFolder();
 		configFile = new File(directory, "config.yml");
-		
+
 		try {
 			URL jarConfigURL = plugin.getClass().getResource("/config.yml");
-			File jarConfigFile = new File(jarConfigURL.getFile());
-			Configuration jarConfig = new Configuration(jarConfigFile);
-			jarConfig.load();
-			
+
 			if (!directory.exists()) {
 				directory.mkdir();
 			}
 
-			if(!configFile.exists()) {
-				System.out.println("Copying file...");
+			if (!configFile.exists()) {
+				plugin.info("Copying new config file");
 				FileUtils.copyURLToFile(jarConfigURL, configFile);
+				config = new Configuration(configFile);
+				config.load();
 			}
-			
+
+			else {
+				config = new Configuration(configFile);
+				config.load();
+
+				File jarConfigFile = new File(directory, "newconfig.yml");
+				FileUtils.copyURLToFile(jarConfigURL, jarConfigFile);
+
+				Configuration jarConfig = new Configuration(jarConfigFile);
+				jarConfig.load();
+
+				String oldVersion = config.getString("version", "0");
+				String jarVersion = jarConfig.getString("version");
+
+				if (!oldVersion.equals(jarVersion)) {
+
+					plugin.info("Backing up old config file");
+					File backupFile = new File(directory, oldVersion + "_backup_config.yml");
+					FileUtils.copyFile(configFile, backupFile);
+
+					plugin.info("Copying new config file");
+					FileUtils.copyURLToFile(jarConfigURL, configFile);
+				}
+
+				jarConfigFile.delete();
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		config = new Configuration(configFile);
-		config.load();
 
 		loadMap();
 	}
@@ -77,7 +97,7 @@ public class Config {
 	public List<String> getSeasons() {
 		return config.getKeys("seasons");
 	}
-	
+
 	public SpoutWeather getSeasonBiomeWeather(String season, String biome) {
 		SpoutWeather weather = SpoutWeather.RESET;
 		String weatherString = config.getString("seasons." + season + ".Biome_Weather." + biome, "RESET");
@@ -102,7 +122,7 @@ public class Config {
 	}
 
 	public String getSeasonURL(String season) {
-		return config.getString("seasons." + season + ".URL", QUANDARY + "Djilba.zip");
+		return config.getString("seasons." + season + ".URL", "http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip");
 	}
 
 	public Boolean isWorldEnabled(World world) {
@@ -120,7 +140,7 @@ public class Config {
 	public int getHUDY() {
 		return config.getInt("HUD_Y", 10);
 	}
-	
+
 	public int getHUDX() {
 		return config.getInt("HUD_X", 0);
 	}
@@ -129,10 +149,13 @@ public class Config {
 		return config.getString("date_message", "{WEEKDAY} the {DATE}{MOD} of {MONTH} {YEAR}AN");
 	}
 
-	public int getFontSize() {
-		return config.getInt("font_size", 10);
+	public String getShortDateMessage() {
+		return config.getString("short_date_message", "{DATE}/{MONTH}/{YEAR}");
 	}
 
+	public int getFontSize() {
+		return config.getInt("font_size", 30);
+	}
 
 	@SuppressWarnings("unchecked")
 	public void loadMap() {
@@ -145,9 +168,6 @@ public class Config {
 		}
 	}
 
-	/**
-	 * Save the hash map HUDEnable
-	 */
 	public void saveMap() {
 		HMapSL.save(plugin.getHUDEnable(), hudMap.getPath());
 

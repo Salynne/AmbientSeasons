@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.ambientseasons.listener.BlockGrow;
@@ -30,6 +31,7 @@ import me.ambientseasons.util.Config;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,6 +40,8 @@ import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * Seasons Plugin for Bukkit and Spout
@@ -74,7 +78,7 @@ public class AmbientSeasons extends JavaPlugin {
 	public void onDisable() {
 
 		config.saveMap();
-		System.out.println("[" + info.getName() + "] is now disabled!");
+		info("version " + info.getVersion() + " is now Disabled.");
 	}
 
 	/**
@@ -110,7 +114,7 @@ public class AmbientSeasons extends JavaPlugin {
 		}
 
 		// Send an enable message
-		System.out.println("[" + info.getName() + "] version " + info.getVersion() + " is now enabled!");
+		info("version " + info.getVersion() + " is now Enabled.");
 
 	}
 
@@ -120,43 +124,72 @@ public class AmbientSeasons extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		String commandName = command.getName().toLowerCase();
+		boolean commandSuccess = false;
 
 		// Only Players
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(PREFIX + "/" + commandName + " can only be run from in game.");
-			return true;
+			commandSuccess = true;
 		}
-		/*
-		 * Checks to see if the command is /ashud If so, it toggles the players
-		 * HUD on or off.
-		 */
+
 		if (commandName.equals("ashud")) {
-			Player player = (Player) sender;
-			if (HUDEnable.containsKey(player.getName())) {
-				if (HUDEnable.get(player.getName())) {
-					HUDEnable.put(player.getName(), false);
-					sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD disabled.");
-					sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to enable it again.");
-				} else {
-					HUDEnable.put(player.getName(), true);
-					sender.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD enabled.");
-					sender.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to disable it.");
-				}
-			}
-			return true;
+			commandSuccess = toggleHUD((Player) sender);
+
 		}
 
 		if (commandName.equals("ashelp")) {
-			sender.sendMessage("");
-			sender.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
-			sender.sendMessage(ChatColor.RED + "/asHUD" + ChatColor.WHITE + " Command toggles your clientside HUD.");
-
-			return true;
-
+			commandSuccess = help((Player) sender);
 		}
-		return false;
+
+		if (commandName.equals("asdate")) {
+			commandSuccess = date((Player) sender);
+		}
+
+		return commandSuccess;
+
 	}
 
+	public boolean toggleHUD(Player player) {
+		if (HUDEnable.containsKey(player.getName())) {
+			if (HUDEnable.get(player.getName())) {
+				HUDEnable.put(player.getName(), false);
+				player.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD disabled.");
+				player.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to enable it again.");
+			} else {
+				HUDEnable.put(player.getName(), true);
+				player.sendMessage(ChatColor.GREEN + "AmbientSeason's HUD enabled.");
+				player.sendMessage(ChatColor.WHITE + "Type " + ChatColor.GREEN + "/ashud" + ChatColor.WHITE + " to disable it.");
+			}
+		}
+		return true;
+	}
+
+	public boolean help(Player player) {
+		player.sendMessage("");
+		player.sendMessage(ChatColor.GREEN + "Welcome to " + ChatColor.WHITE + "[" + ChatColor.LIGHT_PURPLE + "AmbientSeasons" + ChatColor.WHITE + "]" + ChatColor.GREEN + ".");
+		player.sendMessage(ChatColor.RED + "/asHUD" + ChatColor.WHITE + " Command toggles your clientside HUD.");
+		player.sendMessage(ChatColor.RED + "/asDate" + ChatColor.WHITE + " Command displays your current date.");
+
+		return true;
+
+	}
+
+	public boolean date(Player player) {
+		SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
+		String date = calendar.getTimes(player).getDate();
+		if (sPlayer.isSpoutCraftEnabled()) {
+			date = calendar.getTimes(player).getShortDate();
+			sPlayer.sendNotification("Current Date", date, Material.WATCH);
+		} else {
+			sPlayer.sendMessage("Current Date: " + date);
+		}
+
+		return true;
+	}
+
+	public void info(String info) {
+		log.log(Level.INFO, PREFIX + info);
+	}
 	public Config getConfig() {
 		return config;
 	}
