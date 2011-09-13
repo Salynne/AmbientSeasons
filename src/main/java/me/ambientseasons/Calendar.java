@@ -62,10 +62,8 @@ public class Calendar {
 				time.newYear();
 				
 				for(Biome biome : Biome.values()) {
-					System.out.println(time.getSeasonString());
-					System.out.println(biome.toString());
-					System.out.println(config.getSeasonBiomeWeather(time.getSeasonString(), biome.toString()));
 					bm.setGlobalBiomeWeather(biome, config.getSeasonBiomeWeather(time.getSeasonString(), biome.toString()));
+					
 				}
 			}
 

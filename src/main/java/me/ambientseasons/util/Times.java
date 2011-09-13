@@ -62,7 +62,6 @@ public class Times {
 
 		for (String string : config.getMonths(world)) {
 			int length = config.getMonthLength(string, world);
-			System.out.println("Days: " + days + " Length: " + length);
 			if (days >= length) {
 				days -= length;
 			} else {
@@ -80,7 +79,6 @@ public class Times {
 		for (String string : config.getMonths(world)) {
 			int length = config.getMonthLength(string, world);
 			if (days >= length) {
-				System.out.println("Days: " + days + " Length: " + length + " Month: " + month);
 				days -= length;
 				month++;
 			} else {
@@ -251,6 +249,10 @@ public class Times {
 		}
 		
 		return newYear;
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 
 }
