@@ -17,6 +17,7 @@
 
 package me.ambientseasons;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -156,20 +157,24 @@ public class AmbientSeasons extends JavaPlugin {
 		}
 		return false;
 	}
-	
+
 	public Config getConfig() {
 		return config;
 	}
-	
+
 	public Calendar getCalendar() {
 		return calendar;
 	}
-	
+
 	public Map<String, Boolean> getHUDEnable() {
 		return HUDEnable;
 	}
-	
+
 	public void setHUDEnable(HashMap<String, Boolean> HUDEnable) {
 		this.HUDEnable = HUDEnable;
+	}
+	
+	public File getJar(){
+		return this.getFile();
 	}
 }

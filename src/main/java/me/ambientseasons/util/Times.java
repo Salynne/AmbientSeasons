@@ -50,6 +50,7 @@ public class Times {
 		
 		for (String string : config.getMonths(world)) {
 			int length = config.getMonthLength(string, world);
+			System.out.println("Days: " + days + " Length: " + length);
 			if(days > length) {
 				days -= length;
 			}

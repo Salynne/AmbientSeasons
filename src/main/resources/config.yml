@@ -1,0 +1,68 @@
+worlds:
+    world:
+        months:
+            January:
+                days: 31
+                season: Djilba
+            February:
+                days: 28
+                season: Djilba
+            March:
+                days: 31
+                season: Djilba
+            April:
+                days: 30
+                season: Djilba
+            May:
+                days: 31
+                season: Djilba
+            June:
+                days: 30
+                season: Djilba
+            July:
+                days: 31
+                season: Djilba
+            August:
+                days: 31
+                season: Djilba
+            September:
+                days: 30
+                season: Djilba
+            October:
+                days: 31
+                season: Djilba
+            November:
+                days: 30
+                season: Djilba
+            December:
+                days: 31
+                season: Djilba
+        weekdays:
+        - Sunday
+        - Monday
+        - Tuesday
+        - Wednesday
+        - Thursday
+        - Friday
+        - Saturday
+seasons:
+    Djilba:
+        season_type: Spring
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip
+    Kamba:
+        season_type: Spring
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip
+    Birak:
+        season_type: Summer
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip
+    Bunuru:
+        season_type: Summer
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip
+    Djeran:
+        season_type: Fall
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip
+    Makuru:
+        season_type: Winter
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip
+date_message: '{WEEKDAY} the {DATE}{MOD} of {MONTH} {YEAR}AN'
+HUD_Y: 10

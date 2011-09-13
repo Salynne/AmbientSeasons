@@ -18,12 +18,13 @@
 package me.ambientseasons.util;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
 import me.ambientseasons.AmbientSeasons;
 
+import org.apache.commons.io.FileUtils;
 import org.bukkit.World;
 import org.bukkit.util.config.Configuration;
 
@@ -32,131 +33,47 @@ public class Config {
 
 	// Hashmap file location
 	private File hudMap;
-
 	private AmbientSeasons plugin;
 	private File directory;
-	private File configFile;
 	private Configuration config;
-	
-	public Config (AmbientSeasons plugin) {
+	private File configFile;
+
+	public Config(AmbientSeasons plugin) {
 		this.plugin = plugin;
-		
+
 		directory = plugin.getDataFolder();
 		configFile = new File(directory, "config.yml");
-		if (!directory.exists())
-			directory.mkdir();
-		if (!configFile.exists()) {
-			try {
-				configFile.createNewFile();
-			} catch (Exception e) {
-				e.printStackTrace();
+		
+		try {
+			URL jarConfigURL = plugin.getClass().getResource("/config.yml");
+			File jarConfigFile = new File (jarConfigURL.getPath());
+			Configuration jarConfig = new Configuration(jarConfigFile);
+			jarConfig.load();
+			
+			if (!directory.exists()) {
+				directory.mkdir();
 			}
+
+			if(!configFile.exists()) {
+				System.out.println("Copying file...");
+				FileUtils.copyURLToFile(jarConfigURL, configFile);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		load();
+		config = new Configuration(configFile);
+		config.load();
 
 		loadMap();
 	}
 
-	public void load() {
-		config = new Configuration(configFile);
-		config.load();
-
-		getWorlds();
-		config.save();
-		config.load();
-
-		getSeasons();
-		config.save();
-		config.load();
-
-		getDateMessage();
-		config.save();
-		config.load();
-
-		getHUDPosition();
-		config.save();
-		config.load();
-		
-		System.out.println(config.getString("worlds." + "world" + ".months." + "May" + ".days"));
-	}
-
 	public List<String> getWorlds() {
-
-		if (config.getKeys("worlds") == null) {
-			List<String> months = new ArrayList<String>();
-			months.add("January");
-			months.add("February");
-			months.add("March");
-			months.add("April");
-			months.add("May");
-			months.add("June");
-			months.add("July");
-			months.add("August");
-			months.add("September");
-			months.add("October");
-			months.add("November");
-			months.add("December");
-
-			ArrayList<String> weekdays = new ArrayList<String>();
-			weekdays.add("Sunday");
-			weekdays.add("Monday");
-			weekdays.add("Tuesday");
-			weekdays.add("Wednesday");
-			weekdays.add("Thursday");
-			weekdays.add("Friday");
-			weekdays.add("Saturday");
-
-			String mainWorld = plugin.getServer().getWorlds().get(0).getName();
-
-			for (String month : months) {
-				config.setProperty("worlds." + mainWorld + ".months." + month + ".season", "Djilba");
-				config.setProperty("worlds." + mainWorld + ".months." + month + ".days", "30");
-				config.save();
-				config.load();
-			}
-
-			config.setProperty("worlds." + mainWorld + ".weekdays", weekdays);
-			config.save();
-			config.load();
-
-		}
-
 		return config.getKeys("worlds");
 	}
 
 	public List<String> getSeasons() {
-		List<String> seasons = new ArrayList<String>();
-		seasons.add("Djilba");
-		seasons.add("Kamba");
-		seasons.add("Birak");
-		seasons.add("Bunuru");
-		seasons.add("Djeran");
-		seasons.add("Makuru");
-		if (config.getKeys("seasons") == null) {
-			for (String season : seasons) {
-				config.setProperty("seasons." + season + ".URL", QUANDARY + season + ".zip");
-
-				if (season.equals("Djilba"))
-					config.setProperty("seasons." + season + ".season_type", "Spring");
-				else if (season.equals("Kamba"))
-					config.setProperty("seasons." + season + ".season_type", "Spring");
-				else if (season.equals("Birak"))
-					config.setProperty("seasons." + season + ".season_type", "Summer");
-				else if (season.equals("Bunuru"))
-					config.setProperty("seasons." + season + ".season_type", "Summer");
-				else if (season.equals("Djeran"))
-					config.setProperty("seasons." + season + ".season_type", "Fall");
-				else if (season.equals("Makuru"))
-					config.setProperty("seasons." + season + ".season_type", "Winter");
-				else
-					config.setProperty("seasons." + season + ".season_type", "Spring");
-
-				config.save();
-				config.load();
-			}
-		}
-
 		return config.getKeys("seasons");
 	}
 
@@ -173,17 +90,11 @@ public class Config {
 	}
 
 	public int getMonthLength(String month, World world) {
-		try{
-			return Integer.parseInt(config.getString("worlds." + world.getName() + ".months." + month + ".days"));
-		} catch(Exception e) {
-			return 30;
-		}
+		return config.getInt("worlds." + world.getName() + ".months." + month + ".days", 30);
 	}
 
 	public String getSeasonURL(String season) {
-		String string = config.getString("seasons." + season + ".URL", QUANDARY + "Djilba.zip");
-
-		return string;
+		return config.getString("seasons." + season + ".URL", QUANDARY + "Djilba.zip");
 	}
 
 	public Boolean isWorldEnabled(World world) {

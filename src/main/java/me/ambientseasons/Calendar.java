@@ -34,9 +34,10 @@ public class Calendar {
 	private Map<String, Times> calendars;
 	long count;
 
-	public int DAY_OF_WEEK, DAY_OF_MONTH, MONTH, YEAR;
-
-	private int dayOfMonth, month, year;
+	@SuppressWarnings("unused")
+	private int dayOfWeek, dayOfMonth, month, year, season;
+	@SuppressWarnings("unused")
+	private int oldDayOfWeek, oldDayOfMonth, oldMonth, oldYear, oldSeason;
 
 	public Calendar(AmbientSeasons plugin) {
 		this.plugin = plugin;
@@ -51,26 +52,26 @@ public class Calendar {
 	 * Runs every second, BE CAREFUL HERE.
 	 */
 	public void onSecond() {
-		
-		for(Times time : calendars.values()) {
-			DAY_OF_WEEK = time.getDayOfWeek();
-			DAY_OF_MONTH = time.getDayOfMonth();
-			MONTH = time.getMonth();
-			YEAR = time.getYear();
 
-			if (DAY_OF_MONTH != dayOfMonth || MONTH != month || YEAR != year) {
-				dayOfMonth = DAY_OF_MONTH;
-				year = YEAR;
+		for (Times time : calendars.values()) {
+			dayOfWeek = time.getDayOfWeek();
+			dayOfMonth = time.getDayOfMonth();
+			month = time.getMonth();
+			year = time.getYear();
+
+			if (dayOfMonth != oldDayOfMonth || month != oldMonth || year != oldYear) {
+				dayOfMonth = oldDayOfMonth;
+				year = oldYear;
 			}
 
-			if (MONTH != month) {
+			if (month != oldMonth) {
 				updateTextures();
 
 				if (AmbientSeasons.WHEAT_MOD) {
 					plugin.wheatMod.updateSettings();
 				}
 
-				month = MONTH;
+				month = oldMonth;
 			}
 		}
 
@@ -84,14 +85,14 @@ public class Calendar {
 			updateTexture(player);
 		}
 	}
-	
+
 	public void updateTexture(Player player) {
 		if (config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
 			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 			sPlayer.setTexturePack(calendars.get(player.getWorld().getName()).getSeasonUrl());
 		}
 	}
-	
+
 	public Times getTimes(Player player) {
 		return calendars.get(player.getWorld().getName());
 	}
