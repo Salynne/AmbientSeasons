@@ -58,7 +58,7 @@ seasons:
     # name of the season
     Djilba:
         # texture pack URL to use for the season
-        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Djilba.zip
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_5_Djilba.zip
         # List of weather by biome
         Biome_Weather:
             # Name of the Biome, and the weather type for this season in that biome
@@ -76,7 +76,7 @@ seasons:
             TAIGA: SNOW
             TUNDRA: SNOW
     Kamba:
-        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Kamba.zip
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_6_Kamba.zip
         Biome_Weather:
             DESERT: RAIN
             FOREST: RAIN
@@ -90,7 +90,7 @@ seasons:
             TAIGA: SNOW
             TUNDRA: SNOW
     Birak:
-        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Birak.zip
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_1_Birak.zip
         Biome_Weather:
             DESERT: NONE
             FOREST: RAIN
@@ -104,7 +104,7 @@ seasons:
             TAIGA: SNOW
             TUNDRA: SNOW
     Bunuru:
-        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Bunuru.zip
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_2_Bunuru.zip
         Biome_Weather:
             DESERT: NONE
             FOREST: RAIN
@@ -118,7 +118,7 @@ seasons:
             TAIGA: SNOW
             TUNDRA: SNOW
     Djeran:
-        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Djeran.zip
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_3_Djeran.zip
         Biome_Weather:
             DESERT: NONE
             FOREST: RAIN
@@ -132,7 +132,7 @@ seasons:
             TAIGA: SNOW
             TUNDRA: SNOW
     Makuru:
-        URL: http://www.retributiongames.com/quandary/files/Quandary_4.1_Makuru.zip
+        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_4_Makuru.zip
         Biome_Weather:
             DESERT: NONE
             FOREST: SNOW
@@ -171,4 +171,4 @@ HUD_Y: 10
 
 # version this config is for, so that the plugin can tell if the config is out of date
 # in order to back this one up, and generate a new one
-version: 1.6.0
+version: 1.6.1
