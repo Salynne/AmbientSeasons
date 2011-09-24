@@ -32,7 +32,6 @@ public class HUDLabel extends GenericLabel {
 		this.sPlayer = sPlayer;
 		this.plugin = plugin;
 		this.setX(plugin.getConfig().getHUDX()).setY(plugin.getConfig().getHUDY());
-		this.setMinHeight(plugin.getConfig().getFontSize()).setMaxHeight(plugin.getConfig().getFontSize());
 	}
 	
 	@Override
