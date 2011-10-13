@@ -31,15 +31,20 @@ public class HUDLabel extends GenericLabel {
 		count = 0;
 		this.sPlayer = sPlayer;
 		this.plugin = plugin;
-		this.setX(plugin.getConfig().getHUDX()).setY(plugin.getConfig().getHUDY());
+		this.setX(plugin.getASConfig().getHUDX()).setY(plugin.getASConfig().getHUDY());
 	}
 	
 	@Override
 	public void onTick() {
 		count++;
 		if (count % 10 == 0) {
-			this.setVisible(plugin.getHUDEnable().get(sPlayer.getName()));
-			this.setText(ChatColor.WHITE + plugin.getCalendar().getTimes(sPlayer).getDate());
+			if(plugin.getASConfig().isWorldEnabled(sPlayer.getWorld())) {
+				this.setVisible(plugin.getHUDEnable().get(sPlayer.getName()));
+				this.setText(ChatColor.WHITE + plugin.getCalendar().getTimes(sPlayer).getDate());
+			}
+			else {
+				this.setVisible(false);
+			}
 			this.setDirty(true);
 		}
 	}

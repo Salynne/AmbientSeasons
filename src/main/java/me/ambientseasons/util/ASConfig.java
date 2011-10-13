@@ -29,7 +29,7 @@ import org.bukkit.World;
 import org.bukkit.util.config.Configuration;
 import org.getspout.spoutapi.block.SpoutWeather;
 
-public class Config {
+public class ASConfig {
 
 	private File hudMap;
 	private AmbientSeasons plugin;
@@ -37,7 +37,7 @@ public class Config {
 	private Configuration config;
 	private File configFile;
 
-	public Config(AmbientSeasons plugin) {
+	public ASConfig(AmbientSeasons plugin) {
 		this.plugin = plugin;
 
 		directory = plugin.getDataFolder();

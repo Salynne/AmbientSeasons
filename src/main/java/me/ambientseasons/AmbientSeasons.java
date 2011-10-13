@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import me.ambientseasons.listener.BlockGrow;
 import me.ambientseasons.listener.BlockPlaceListener;
 import me.ambientseasons.listener.SListener;
-import me.ambientseasons.util.Config;
+import me.ambientseasons.util.ASConfig;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -67,7 +67,7 @@ public class AmbientSeasons extends JavaPlugin {
 	private PluginManager pm;
 	private SListener sListener;
 	private Calendar calendar;
-	private Config config;
+	private ASConfig config;
 	private BlockPlaceListener blockPlace;
 	private BlockGrow blockGrow;
 	private HashMap<String, Boolean> HUDEnable;
@@ -90,7 +90,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 		HUDEnable = new HashMap<String, Boolean>();
 
-		config = new Config(this);
+		config = new ASConfig(this);
 
 		WHEAT_MOD = false; // TEMP (Load from config in future)
 
@@ -190,7 +190,7 @@ public class AmbientSeasons extends JavaPlugin {
 	public void info(String info) {
 		log.log(Level.INFO, PREFIX + info);
 	}
-	public Config getConfig() {
+	public ASConfig getASConfig() {
 		return config;
 	}
 

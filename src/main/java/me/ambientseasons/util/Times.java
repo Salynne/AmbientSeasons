@@ -28,7 +28,7 @@ import me.ambientseasons.AmbientSeasons;
 public class Times {
 
 	AmbientSeasons plugin;
-	Config config;
+	ASConfig config;
 	World world;
 	int daysInYear, monthsInYear;
 	
@@ -39,7 +39,7 @@ public class Times {
 
 	public Times(AmbientSeasons plugin, World world) {
 		this.plugin = plugin;
-		this.config = plugin.getConfig();
+		this.config = plugin.getASConfig();
 		this.world = world;
 		daysInYear = getDaysInYear();
 		monthsInYear = config.getMonths(world).size();

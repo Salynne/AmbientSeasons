@@ -28,19 +28,19 @@ import org.getspout.spoutapi.block.SpoutWeather;
 import org.getspout.spoutapi.player.BiomeManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
-import me.ambientseasons.util.Config;
+import me.ambientseasons.util.ASConfig;
 import me.ambientseasons.util.Times;
 
 public class Calendar {
 
 	private AmbientSeasons plugin;
-	private Config config;
+	private ASConfig config;
 	private Map<String, Times> calendars;
 	private BiomeManager bm;
 
 	public Calendar(AmbientSeasons plugin) {
 		this.plugin = plugin;
-		config = plugin.getConfig();
+		config = plugin.getASConfig();
 		calendars = new HashMap<String, Times>();
 		bm = SpoutManager.getBiomeManager();
 		for (String world : config.getWorlds()) {
@@ -90,7 +90,7 @@ public class Calendar {
 	}
 
 	public void updateTexture(Player player) {
-		if (config.isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
+		if (config.isWorldEnabled(player.getWorld()) && player.hasPermission("ambientseasons.forcetexture")) {
 			SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 			sPlayer.setTexturePack(getTimes(sPlayer).getSeasonUrl());
 		}
@@ -98,7 +98,7 @@ public class Calendar {
 
 	public void sendNotifications() {
 		for (SpoutPlayer player : SpoutManager.getPlayerManager().getOnlinePlayers()) {
-			if (!player.hasPermission("ambientseasons.dontnotify")) {
+			if (player.hasPermission("ambientseasons.notify") && plugin.getASConfig().isWorldEnabled(player.getWorld())) {
 				String date = getTimes(player).getShortDate();
 				player.sendNotification("A new day!", date, Material.WATCH);
 			}

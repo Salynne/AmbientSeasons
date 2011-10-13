@@ -64,7 +64,7 @@ public class SListener extends SpoutListener {
 
 		player.getMainScreen().attachWidget(plugin, label);
 
-		if (plugin.getConfig().isWorldEnabled(player.getWorld()) && !player.hasPermission("ambientseasons.exempt")) {
+		if (plugin.getASConfig().isWorldEnabled(player.getWorld()) && player.hasPermission("ambientseasons.forcetexture")) {
 			calendar.updateTexture(player);
 		}
 	}

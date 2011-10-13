@@ -21,9 +21,14 @@ commands:
      usage: /<command>
      aliases: [date, calendar]
 permissions:
-    ambientseasons.exempt:
-        description: Makes you exempt from the forced texture packs
-        default: false
-    ambientseasons.dontnotify:
-        description: Makes it so that you don't get notifications on new days.
-        default: false
+    ambientseasons.*:
+        description: Gives permission for all AmbientSeason nodes
+        children:
+            ambientseasons.forcetexture: true
+            ambientseasons.notify: true
+    ambientseasons.forcetexture:
+        description: Allows you to have your texture pack forced to the season.
+        default: true
+    ambientseasons.notify:
+        description: Allows you to recieve notifications for new days.
+        default: true
