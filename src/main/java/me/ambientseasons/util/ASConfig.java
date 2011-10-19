@@ -1,101 +1,51 @@
-/*
- * This file is part of AmbientSeasons (https://github.com/Olloth/AmbientSeasons).
- * 
- * AmbientSeasons is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package me.ambientseasons.util;
 
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
+import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.getspout.spoutapi.block.SpoutWeather;
 
 import me.ambientseasons.AmbientSeasons;
 
-import org.apache.commons.io.FileUtils;
-import org.bukkit.World;
-import org.bukkit.util.config.Configuration;
-import org.getspout.spoutapi.block.SpoutWeather;
-
 public class ASConfig {
-
 	private File hudMap;
+	
 	private AmbientSeasons plugin;
-	private File directory;
-	private Configuration config;
-	private File configFile;
-
+	private FileConfiguration config;
+	
 	public ASConfig(AmbientSeasons plugin) {
 		this.plugin = plugin;
-
-		directory = plugin.getDataFolder();
-		configFile = new File(directory, "config.yml");
-
+		this.config = plugin.getConfig();
+		
+		addDefaults();
+		
+	}
+	
+	public void addDefaults() {
+		FileConfiguration defaultConfig = new YamlConfiguration();
 		try {
-			URL jarConfigURL = plugin.getClass().getResource("/config.yml");
-
-			if (!directory.exists()) {
-				directory.mkdir();
-			}
-
-			if (!configFile.exists()) {
-				plugin.info("Copying new config file");
-				FileUtils.copyURLToFile(jarConfigURL, configFile);
-				config = new Configuration(configFile);
-				config.load();
-			}
-
-			else {
-				config = new Configuration(configFile);
-				config.load();
-
-				File jarConfigFile = new File(directory, "newconfig.yml");
-				FileUtils.copyURLToFile(jarConfigURL, jarConfigFile);
-
-				Configuration jarConfig = new Configuration(jarConfigFile);
-				jarConfig.load();
-
-				String oldVersion = config.getString("version", "0");
-				String jarVersion = jarConfig.getString("version");
-
-				if (!oldVersion.equals(jarVersion)) {
-
-					plugin.info("Backing up old config file");
-					File backupFile = new File(directory, oldVersion + "_backup_config.yml");
-					FileUtils.copyFile(configFile, backupFile);
-
-					plugin.info("Copying new config file");
-					FileUtils.copyURLToFile(jarConfigURL, configFile);
-				}
-
-				jarConfigFile.delete();
-			}
-
-		} catch (Exception e) {
+			defaultConfig.load(plugin.getClass().getResourceAsStream("/config.yml"));
+			config.addDefaults(defaultConfig);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
-
-		loadMap();
+	}
+	
+	public Set<String> getWorlds() {
+		return config.getConfigurationSection("worlds").getKeys(false);
 	}
 
-	public List<String> getWorlds() {
-		return config.getKeys("worlds");
-	}
-
-	public List<String> getSeasons() {
-		return config.getKeys("seasons");
+	public Set<String> getSeasons() {
+		return config.getConfigurationSection("seasons").getKeys(false);
 	}
 
 	public SpoutWeather getSeasonBiomeWeather(String season, String biome) {
@@ -105,12 +55,13 @@ public class ASConfig {
 		return weather;
 	}
 
-	public List<String> getMonths(World world) {
-		return config.getKeys("worlds." + world.getName() + ".months");
+	public Set<String> getMonths(World world) {
+		return config.getConfigurationSection("worlds." + world.getName() + ".months").getKeys(false);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> getWeekdays(World world) {
-		return config.getStringList("worlds." + world.getName() + ".weekdays", null);
+		return config.getList("worlds." + world.getName() + ".weekdays", null);
 	}
 
 	public String getSeason(String month, World world) {
@@ -156,10 +107,10 @@ public class ASConfig {
 	public int getFontSize() {
 		return config.getInt("font_size", 30);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public void loadMap() {
-		hudMap = new File(directory, "settings.bin");
+		hudMap = new File(plugin.getDataFolder(), "settings.bin");
 		if (!hudMap.exists()) {
 			System.out.println("Making new settings file");
 			saveMap();
@@ -172,5 +123,4 @@ public class ASConfig {
 		HMapSL.save(plugin.getHUDEnable(), hudMap.getPath());
 
 	}
-
 }

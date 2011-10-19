@@ -21,10 +21,6 @@ import org.bukkit.World;
 
 import me.ambientseasons.AmbientSeasons;
 
-/**
- * 
- * @author Olloth
- */
 public class Times {
 
 	AmbientSeasons plugin;
@@ -133,9 +129,10 @@ public class Times {
 
 	public String getMonthString() {
 		String string = "";
+		String[] months = (String[]) config.getMonths(world).toArray();
 		for (int i = 0; i < month; i++) {
 			if (i == (month - 1)) {
-				string = (String) config.getMonths(world).get(i);
+				string = months[i];
 			}
 		}
 
