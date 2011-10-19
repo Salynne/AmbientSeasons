@@ -129,10 +129,10 @@ public class Times {
 
 	public String getMonthString() {
 		String string = "";
-		String[] months = (String[]) config.getMonths(world).toArray();
+		Object[] months = config.getMonths(world).toArray();
 		for (int i = 0; i < month; i++) {
 			if (i == (month - 1)) {
-				string = months[i];
+				string = (String) months[i];
 			}
 		}
 

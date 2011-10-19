@@ -1,45 +1,30 @@
 package me.ambientseasons.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import org.bukkit.World;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.getspout.spoutapi.block.SpoutWeather;
 
 import me.ambientseasons.AmbientSeasons;
 
 public class ASConfig {
 	private File hudMap;
-	
+
 	private AmbientSeasons plugin;
 	private FileConfiguration config;
-	
+
 	public ASConfig(AmbientSeasons plugin) {
 		this.plugin = plugin;
-		this.config = plugin.getConfig();
-		
-		addDefaults();
-		
+		this.config = plugin.getConfig().options().copyDefaults(true).configuration();
+		plugin.saveConfig();
+		loadMap();
 	}
-	
-	public void addDefaults() {
-		FileConfiguration defaultConfig = new YamlConfiguration();
-		try {
-			defaultConfig.load(plugin.getClass().getResourceAsStream("/config.yml"));
-			config.addDefaults(defaultConfig);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
+
 	public Set<String> getWorlds() {
 		return config.getConfigurationSection("worlds").getKeys(false);
 	}
@@ -107,7 +92,7 @@ public class ASConfig {
 	public int getFontSize() {
 		return config.getInt("font_size", 30);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void loadMap() {
 		hudMap = new File(plugin.getDataFolder(), "settings.bin");
