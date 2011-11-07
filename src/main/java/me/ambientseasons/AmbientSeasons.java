@@ -176,14 +176,19 @@ public class AmbientSeasons extends JavaPlugin {
 
 	public boolean date(Player player) {
 		SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-		String date = calendar.getTimes(player).getDate();
-		if (sPlayer.isSpoutCraftEnabled()) {
-			date = calendar.getTimes(player).getShortDate();
-			sPlayer.sendNotification("Current Date", date, Material.WATCH);
-		} else {
-			sPlayer.sendMessage("Current Date: " + date);
-		}
+		if(getASConfig().isWorldEnabled(sPlayer.getWorld())) {
+			String date = calendar.getTimes(player).getDate();
+			if (sPlayer.isSpoutCraftEnabled()) {
+				date = calendar.getTimes(player).getShortDate();
+				sPlayer.sendNotification("Current Date", date, Material.WATCH);
+			} else {
+				sPlayer.sendMessage("Current Date: " + date);
+			}
 
+			return true;
+		}
+		
+		sPlayer.sendMessage("No calendar for this world: " + sPlayer.getWorld().getName()); 
 		return true;
 	}
 
