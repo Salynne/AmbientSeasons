@@ -19,8 +19,13 @@ public class ASConfig {
 
 	public ASConfig(AmbientSeasons plugin) {
 		this.plugin = plugin;
-		this.config = plugin.getConfig().options().copyDefaults(true).configuration();
-		plugin.saveConfig();
+		this.plugin.getConfig().options().copyDefaults(true);
+		
+                if (!this.plugin.getConfigFile().exists())
+                    this.plugin.saveConfig();
+                
+                this.config = this.plugin.getConfig();
+                
 		loadMap();
 	}
 
