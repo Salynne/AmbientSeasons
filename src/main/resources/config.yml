@@ -1,70 +1,72 @@
-#===worlds that AmbientSeason is enabled for===
-#worlds:
-#    name of world for this calendar
-#    world:
-#        months in this calendar
-#        months:
-#            ===name of the month in this calendar===
-#            January:
-#                ===number of days in this month===
-#                days: 31
-#                ===season to use for this month===
-#                season: Makuru
-#        ===weekdays in this calendar===
-#        weekdays:
-#        - Sunday
-#        - Monday
-#        - Tuesday
-#        - Wednesday
-#        - Thursday
-#        - Friday
-#        - Saturday
-#
-#===seasons, usable in any calendar===
-#seasons:
-#    ===name of the season===
-#    Djilba:
-#        ===texture pack URL to use for the season===
-#        URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_5_Djilba.zip
-#        ===List of weather by biome===
-#        Biome_Weather:
-#            ===Name of the Biome, and the weather type for this season in that biome               ===
-#            ===Possible weather types are NONE, RAIN, SNOW, and RESET                              ===
-#            ===Any biomes not listed will be RESET which resets to what it is in vanilla minecraft ===
-#            DESERT: NONE
-#            FOREST: RAIN
-#            ICE_DESERT: SNOW
-#            PLAINS: NONE
-#            RAINFOREST: RAIN
-#            SAVANNA: NONE
-#            SEASONAL_FOREST: NONE
-#            SHRUBLAND: RAIN
-#            SWAMPLAND: NONE
-#            TAIGA: SNOW
-#            TUNDRA: SNOW
-#
-#===Date message that displays on the HUD                                           ===
-#==={WEEKDAY} is the string for the day of the week                                 ===
-#==={DATE} is the day of the month                                                  ===
-#==={MOD} is 'st', 'nd', 'rd', 'th' modifiers after the date for English dates      ===
-#==={MONTH} is the string for the month                                             ===
-#==={YEAR} is the year                                                              ===
-#===Message can be any combination of these things and text, including chat colors  ===
-#date_message: '{WEEKDAY} the {DATE}{MOD} of {MONTH} {YEAR}AN'
-#
-#===Date message that displays on /date and new day notifications
-#===If it exceeds 26 Characters (The limit for notifications) it will default to this internally  ===
-#===Otherwise it will parse this like date_message                                                ===
-#==={DATE} is the day of the month                                                                ===
-#==={MONTH} is the month (number, not string)                                                     ===
-#==={YEAR} is the year                                                                            ===
-#short_date_message: '{DATE}/{MONTH}/{YEAR}'
-#
-#===X value for the HUD===
-#HUD_X: 0
-#
-#===Y value for the HUD===
-#HUD_Y: 10
+# |--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--|| #
+# | ===Worlds that AmbientSeasons is enabled for===                                                  #          
+# | worlds:                                                                                          #
+# |   name of world for this calendar                                                                #    
+# |   world:                                                                                         #
+# |      months in this calendar                                                                     #
+# |      months:                                                                                     #
+# |           ===name of the month in this calendar===                                               #
+# |           January:                                                                               #
+# |               ===number of days in this month===                                                 #
+# |               days: 31                                                                           #
+# |               ===season to use for this month===                                                 #
+# |               season: Makuru                                                                     #
+# |       ===weekdays in this calendar===                                                            #
+# |       weekdays:                                                                                  #
+# |       - Sunday                                                                                   #
+# |       - Monday                                                                                   #
+# |       - Tuesday                                                                                  #
+# |       - Wednesday                                                                                #  
+# |       - Thursday                                                                                 #
+# |       - Friday                                                                                   #
+# |       - Saturday                                                                                 #
+# |                                                                                                  #
+# | ===Seasons, usable in any calendar===                                                            #
+# | seasons:                                                                                         #
+# |   ===name of the season===                                                                       #
+# |   Djilba:                                                                                        #
+# |       ===texture pack URL to use for the season===                                               #
+# |       URL: http://www.retributiongames.com/quandary/files/Quandary_4.2_5_Djilba.zip              #
+# |       ===List of weather by biome===                                                             #
+# |       Biome_Weather:                                                                             #
+# |           ===Name of the Biome, and the weather type for this season in that biome               #
+# |           ===Possible weather types are NONE, RAIN, SNOW, and RESET                              # 
+# |           ===Any biomes not listed will be RESET which resets to what it is in vanilla minecraft #
+# |           DESERT: NONE                                                                           #      
+# |           FOREST: RAIN                                                                           #
+# |           ICE_DESERT: SNOW                                                                       #  
+# |           PLAINS: NONE                                                                           #  
+# |           RAINFOREST: RAIN                                                                       #
+# |           SAVANNA: NONE                                                                          #
+# |           SEASONAL_FOREST: NONE                                                                  #
+# |           SHRUBLAND: RAIN                                                                        #
+# |           SWAMPLAND: NONE                                                                        #         
+# |           TAIGA: SNOW                                                                            #
+# |           TUNDRA: SNOW                                                                           #  
+# |                                                                                                  #
+# | ===Date message that displays on the HUD                                                         #
+# | ==={WEEKDAY} is the string for the day of the week                                               #
+# | ==={DATE} is the day of the month                                                                #
+# | ==={MOD} is 'st', 'nd', 'rd', 'th' modifiers after the date for English dates                    #
+# | ==={MONTH} is the string for the month                                                           #
+# | ==={YEAR} is the year                                                                            #
+# | ===Message can be any combination of these things and text, including chat colors                #
+# | date_message: '{WEEKDAY} the {DATE}{MOD} of {MONTH} {YEAR}AN'                                    #
+# |                                                                                                  #
+# | ===Date message that displays on /date and new day notifications                                 #
+# | ===If it exceeds 26 Characters (The limit for notifications) it will default to this internally  #
+# | ===Otherwise it will parse this like date_message                                                #
+# | ==={DATE} is the day of the month                                                                #
+# | ==={MONTH} is the month (number, not string)                                                     #
+# | ==={YEAR} is the year                                                                            #
+# | short_date_message: '{DATE}/{MONTH}/{YEAR}'                                                      #
+# |                                                                                                  #
+# | ===X value for the HUD===                                                                        #
+# | HUD_X: 0                                                                                         #
+# |                                                                                                  #  
+# | ===Y value for the HUD===                                                                        #    
+# | HUD_Y: 10                                                                                        #
+# |--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--|| #
 worlds:
     world:
         months:
