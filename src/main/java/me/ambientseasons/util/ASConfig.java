@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import me.ambientseasons.AmbientSeasons;
+
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.getspout.spoutapi.block.SpoutWeather;
-
-import me.ambientseasons.AmbientSeasons;
 
 public class ASConfig {
 	private File hudMap;
@@ -49,9 +49,8 @@ public class ASConfig {
 		return config.getConfigurationSection("worlds." + world.getName() + ".months").getKeys(false);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> getWeekdays(World world) {
-		return config.getList("worlds." + world.getName() + ".weekdays", null);
+		return config.getStringList("worlds." + world.getName() + ".weekdays");
 	}
 
 	public String getSeason(String month, World world) {

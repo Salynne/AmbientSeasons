@@ -19,25 +19,18 @@ package me.ambientseasons;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.ambientseasons.listener.BlockGrow;
-import me.ambientseasons.listener.BlockPlaceListener;
-import me.ambientseasons.listener.SListener;
+import me.ambientseasons.listener.SpoutListener;
 import me.ambientseasons.util.ASConfig;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,18 +52,11 @@ public class AmbientSeasons extends JavaPlugin {
 	public static String PREFIX = "[AmbientSeasons] ";
 	public static boolean DEBUG = false;
 
-	// Wheat Modifier (Modified growing times based on season)
-	public static boolean WHEAT_MOD;
-	public Set<Location> WheatBlockLocations;
-	public WheatMod wheatMod;
-
 	private PluginDescriptionFile info;
-	private PluginManager pm;
-	private SListener sListener;
+	public PluginManager pm;
+	public SpoutListener sListener;
 	private Calendar calendar;
 	private ASConfig config;
-	private BlockPlaceListener blockPlace;
-	private BlockGrow blockGrow;
 	private HashMap<String, Boolean> HUDEnable;
 
 	/**
@@ -93,26 +79,9 @@ public class AmbientSeasons extends JavaPlugin {
 
 		config = new ASConfig(this);
 
-		WHEAT_MOD = false; // TEMP (Load from config in future)
-
-		if (WHEAT_MOD) {
-			blockPlace = new BlockPlaceListener(this);
-			blockGrow = new BlockGrow(this);
-
-			WheatBlockLocations = new HashSet<Location>();
-			wheatMod = new WheatMod(this);
-		}
-
 		// Initialize listeners
 		calendar = new Calendar(this);
-		sListener = new SListener(this, calendar);
-
-		// Register events
-		pm.registerEvent(Type.CUSTOM_EVENT, sListener, Priority.Low, this);
-		if (WHEAT_MOD) {
-			pm.registerEvent(Type.BLOCK_PLACE, blockPlace, Priority.Low, this);
-			pm.registerEvent(Type.BLOCK_PHYSICS, blockGrow, Priority.Highest, this);
-		}
+		sListener = new SpoutListener(this, calendar);
 
 		// Send an enable message
 		info("version " + info.getVersion() + " is now Enabled.");
@@ -177,7 +146,7 @@ public class AmbientSeasons extends JavaPlugin {
 
 	public boolean date(Player player) {
 		SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
-		if(getASConfig().isWorldEnabled(sPlayer.getWorld())) {
+		if (getASConfig().isWorldEnabled(sPlayer.getWorld())) {
 			String date = calendar.getTimes(player).getDate();
 			if (sPlayer.isSpoutCraftEnabled()) {
 				date = calendar.getTimes(player).getShortDate();
@@ -188,14 +157,15 @@ public class AmbientSeasons extends JavaPlugin {
 
 			return true;
 		}
-		
-		sPlayer.sendMessage("No calendar for this world: " + sPlayer.getWorld().getName()); 
+
+		sPlayer.sendMessage("No calendar for this world: " + sPlayer.getWorld().getName());
 		return true;
 	}
 
 	public void info(String info) {
 		log.log(Level.INFO, PREFIX + info);
 	}
+
 	public ASConfig getASConfig() {
 		return config;
 	}
@@ -211,8 +181,8 @@ public class AmbientSeasons extends JavaPlugin {
 	public void setHUDEnable(HashMap<String, Boolean> HUDEnable) {
 		this.HUDEnable = HUDEnable;
 	}
-        
-        public File getConfigFile() {
-            return new File(getDataFolder(), "config.yml");
-        }
+
+	public File getConfigFile() {
+		return new File(getDataFolder(), "config.yml");
+	}
 }

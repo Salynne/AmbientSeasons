@@ -21,16 +21,18 @@ import me.ambientseasons.AmbientSeasons;
 import me.ambientseasons.Calendar;
 import me.ambientseasons.HUDLabel;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.getspout.spoutapi.event.spout.ServerTickEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
-import org.getspout.spoutapi.event.spout.SpoutListener;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * 
  * @author Olloth
  */
-public class SListener extends SpoutListener {
+public class SpoutListener implements Listener {
 
 	private AmbientSeasons plugin;
 	long count;
@@ -42,16 +44,17 @@ public class SListener extends SpoutListener {
 	 * 
 	 * @param plugin
 	 */
-	public SListener(AmbientSeasons plugin, Calendar calendar) {
+	public SpoutListener(AmbientSeasons plugin, Calendar calendar) {
 		count = 0;
 		this.calendar = calendar;
 		this.plugin = plugin;
+		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	/**
 	 * Runs when SpoutCraft enables after a player joins.
 	 */
-	@Override
+	@EventHandler
 	public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
 
 		SpoutPlayer player = event.getPlayer();
@@ -72,7 +75,7 @@ public class SListener extends SpoutListener {
 	/**
 	 * Runs every tick, BE CAREFUL HERE.
 	 */
-	@Override
+	@EventHandler
 	public void onServerTick(ServerTickEvent event) {
 
 		if ((count % 20) == 0) {
